@@ -2,27 +2,12 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\MDBMultiselect.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\mult.ts">
+    <TypeScriptCompile Update="ClientApp\app\multiselect.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Update="ClientApp\app\chart.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\multiple-select.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\multiselect.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

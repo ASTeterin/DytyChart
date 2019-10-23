@@ -2,6 +2,7 @@
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect'
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { NgMultiselect } from './multiselect';
 
 
 @Component({
@@ -21,14 +22,15 @@ export class AppComponent implements OnInit {
     myOptions: IMultiSelectOption[];
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
 
-    dropdownList: any[];
+    /*dropdownList: any[];
     selectedItems: any[];
     dropdownSettings = {};
-
+    */
     ngOnInit() {
         this.loadWorkers();
 
-        this.dropdownList = [
+
+        /*this.dropdownList = [
             { item_id: 1, item_text: '09:00' },
             { item_id: 2, item_text: '10:00' },
             { item_id: 3, item_text: '11:00' },
@@ -56,8 +58,8 @@ export class AppComponent implements OnInit {
     }
     onSelectAll(items: any) {
         console.log(items);
+    }*/
     }
-
     constructor(private dataService: DataService) { }
 
     // получаем данные через сервис
