@@ -1,0 +1,17 @@
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.csprojAssemblyReference.cache
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.RazorAssemblyInfo.cache
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.RazorAssemblyInfo.cs
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.AssemblyInfo.cs
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\package.json
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\tsconfig.json
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\dutyChart.deps.json
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\dutyChart.runtimeconfig.json
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\dutyChart.runtimeconfig.dev.json
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\dutyChart.dll
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.RazorTargetAssemblyInfo.cache
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\dutyChart.pdb
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.dll
+C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.pdb
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\package-lock.json

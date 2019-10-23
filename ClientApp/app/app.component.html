@@ -1,0 +1,80 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            
+            <div class="row">
+                <ngbd-datepicker-basic></ngbd-datepicker-basic>
+            </div>
+
+            <div class="row">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="min_slot">Минимальное количество слотов</label>
+                            <input type="text" class="form-control" id="min_slot" [(ngModel)]="minSlotsCount" [ngModelOptions]="{standalone: true}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="min_slot">Максимальное количество слотов</label>
+                            <input type="text" class="form-control" id="max_slot" [(ngModel)]="maxSlotsCount" [ngModelOptions]="{standalone: true}">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="name">Имя</label>
+                    <select id="name" class="form-control">
+                        <option selected>Choose...</option>
+                        <option *ngFor="let w of workers">
+                            {{w?.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <ss-multiselect-dropdown [options]="myOptions" [(ngModel)]="optionsModel" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
+            </div>
+            <div class="row">
+                <label for="unwanted_time">Нежелательное время</label>
+                <select id="unwanted_time" multiple="multiple">
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                </select>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                    Дежурный
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                <label class="form-check-label" for="defaultCheck1">
+                    Дежурный по средам
+                </label>
+            </div>
+
+        </div>
+
+        <div class="col-sm-9">
+            Таблица
+            <duty-chart></duty-chart>
+        </div>
+        
+    </div>
+</div>
