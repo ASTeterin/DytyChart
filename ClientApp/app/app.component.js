@@ -10,11 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+//import { MultipleMaterialSelectComponent } from './multiselect';
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService) {
         this.dataService = dataService;
         this.worker = new Worker();
         this.tableMode = true;
+        this.countSlots = [1, 2, 3, 4, 5, 6, 7];
+        this.dropdownSettings = {};
     }
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
@@ -27,7 +30,57 @@ var AppComponent = /** @class */ (function () {
             { id: 6, name: '14:00' },
             { id: 7, name: '15:00' },
         ];
+        this.dropdownList = [
+            { item_id: 1, item_text: 'Mumbai' },
+            { item_id: 2, item_text: 'Bangaluru' },
+            { item_id: 3, item_text: 'Pune' },
+            { item_id: 4, item_text: 'Navsari' },
+            { item_id: 5, item_text: 'New Delhi' }
+        ];
+        this.selectedItems = [
+            { item_id: 3, item_text: 'Pune' },
+            { item_id: 4, item_text: 'Navsari' }
+        ];
+        this.dropdownSettings = {
+            singleSelection: false,
+            idField: 'item_id',
+            textField: 'item_text',
+            selectAllText: 'Select All',
+            unSelectAllText: 'UnSelect All',
+            itemsShowLimit: 3,
+            allowSearchFilter: true
+        };
     };
+    AppComponent.prototype.onItemSelect = function (item) {
+        console.log(item);
+    };
+    AppComponent.prototype.onSelectAll = function (items) {
+        console.log(items);
+    };
+    /*options = [
+        "France",
+        "United Kingdom",
+        "Germany",
+        "Belgium",
+        "Netherlands",
+        "Spain",
+        "Italy",
+        "Poland",
+        "Austria"
+    ];*/
+    /*
+        ngOnInit() {
+            this.loadWorkers();
+            this.myOptions = [
+                { id: 1, name: '09:00' },
+                { id: 2, name: '10:00' },
+                { id: 3, name: '11:00' },
+                { id: 4, name: '12:00' },
+                { id: 5, name: '13:00' },
+                { id: 6, name: '14:00' },
+                { id: 7, name: '15:00' },
+            ];
+        }*/
     AppComponent.prototype.onChange = function () {
         console.log(this.optionsModel);
     };

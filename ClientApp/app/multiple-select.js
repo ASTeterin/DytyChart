@@ -5,45 +5,55 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { Component } from '@angular/core';
-var MultipleSelect = /** @class */ (function () {
-    function MultipleSelect() {
-        this.dropdownSettings = {};
+var MultipleDemoComponent = /** @class */ (function () {
+    function MultipleDemoComponent() {
+        this.items = ['Amsterdam', 'Antwerp', 'Athens', 'Barcelona',
+            'Berlin', 'Birmingham', 'Bradford', 'Bremen', 'Brussels', 'Bucharest',
+            'Budapest', 'Cologne', 'Copenhagen', 'Dortmund', 'Dresden', 'Dublin', 'Düsseldorf',
+            'Essen', 'Frankfurt', 'Genoa', 'Glasgow', 'Gothenburg', 'Hamburg', 'Hannover',
+            'Helsinki', 'Leeds', 'Leipzig', 'Lisbon', 'Łódź', 'London', 'Kraków', 'Madrid',
+            'Málaga', 'Manchester', 'Marseille', 'Milan', 'Munich', 'Naples', 'Palermo',
+            'Paris', 'Poznań', 'Prague', 'Riga', 'Rome', 'Rotterdam', 'Seville', 'Sheffield',
+            'Sofia', 'Stockholm', 'Stuttgart', 'The Hague', 'Turin', 'Valencia', 'Vienna',
+            'Vilnius', 'Warsaw', 'Wrocław', 'Zagreb', 'Zaragoza'];
+        this.value = ['Athens'];
+        this._disabledV = '0';
+        this.disabled = false;
     }
-    MultipleSelect.prototype.ngOnInit = function () {
-        this.dropdownList = [
-            { "id": 1, "itemName": "India" },
-            { "id": 2, "itemName": "Singapore" },
-            { "id": 3, "itemName": "Australia" },
-            { "id": 4, "itemName": "Canada" },
-            { "id": 5, "itemName": "South Korea" },
-            { "id": 6, "itemName": "Germany" },
-            { "id": 7, "itemName": "France" },
-            { "id": 8, "itemName": "Russia" },
-            { "id": 9, "itemName": "Italy" },
-            { "id": 10, "itemName": "Sweden" }
-        ];
-        this.selectedItems = [
-            { "id": 2, "itemName": "Singapore" },
-            { "id": 3, "itemName": "Australia" },
-            { "id": 4, "itemName": "Canada" },
-            { "id": 5, "itemName": "South Korea" }
-        ];
-        this.dropdownSettings = {
-            singleSelection: false,
-            text: "Select Countries",
-            selectAllText: 'Select All',
-            unSelectAllText: 'UnSelect All',
-            enableSearchFilter: true,
-            classes: "myclass custom-class"
-        };
+    Object.defineProperty(MultipleDemoComponent.prototype, "disabledV", {
+        get: function () {
+            return this._disabledV;
+        },
+        set: function (value) {
+            this._disabledV = value;
+            this.disabled = this._disabledV === '1';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    MultipleDemoComponent.prototype.selected = function (value) {
+        console.log('Selected value is: ', value);
     };
-    MultipleSelect = __decorate([
+    MultipleDemoComponent.prototype.removed = function (value) {
+        console.log('Removed value is: ', value);
+    };
+    MultipleDemoComponent.prototype.refreshValue = function (value) {
+        this.value = value;
+    };
+    MultipleDemoComponent.prototype.itemsToString = function (value) {
+        if (value === void 0) { value = []; }
+        return value
+            .map(function (item) {
+            return item.text;
+        }).join(',');
+    };
+    MultipleDemoComponent = __decorate([
         Component({
-            selector: 'multuple-select',
-            templateUrl: 'multiple-select.html'
+            selector: 'multiple-demo',
+            templateUrl: './multiple-select.html'
         })
-    ], MultipleSelect);
-    return MultipleSelect;
+    ], MultipleDemoComponent);
+    return MultipleDemoComponent;
 }());
-export { MultipleSelect };
+export { MultipleDemoComponent };
 //# sourceMappingURL=multiple-select.js.map

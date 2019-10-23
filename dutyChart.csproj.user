@@ -2,6 +2,16 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\app\MDBMultiselect.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\app\mult.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
     <TypeScriptCompile Update="ClientApp\app\chart.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -17,7 +27,7 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\datapicker-basic.ts">
+    <TypeScriptCompile Update="ClientApp\app\datepicker-basic.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

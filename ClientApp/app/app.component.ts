@@ -19,21 +19,43 @@ export class AppComponent implements OnInit {
     tableMode: boolean = true;  
     optionsModel: number[];
     myOptions: IMultiSelectOption[];
+    countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
+
+    dropdownList: any[];
+    selectedItems: any[];
+    dropdownSettings = {};
 
     ngOnInit() {
-        this.loadWorkers(); 
-        this.myOptions = [
-            { id: 1, name: '09:00' },
-            { id: 2, name: '10:00' },
-            { id: 3, name: '11:00' },
-            { id: 4, name: '12:00' },
-            { id: 5, name: '13:00' },
-            { id: 6, name: '14:00' },
-            { id: 7, name: '15:00' },
+        this.loadWorkers();
+
+        this.dropdownList = [
+            { item_id: 1, item_text: '09:00' },
+            { item_id: 2, item_text: '10:00' },
+            { item_id: 3, item_text: '11:00' },
+            { item_id: 4, item_text: '12:00' },
+            { item_id: 5, item_text: '13:00' },
+            { item_id: 6, item_text: '14:00' },
+            { item_id: 7, item_text: '15:00' },
+            { item_id: 8, item_text: '16:00' },
+            { item_id: 9, item_text: '17:00' },
+            { item_id: 10, item_text: '18:00' },
+            { item_id: 11, item_text: '19:00' }
         ];
+        this.dropdownSettings= {
+            singleSelection: false,
+            idField: 'item_id',
+            textField: 'item_text',
+            selectAllText: 'Select All',
+            unSelectAllText: 'UnSelect All',
+            itemsShowLimit: 2,
+            allowSearchFilter: false
+        };
     }
-    onChange() {
-        console.log(this.optionsModel);
+    onItemSelect(item: any) {
+        console.log(item);
+    }
+    onSelectAll(items: any) {
+        console.log(items);
     }
 
     constructor(private dataService: DataService) { }

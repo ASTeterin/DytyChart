@@ -11,9 +11,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-//import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
-//import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { NgbdDatepickerBasic } from './datapicker-basic';
+import { MultipleDemoComponent } from './multiple-select';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgbdDatepickerBasic } from './datepicker-basic';
 import { DutyChart } from './chart';
 //import { MultipleMaterialSelectComponent } from './multiselect'
 var AppModule = /** @class */ (function () {
@@ -21,8 +21,8 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = __decorate([
         NgModule({
-            imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, MultiselectDropdownModule, DutyChart /*, AngularMultiSelectModule MDBBootstrapModule.forRoot()*/],
-            declarations: [AppComponent, NgbdDatepickerBasic /*, MultipleMaterialSelectComponent*/],
+            imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, MultiselectDropdownModule, NgMultiSelectDropDownModule.forRoot()],
+            declarations: [AppComponent, NgbdDatepickerBasic, DutyChart, MultipleDemoComponent /*, MultipleMaterialSelectComponent*/],
             bootstrap: [AppComponent]
         })
     ], AppModule);

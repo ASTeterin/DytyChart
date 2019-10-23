@@ -9,7 +9,9 @@
     <None Remove="ClientApp\app\app.module.ts" />
     <None Remove="ClientApp\app\chart.ts" />
     <None Remove="ClientApp\app\data.service.ts" />
-    <None Remove="ClientApp\app\datapicker-basic.ts" />
+    <None Remove="ClientApp\app\datepicker-basic.ts" />
+    <None Remove="ClientApp\app\MDBMultiselect.ts" />
+    <None Remove="ClientApp\app\mult.ts" />
     <None Remove="ClientApp\app\multiple-select.ts" />
     <None Remove="ClientApp\app\multiselect.ts" />
     <None Remove="ClientApp\app\worker.ts" />

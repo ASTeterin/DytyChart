@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'multiple-material-select',
+    selector: 'multiple-material-select-example',
     templateUrl: 'multiple-material-select.html',
 })
 export class MultipleMaterialSelectComponent implements OnInit {

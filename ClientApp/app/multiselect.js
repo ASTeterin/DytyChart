@@ -17,7 +17,7 @@ var MultipleMaterialSelectComponent = /** @class */ (function () {
     };
     MultipleMaterialSelectComponent = __decorate([
         Component({
-            selector: 'multiple-material-select',
+            selector: 'multiple-material-select-example',
             templateUrl: 'multiple-material-select.html',
         })
     ], MultipleMaterialSelectComponent);

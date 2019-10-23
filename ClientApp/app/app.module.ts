@@ -4,18 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
-import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+//import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
-//import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
-//import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
-import { NgbdDatepickerBasic } from './datapicker-basic';
+
+import { NgbdDatepickerBasic } from './datepicker-basic';
 import { DutyChart } from './chart'
-//import { MultipleMaterialSelectComponent } from './multiselect'
+
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, MultiselectDropdownModule/*, AngularMultiSelectModule MDBBootstrapModule.forRoot()*/],
-    declarations: [AppComponent, NgbdDatepickerBasic, DutyChart/*, MultipleMaterialSelectComponent*/],
+    imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot()],
+    declarations: [AppComponent, NgbdDatepickerBasic, DutyChart],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
