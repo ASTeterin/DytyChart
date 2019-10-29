@@ -2,5 +2,7 @@
     constructor(
         public id?: number,
         public name?: string,
-        public isDuty?: boolean) { }
+        public isDuty?: boolean,
+        public unwantedSlots?: string[]) { }
+        
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+
 namespace dutyChart.Models
 {
     public class ApplicationContext : DbContext

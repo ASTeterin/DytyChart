@@ -1,4 +1,5 @@
-﻿import { Input, Component } from '@angular/core';
+﻿import { Input, Component, Output, EventEmitter } from '@angular/core';
+
 
 @Component({
     selector: 'multiselect',
@@ -37,10 +38,17 @@ export class NgMultiselect {
     }
     onItemSelect(item: any) {
         console.log(item);
+        
     }
     onSelectAll(items: any) {
         console.log(items);
     }
-    
+    /*@Input() userName: string;
+    @Output() timeChange = new EventEmitter<string>();
+    onTimeChange(model: any[]) {
+
+        this.userName = model;
+        this.timeChange.emit(model  );
+    }*/
     
 }

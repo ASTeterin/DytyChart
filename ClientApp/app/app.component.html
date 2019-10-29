@@ -3,7 +3,10 @@
         <div class="col-sm-3">
 
             <div class="row">
-                <ngbd-datepicker-basic></ngbd-datepicker-basic>
+                <div class="col">
+                    <ngbd-datepicker-basic></ngbd-datepicker-basic>
+                </div>
+
             </div>
 
             <div class="row">
@@ -31,17 +34,17 @@
                 </form>
             </div>
 
-
+            <hr />
             <div class="row">
                 <div class="form-group">
                     <label for="name">Имя</label>
-                    <select id="name" class="form-control">
-                        <option selected>Choose...</option>
-                        <option *ngFor="let w of workers">
+                    <select id="name" class="form-control" [(ngModel)]="selectedWorkerId" (change)="changeStaff($event)">
+                        <option *ngFor="let w of workers" [value]="w?.id">
                             {{w?.name}}
                         </option>
                     </select>
                 </div>
+                {{selectedWorker?.name}}
             </div>
 
             <div class="row">
@@ -60,16 +63,23 @@
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label" for="defaultCheck1">
+                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="currenStaffIsDutyCheck">
+                <label class="form-check-label" for="duty">
                     Дежурный
                 </label>
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                <label class="form-check-label" for="defaultCheck1">
+                <input class="form-check-input" type="checkbox" value="" id="duty_wedn">
+                <label class="form-check-label" for="duty_wedn">
                     Дежурный по средам
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="duty_letter">
+                <label class="form-check-label" for="duty_letter">
+                    Дежурный по письмам
                 </label>
             </div>
 

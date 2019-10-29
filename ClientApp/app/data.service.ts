@@ -12,8 +12,11 @@ export class DataService {
 
     getWorkers() {
         return [
-            { id: 1, name: "Ivan", isDuty: true },
-            { id: 2, name: "Vasiliy", isDuty: false },
+            { id: 1, name: "Ivan Ivanov", isDuty: true },
+            { id: 2, name: "Vasiliy Uhov", isDuty: false },
+            { id: 3, name: "Elena Petrova", isDuty: false },
+            { id: 4, name: "Vlad Konev", isDuty: true },
+            { id: 5, name: "Igor Maksimov", isDuty: false },
         ];
         
     }

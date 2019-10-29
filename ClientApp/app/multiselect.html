@@ -4,5 +4,6 @@
                          [(ngModel)]="selectedItems"
                          [settings]="dropdownSettings"
                          (onSelect)="onItemSelect($event)"
-                         (onSelectAll)="onSelectAll($event)">
+                         (onSelectAll)="onSelectAll($event)"
+                         (ngModelChange)="onTimeChange($event)">
 </ng-multiselect-dropdown>
