@@ -12,11 +12,14 @@ export class DataService {
 
     getWorkers() {
         return [
-            { id: 1, name: "Ivan Ivanov", isDuty: true },
-            { id: 2, name: "Vasiliy Uhov", isDuty: false },
-            { id: 3, name: "Elena Petrova", isDuty: false },
-            { id: 4, name: "Vlad Konev", isDuty: true },
-            { id: 5, name: "Igor Maksimov", isDuty: false },
+            { id: 1, name: "Ivan Ivanov", isDuty: true, isDutyByLetters: false, isDutyOnWednesday: false },
+            { id: 2, name: "Vasiliy Uhov", isDuty: false, isDutyByLetters: true, isDutyOnWednesday: false },
+            { id: 3, name: "Elena Petrova", isDuty: false, isDutyByLetters: true, isDutyOnWednesday: false },
+            { id: 4, name: "Vlad Konev", isDuty: true, isDutyByLetters: false, isDutyOnWednesday: false },
+            { id: 5, name: "Igor Maksimov", isDuty: false, isDutyByLetters: true, isDutyOnWednesday: true },
+            { id: 6, name: "Igor Nikolaev", isDuty: false, isDutyByLetters: true, isDutyOnWednesday: false },
+            { id: 7, name: "Sergey Bobkov", isDuty: false, isDutyByLetters: true, isDutyOnWednesday: false },
+            { id: 8, name: "Yuliya Voz", isDuty: false, isDutyByLetters: true, isDutyOnWednesday: false },
         ];
         
     }

@@ -3,6 +3,8 @@
         public id?: number,
         public name?: string,
         public isDuty?: boolean,
-        public unwantedSlots?: string[]) { }
+        public isDutyByLetters?: boolean,
+        public isDutyOnWednesday?: boolean,
+        public unwantedSlots?: number[]) { }
         
 }

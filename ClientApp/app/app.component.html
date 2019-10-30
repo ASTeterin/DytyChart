@@ -63,21 +63,21 @@
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="currenStaffIsDutyCheck">
+                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="worker.isDuty">
                 <label class="form-check-label" for="duty">
                     Дежурный
                 </label>
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty_wedn">
+                <input class="form-check-input" type="checkbox" value="" id="duty_wedn" [(ngModel)]="worker.isDutyOnWednesday">
                 <label class="form-check-label" for="duty_wedn">
                     Дежурный по средам
                 </label>
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty_letter">
+                <input class="form-check-input" type="checkbox" value="" id="duty_letter" [(ngModel)]="worker.isDutyByLetters">
                 <label class="form-check-label" for="duty_letter">
                     Дежурный по письмам
                 </label>
@@ -85,10 +85,16 @@
 
         </div>
 
-                <div class="col-sm-9">
-                    Таблица
-                    <duty-chart [minSlotsCount]="minSlotsCount" [maxSlotsCount]="maxSlotsCount"></duty-chart>
-                </div>
+        <div class="col-sm-9">
+            <h1>График дежурств на </h1>
+            <p><b>Дежурный: </b></p>
+            <p><b>Дежурные на письмах: </b></p>
+            <p><b>Дежурный в среду: </b></p>
+            <div class="form-group">
+                <button class="btn btn-default" (click)="generateGraph()">Сформировать график</button>
+            </div>
+            <duty-chart [minSlotsCount]="minSlotsCount" [maxSlotsCount]="maxSlotsCount"></duty-chart>
+        </div>
 
             </div>
         </div>

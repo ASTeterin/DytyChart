@@ -26,6 +26,9 @@ export class AppComponent implements OnInit {
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
+    dutyWorkerArr: Worker[];
+    dutyWorkerByLetterArr: Worker[];
+    dutyWorkerInWednesday: Worker[];
 
     ngOnInit() {
         this.loadWorkers();    
@@ -49,6 +52,9 @@ export class AppComponent implements OnInit {
         this.workers = this.dataService.getWorkers();
         //this.selectedWorker = this.workers[1];
     }
-   
+
+    generateGraph() {
+
+    }
 }
 
