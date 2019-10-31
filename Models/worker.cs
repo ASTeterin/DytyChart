@@ -10,6 +10,6 @@ public class Worker
     public bool IsDutyOnLetters { get; set; }
     //public List<TimeSpan> DesiredTimes { get; set; }
     //public List<TimeSpan> UnwantedTimes { get; set; }
-    public int[] DesiredTimes { get; set; }
-    public int[] UnwantedTimes { get; set; }
+    //public int[] DesiredTimes { get; set; }
+    //public int[] UnwantedTimes { get; set; }
 }

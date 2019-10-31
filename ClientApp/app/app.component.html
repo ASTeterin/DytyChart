@@ -11,25 +11,10 @@
 
             <div class="row">
                 <form>
+                    
+                    <ngbd-tabset [timeArr]="timeArr"></ngbd-tabset>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="min_slot">Минимальное количество слотов</label>
-                            <select class="form-control" name="min_slot"
-                                    [(ngModel)]="minSlotsCount" #minSlots="ngModel" (ngModelChange)="onModelChange()">
-                                <option *ngFor="let i of countSlots">
-                                    {{i}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="max_slot">Максимальное количество слотов</label>
-                            <select class="form-control" name="max_slot"
-                                    [(ngModel)]="maxSlotsCount" #maxSlots="ngModel">
-                                <option *ngFor="let i of countSlots">
-                                    {{i}}
-                                </option>
-                            </select>
-                        </div>
+                        
                     </div>
                 </form>
             </div>

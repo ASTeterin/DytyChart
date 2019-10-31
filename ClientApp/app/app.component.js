@@ -27,11 +27,15 @@ var AppComponent = /** @class */ (function () {
         var _this = this;
         //console.log(this.selectedWorkerId);
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
+        this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
+        console.log(this.currenStaffIsDutyCheck);
     };
     AppComponent.prototype.loadWorkers = function () {
         this.workers = this.dataService.getWorkers();
         //this.selectedWorker = this.workers[1];
+    };
+    AppComponent.prototype.generateGraph = function () {
     };
     AppComponent = __decorate([
         Component({

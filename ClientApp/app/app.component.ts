@@ -3,17 +3,18 @@ import { IMultiSelectOption } from 'angular-2-dropdown-multiselect'
 import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { NgMultiselect } from './multiselect';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
     //styleUrls: ['./app.component.css'],
-    providers: [DataService]
+    providers: [DataService]    
 })
 
 export class AppComponent implements OnInit {
-
+    date: NgbDateStruct;
     worker: Worker = new Worker();   
     workers: Worker[];
     selectedWorkerId: number;//Worker = new Worker();
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
     dutyWorkerArr: Worker[];
     dutyWorkerByLetterArr: Worker[];
     dutyWorkerInWednesday: Worker[];
+    timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
 
     ngOnInit() {
         this.loadWorkers();    
