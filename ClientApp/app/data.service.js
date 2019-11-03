@@ -14,6 +14,19 @@ var DataService = /** @class */ (function () {
         this.http = http;
         this.url = "/api/Workers";
     }
+    DataService.prototype.getWorker = function () {
+        console.log('2');
+        return this.http.get(this.url);
+    };
+    DataService.prototype.createWorker = function (worker) {
+        return this.http.post(this.url, worker);
+    };
+    DataService.prototype.updateWorker = function (worker) {
+        return this.http.put(this.url + '/' + worker.id, worker);
+    };
+    DataService.prototype.deleteProduct = function (id) {
+        return this.http.delete(this.url + '/' + id);
+    };
     DataService.prototype.getWorkers = function () {
         return [
             { id: 1, name: "Ivan Ivanov", isDuty: true, isDutyByLetters: false, isDutyOnWednesday: false },

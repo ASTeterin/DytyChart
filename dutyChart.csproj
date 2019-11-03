@@ -14,8 +14,9 @@
     <None Remove="ClientApp\app\app.module.ts" />
     <None Remove="ClientApp\app\chart.ts" />
     <None Remove="ClientApp\app\data.service.ts" />
-    <None Remove="ClientApp\app\datepicker-basic.ts" />
+    <None Remove="ClientApp\app\datepicker.ts" />
     <None Remove="ClientApp\app\multiselect.ts" />
+    <None Remove="ClientApp\app\tabset.module.ts" />
     <None Remove="ClientApp\app\tabset.ts" />
     <None Remove="ClientApp\app\worker.ts" />
     <None Remove="ClientApp\main.ts" />

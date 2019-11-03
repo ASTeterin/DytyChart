@@ -7,7 +7,7 @@ using dutyChart.Models;
 
 namespace dutyChart.Controllers
 {
-    [Route("api/worker")]
+    [Route("api/workers")]
     public class WorkerController : Controller
     {
         ApplicationContext db;

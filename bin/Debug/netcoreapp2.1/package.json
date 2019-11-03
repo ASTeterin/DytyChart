@@ -7,13 +7,13 @@
     "@angular/animations": "^8.2.11",
     "@angular/common": "~8.0.0",
     "@angular/compiler": "~8.0.0",
-    "@angular/core": "~8.0.0",
+    "@angular/core": "^8.2.11",
     "@angular/forms": "~8.0.0",
     "@angular/platform-browser": "~8.0.0",
     "@angular/platform-browser-dynamic": "~8.0.0",
     "@angular/router": "~8.0.0",
     "@fortawesome/fontawesome-free": "^5.11.2",
-    "@ng-bootstrap/ng-bootstrap": "^5.1.1",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.2",
     "@tweenjs/tween.js": "^18.3.1",
     "@types/chart.js": "^2.8.8",
     "angular-2-dropdown-multiselect": "^1.9.0",
@@ -41,6 +41,8 @@
     "aspnet-prerendering": "3.0.1",
     "aspnet-webpack": "3.0.0",
     "raw-loader": "3.0.0",
-    "html-loader": "0.5.5"
+    "html-loader": "0.5.5",
+    "to-string-loader": "^1.1.5",
+    "css-loader": "^0.28.11"
   }
 }

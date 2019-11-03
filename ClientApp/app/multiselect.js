@@ -7,10 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Input, Component } from '@angular/core';
+import { Input, Component, Output, EventEmitter } from '@angular/core';
 var NgMultiselect = /** @class */ (function () {
     function NgMultiselect() {
         this.dropdownSettings = {};
+        this.timeChange = new EventEmitter();
         this.dropdownList = [
             { item_id: 1, item_text: '09:00' },
             { item_id: 2, item_text: '10:00' },
@@ -40,10 +41,22 @@ var NgMultiselect = /** @class */ (function () {
     NgMultiselect.prototype.onSelectAll = function (items) {
         console.log(items);
     };
+    NgMultiselect.prototype.onTimeChange = function (model) {
+        //this.userName = model;
+        //this.timeChange.emit(model  );
+    };
     __decorate([
         Input(),
         __metadata("design:type", String)
     ], NgMultiselect.prototype, "placeholder", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], NgMultiselect.prototype, "userName", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", Object)
+    ], NgMultiselect.prototype, "timeChange", void 0);
     NgMultiselect = __decorate([
         Component({
             selector: 'multiselect',

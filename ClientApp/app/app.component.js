@@ -16,6 +16,7 @@ var AppComponent = /** @class */ (function () {
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
+        this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
     }
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
@@ -25,14 +26,17 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.changeStaff = function (worker) {
         var _this = this;
-        //console.log(this.selectedWorkerId);
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
         console.log(this.currenStaffIsDutyCheck);
     };
     AppComponent.prototype.loadWorkers = function () {
-        this.workers = this.dataService.getWorkers();
+        var _this = this;
+        //this.workers = this.dataService.getWorkers();
+        console.log('1');
+        this.dataService.getWorker()
+            .subscribe(function (data) { return _this.workers = data; });
         //this.selectedWorker = this.workers[1];
     };
     AppComponent.prototype.generateGraph = function () {

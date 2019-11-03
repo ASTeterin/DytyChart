@@ -32,6 +32,8 @@ export class AppComponent implements OnInit {
     dutyWorkerInWednesday: Worker[];
     timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
 
+    constructor(private dataService: DataService) { }
+
     ngOnInit() {
         this.loadWorkers();    
     }
@@ -41,17 +43,17 @@ export class AppComponent implements OnInit {
     }
 
     changeStaff(worker: any) {
-        //console.log(this.selectedWorkerId);
         this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
         this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
         console.log(this.currenStaffIsDutyCheck);
     }   
 
-    constructor(private dataService: DataService) { }
-
     loadWorkers() {
-        this.workers = this.dataService.getWorkers();
+        //this.workers = this.dataService.getWorkers();
+        console.log('1');
+        this.dataService.getWorker()
+            .subscribe((data: Worker[]) => this.workers = data);
         //this.selectedWorker = this.workers[1];
     }
 

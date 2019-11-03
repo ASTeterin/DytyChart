@@ -10,6 +10,22 @@ export class DataService {
     constructor(private http: HttpClient) {
     }
 
+    getWorker() {
+        console.log('2');
+        return this.http.get(this.url);
+    }
+
+    createWorker(worker: Worker) {
+        return this.http.post(this.url, worker);
+    }
+    updateWorker(worker: Worker) {
+
+        return this.http.put(this.url + '/' + worker.id, worker);
+    }
+    deleteProduct(id: number) {
+        return this.http.delete(this.url + '/' + id);
+    }
+
     getWorkers() {
         return [
             { id: 1, name: "Ivan Ivanov", isDuty: true, isDutyByLetters: false, isDutyOnWednesday: false },

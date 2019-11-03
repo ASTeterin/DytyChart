@@ -43,12 +43,12 @@ export class NgMultiselect {
     onSelectAll(items: any) {
         console.log(items);
     }
-    /*@Input() userName: string;
+    @Input() userName: string;
     @Output() timeChange = new EventEmitter<string>();
     onTimeChange(model: any[]) {
 
-        this.userName = model;
-        this.timeChange.emit(model  );
-    }*/
+        //this.userName = model;
+        //this.timeChange.emit(model  );
+    }
     
 }
