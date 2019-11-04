@@ -1,9 +1,10 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect'
 import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { NgMultiselect } from './multiselect';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdDatepicker } from './datepicker';
 
 
 @Component({
@@ -14,7 +15,11 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class AppComponent implements OnInit {
+    @ViewChild(NgbdDatepicker, { static: false })
+    private datepicker: NgbdDatepicker;
     date: NgbDateStruct;
+    day: number;
+    month: number;
     worker: Worker = new Worker();   
     workers: Worker[];
     selectedWorkerId: number;//Worker = new Worker();
@@ -31,11 +36,24 @@ export class AppComponent implements OnInit {
     dutyWorkerByLetterArr: Worker[];
     dutyWorkerInWednesday: Worker[];
     timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+   
 
-    constructor(private dataService: DataService) { }
+    constructor(private dataService: DataService, private calendar: NgbCalendar) {
+        //this.today = calendar.getToday();
+    }
 
     ngOnInit() {
-        this.loadWorkers();    
+        this.loadWorkers();
+        //this.date = this.datepicker.model;
+        //this.date = this.datepicker.today;
+        //console.log(this.date);
+    }
+
+    ngAfterViewChecked() {
+        this.date = this.datepicker.model;
+        this.day = this.date.day;
+        this.month = this.date.month;
+
     }
 
     isFind(itemId: number, item: any) {
@@ -47,6 +65,8 @@ export class AppComponent implements OnInit {
         this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
         console.log(this.currenStaffIsDutyCheck);
+        this.date = this.datepicker.model;
+        console.log(this.date);
     }   
 
     loadWorkers() {

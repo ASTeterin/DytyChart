@@ -7,19 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdDatepicker } from './datepicker';
 var AppComponent = /** @class */ (function () {
-    function AppComponent(dataService) {
+    function AppComponent(dataService, calendar) {
         this.dataService = dataService;
+        this.calendar = calendar;
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        //this.today = calendar.getToday();
     }
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
+        this.date = this.datepicker.model;
+        //this.date = this.datepicker.today;
+        //console.log(this.date);
     };
     AppComponent.prototype.isFind = function (itemId, item) {
         return itemId == item.id;
@@ -30,6 +37,8 @@ var AppComponent = /** @class */ (function () {
         this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
         console.log(this.currenStaffIsDutyCheck);
+        this.date = this.datepicker.model;
+        console.log(this.date);
     };
     AppComponent.prototype.loadWorkers = function () {
         var _this = this;
@@ -41,6 +50,10 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.generateGraph = function () {
     };
+    __decorate([
+        ViewChild(NgbdDatepicker, { static: false }),
+        __metadata("design:type", NgbdDatepicker)
+    ], AppComponent.prototype, "datepicker", void 0);
     AppComponent = __decorate([
         Component({
             selector: 'app',
@@ -48,7 +61,7 @@ var AppComponent = /** @class */ (function () {
             //styleUrls: ['./app.component.css'],
             providers: [DataService]
         }),
-        __metadata("design:paramtypes", [DataService])
+        __metadata("design:paramtypes", [DataService, NgbCalendar])
     ], AppComponent);
     return AppComponent;
 }());

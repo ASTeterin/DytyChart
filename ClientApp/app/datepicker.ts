@@ -8,5 +8,13 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 export class NgbdDatepicker {
 
     model: NgbDateStruct;
+    today: NgbDateStruct;
+
+    constructor(private calendar: NgbCalendar) {
+        this.today = calendar.getToday();
+        this.model = this.today;
+
+    }
+
     
 }
