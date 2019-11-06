@@ -12,15 +12,12 @@ import { NgbdDatepicker } from './datepicker';
     templateUrl: './app.component.html',
     //styleUrls: ['./app.component.css'],
     styles: [` 
-     
-            .form-group {width: 100%;}
-            
+            .form-group {width: 100%;
     `],
     providers: [DataService]    
 })
 
 export class AppComponent implements OnInit {
-    //@ViewChild(NgbdDatepicker, { static: false })
     private datepicker: NgbdDatepicker;
     calendar: NgbCalendar;
     currentDate: NgbDateStruct;
@@ -55,7 +52,6 @@ export class AppComponent implements OnInit {
 
 
     dateChangeHandler(date: NgbDateStruct) {
-        //this.currentDate = date;
         this.day = date.day;
         this.month = date.month;
         console.log(date)
@@ -63,6 +59,10 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
+    }
+
+    generateTextInfo() {
+        
     }
 
     save() {

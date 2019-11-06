@@ -24,13 +24,14 @@ var AppComponent = /** @class */ (function () {
         //this.month = this.date.month;
     }
     AppComponent.prototype.dateChangeHandler = function (date) {
-        //this.currentDate = date;
         this.day = date.day;
         this.month = date.month;
         console.log(date);
     };
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
+    };
+    AppComponent.prototype.generateTextInfo = function () {
     };
     AppComponent.prototype.save = function () {
         var _this = this;
@@ -65,7 +66,7 @@ var AppComponent = /** @class */ (function () {
             selector: 'app',
             templateUrl: './app.component.html',
             //styleUrls: ['./app.component.css'],
-            styles: [" \n     \n            .form-group {width: 100%;}\n            \n    "],
+            styles: [" \n            .form-group {width: 100%;\n    "],
             providers: [DataService]
         }),
         __metadata("design:paramtypes", [DataService])

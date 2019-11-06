@@ -74,9 +74,27 @@
 
         <div class="col-sm-9">
             <h1>График дежурств на {{day}}.{{month}} </h1>
-            <p><b>Дежурный: </b></p>
-            <p><b>Дежурные на письмах: </b></p>
-            <p><b>Дежурный в среду: </b></p>
+            <p> <b>Дежурный: </b>
+                <ng-container *ngFor="let w of workers">
+                    <div *ngIf="w?.isDuty">
+                        {{w?.name}}
+                    </div>
+                </ng-container>
+            </p>
+            <p><b>Дежурные на письмах: </b>
+               <ng-container *ngFor="let w of workers">
+                   <div *ngIf="w?.isDutyOnLetters">
+                       {{w?.name}}
+                   </div>
+               </ng-container>
+            </p>
+            <p><b>Дежурный в среду: </b>
+               <ng-container *ngFor="let w of workers">
+                   <div *ngIf="w?.isDutyOnWedn">
+                       {{w?.name}}
+                   </div>
+               </ng-container>
+            </p>
             <div class="form-group">
                 <button class="btn btn-default" (click)="generateGraph()">Сформировать график</button>
             </div>
