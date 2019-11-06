@@ -24,7 +24,7 @@ var DataService = /** @class */ (function () {
     DataService.prototype.updateWorker = function (worker) {
         return this.http.put(this.url + '/' + worker.id, worker);
     };
-    DataService.prototype.deleteProduct = function (id) {
+    DataService.prototype.deleteworker = function (id) {
         return this.http.delete(this.url + '/' + id);
     };
     DataService.prototype.getWorkers = function () {

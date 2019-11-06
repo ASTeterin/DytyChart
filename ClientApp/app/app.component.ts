@@ -11,13 +11,19 @@ import { NgbdDatepicker } from './datepicker';
     selector: 'app',
     templateUrl: './app.component.html',
     //styleUrls: ['./app.component.css'],
+    styles: [` 
+     
+            .form-group {width: 100%;}
+            
+    `],
     providers: [DataService]    
 })
 
 export class AppComponent implements OnInit {
-    @ViewChild(NgbdDatepicker, { static: false })
+    //@ViewChild(NgbdDatepicker, { static: false })
     private datepicker: NgbdDatepicker;
-    date: NgbDateStruct;
+    calendar: NgbCalendar;
+    currentDate: NgbDateStruct;
     day: number;
     month: number;
     worker: Worker = new Worker();   
@@ -38,22 +44,31 @@ export class AppComponent implements OnInit {
     timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
    
 
-    constructor(private dataService: DataService, private calendar: NgbCalendar) {
+    constructor(private dataService: DataService) {
+        //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
+        //this.date = this.datepicker.model;
+        //this.day = this.date.day;
+        //this.month = this.date.month;
+    }
+
+
+
+    dateChangeHandler(date: NgbDateStruct) {
+        //this.currentDate = date;
+        this.day = date.day;
+        this.month = date.month;
+        console.log(date)
     }
 
     ngOnInit() {
         this.loadWorkers();
-        //this.date = this.datepicker.model;
-        //this.date = this.datepicker.today;
-        //console.log(this.date);
     }
 
-    ngAfterViewChecked() {
-        this.date = this.datepicker.model;
-        this.day = this.date.day;
-        this.month = this.date.month;
-
+    save() {
+        console.log(this.worker);
+        this.dataService.updateWorker(this.worker)
+            .subscribe(data => this.loadWorkers());
     }
 
     isFind(itemId: number, item: any) {
@@ -62,11 +77,11 @@ export class AppComponent implements OnInit {
 
     changeStaff(worker: any) {
         this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
-        this.currenStaffIsDutyCheck = this.worker.isDuty;
-        console.log(this.worker);
-        console.log(this.currenStaffIsDutyCheck);
-        this.date = this.datepicker.model;
-        console.log(this.date);
+        //this.currenStaffIsDutyCheck = this.worker.isDuty;
+        //console.log(this.worker);
+        //console.log(this.currenStaffIsDutyCheck);
+        //this.date = this.datepicker.model;
+        //console.log(this.date);
     }   
 
     loadWorkers() {

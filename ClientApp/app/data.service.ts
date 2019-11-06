@@ -22,7 +22,7 @@ export class DataService {
 
         return this.http.put(this.url + '/' + worker.id, worker);
     }
-    deleteProduct(id: number) {
+    deleteworker(id: number) {
         return this.http.delete(this.url + '/' + id);
     }
 

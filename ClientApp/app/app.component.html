@@ -1,72 +1,75 @@
 ﻿<div class="container">
     <div class="row">
         <div class="col-sm-3">
-
+            
             <div class="row">
-                <div class="col">
-                    <ngbd-datepicker></ngbd-datepicker>
-                </div>
+
+                <ngbd-datepicker (onChanged)="dateChangeHandler($event)"></ngbd-datepicker>
+
             </div>
 
-            <div class="row">
-                <form>
+                <div class="row">
+                    <form>
 
-                    <ngbd-tabset [timeArr]="timeArr"></ngbd-tabset>
-                    <div class="form-row">
-  
+                        <ngbd-tabset [timeArr]="timeArr"></ngbd-tabset>
+                        <div class="form-row">
+
+                        </div>
+                    </form>
+                </div>
+
+                <hr />
+                <div class="row">
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <select id="name" class="form-control" [(ngModel)]="selectedWorkerId" (change)="changeStaff($event)">
+                            <option *ngFor="let w of workers" [value]="w?.id">
+                                {{w?.name}}
+                            </option>
+                        </select>
                     </div>
-                </form>
-            </div>
-
-            <hr />
-            <div class="row">
-                <div class="form-group">
-                    <label for="name">Имя</label>
-                    <select id="name" class="form-control" [(ngModel)]="selectedWorkerId" (change)="changeStaff($event)">
-                        <option *ngFor="let w of workers" [value]="w?.id">
-                            {{w?.name}}
-                        </option>
-                    </select>
+                    {{selectedWorker?.name}}
                 </div>
-                {{selectedWorker?.name}}
-            </div>
 
-            <div class="row">
-                <div class="form-group">
-                    <label for="desirable_slots">Желаемые часы</label>
-                    <multiselect [placeholder]="'Желательные часы'"></multiselect>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="desirable_slots">Желаемые часы</label>
+                        <multiselect [placeholder]="'Желательные часы'"></multiselect>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="form-group">
-                    <label for="unwanted_slots">Нежелательные часы</label>
-                    <multiselect [placeholder]="'Нежелательные часы'"></multiselect>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="unwanted_slots">Нежелательные часы</label>
+                        <multiselect [placeholder]="'Нежелательные часы'"></multiselect>
 
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="worker.isDuty">
-                <label class="form-check-label" for="duty">
-                    Дежурный
-                </label>
-            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="worker.isDuty" (change)="save()">
+                    <label class="form-check-label" for="duty">
+                        Дежурный
+                    </label>
+                </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty_wedn" [(ngModel)]="worker.isDutyOnWednesday">
-                <label class="form-check-label" for="duty_wedn">
-                    Дежурный по средам
-                </label>
-            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="duty_wedn" [(ngModel)]="worker.isDutyOnWedn"
+                           (change)="save()">
+                    <label class="form-check-label" for="duty_wedn">
+                        Дежурный по средам
+                    </label>
+                </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty_letter" [(ngModel)]="worker.isDutyByLetters">
-                <label class="form-check-label" for="duty_letter">
-                    Дежурный по письмам
-                </label>
-            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="duty_letter" [(ngModel)]="worker.isDutyOnLetters"
+                           (change)="save()">
+                    <label class="form-check-label" for="duty_letter">
+                        Дежурный по письмам
+                    </label>
+                </div>
 
+            
         </div>
 
         <div class="col-sm-9">
@@ -80,5 +83,6 @@
             <duty-chart [minSlotsCount]="minSlotsCount" [maxSlotsCount]="maxSlotsCount"></duty-chart>
         </div>
 
-            </div>
-        </div>
+        
+    </div>
+</div>

@@ -16,9 +16,15 @@ namespace dutyChart.Controllers
             db = context;
             if (!db.Workers.Any())
             {
-                db.Workers.Add(new Worker { Name = "Иван Зосимов", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = false}) ;
-                db.Workers.Add(new Worker { Name = "Виктор Борисов", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = false });
-                db.Workers.Add(new Worker { Name = "Елена Мохова", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = false});
+                /*db.Workers.Add(new Worker { Name = "Иван Зосимов", IsDuty = false, IsDutyOnWedn = true, IsDutyOnLetters = false, DesiredTimes = new int[] { 1, 3 }, UnwantedTimes = new int[] { 6 } }) ;
+                db.Workers.Add(new Worker { Name = "Виктор Борисов", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true, DesiredTimes = new int[] { 1, 6, 8 }, UnwantedTimes = new int[] { 4 } });
+                db.Workers.Add(new Worker { Name = "Елена Мохова", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true, DesiredTimes = new int[] { 2, 3 }, UnwantedTimes = new int[] { 1, 4, 8 } });
+                db.Workers.Add(new Worker { Name = "Ирина Ведерникова", IsDuty = true, IsDutyOnWedn = false, IsDutyOnLetters = false, DesiredTimes = new int[] { 5, 6 }, UnwantedTimes = new int[] { 2, 3, 4 } });
+                */
+                db.Workers.Add(new Worker { Name = "Иван Зосимов", IsDuty = false, IsDutyOnWedn = true, IsDutyOnLetters = false });
+                db.Workers.Add(new Worker { Name = "Виктор Борисов", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true});
+                db.Workers.Add(new Worker { Name = "Елена Мохова", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true});
+                db.Workers.Add(new Worker { Name = "Ирина Ведерникова", IsDuty = true, IsDutyOnWedn = false, IsDutyOnLetters = false });
                 db.SaveChanges();
             }
         }

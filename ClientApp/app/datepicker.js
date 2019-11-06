@@ -7,14 +7,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 var NgbdDatepicker = /** @class */ (function () {
     function NgbdDatepicker(calendar) {
         this.calendar = calendar;
+        this.onChanged = new EventEmitter();
         this.today = calendar.getToday();
         this.model = this.today;
+        this.getDate(this.today);
     }
+    NgbdDatepicker.prototype.getDate = function ($event) {
+        console.log(this.model.day);
+        this.onChanged.emit(this.model);
+    };
+    __decorate([
+        Output(),
+        __metadata("design:type", Object)
+    ], NgbdDatepicker.prototype, "onChanged", void 0);
     NgbdDatepicker = __decorate([
         Component({
             selector: 'ngbd-datepicker',

@@ -7,26 +7,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
-import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdDatepicker } from './datepicker';
 var AppComponent = /** @class */ (function () {
-    function AppComponent(dataService, calendar) {
+    function AppComponent(dataService) {
         this.dataService = dataService;
-        this.calendar = calendar;
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
+        //this.date = this.datepicker.model;
+        //this.day = this.date.day;
+        //this.month = this.date.month;
     }
+    AppComponent.prototype.dateChangeHandler = function (date) {
+        //this.currentDate = date;
+        this.day = date.day;
+        this.month = date.month;
+        console.log(date);
+    };
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
-        this.date = this.datepicker.model;
-        //this.date = this.datepicker.today;
-        //console.log(this.date);
+    };
+    AppComponent.prototype.save = function () {
+        var _this = this;
+        console.log(this.worker);
+        this.dataService.updateWorker(this.worker)
+            .subscribe(function (data) { return _this.loadWorkers(); });
     };
     AppComponent.prototype.isFind = function (itemId, item) {
         return itemId == item.id;
@@ -34,11 +44,11 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.changeStaff = function (worker) {
         var _this = this;
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
-        this.currenStaffIsDutyCheck = this.worker.isDuty;
-        console.log(this.worker);
-        console.log(this.currenStaffIsDutyCheck);
-        this.date = this.datepicker.model;
-        console.log(this.date);
+        //this.currenStaffIsDutyCheck = this.worker.isDuty;
+        //console.log(this.worker);
+        //console.log(this.currenStaffIsDutyCheck);
+        //this.date = this.datepicker.model;
+        //console.log(this.date);
     };
     AppComponent.prototype.loadWorkers = function () {
         var _this = this;
@@ -50,18 +60,15 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.generateGraph = function () {
     };
-    __decorate([
-        ViewChild(NgbdDatepicker, { static: false }),
-        __metadata("design:type", NgbdDatepicker)
-    ], AppComponent.prototype, "datepicker", void 0);
     AppComponent = __decorate([
         Component({
             selector: 'app',
             templateUrl: './app.component.html',
             //styleUrls: ['./app.component.css'],
+            styles: [" \n     \n            .form-group {width: 100%;}\n            \n    "],
             providers: [DataService]
         }),
-        __metadata("design:paramtypes", [DataService, NgbCalendar])
+        __metadata("design:paramtypes", [DataService])
     ], AppComponent);
     return AppComponent;
 }());
