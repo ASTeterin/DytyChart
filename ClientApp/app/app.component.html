@@ -23,9 +23,27 @@
                     <div class="form-group">
                         <label for="name">Имя</label>
                         <select id="name" class="form-control" [(ngModel)]="selectedWorkerId" (change)="changeStaff($event)">
-                            <option *ngFor="let w of workers" [value]="w?.id">
-                                {{w?.name}}
-                            </option>
+                            <optgroup label="Группа поддержки VIP">
+                                <ng-container *ngFor="let w of workers">
+                                    <option *ngIf="w?.isDuty" [value]="w?.id">
+                                        {{w?.name}}
+                                    </option>
+                                </ng-container>
+                            </optgroup>
+                            <optgroup label="Группа запуска">
+                                <ng-container *ngFor="let w of workers">
+                                    <option *ngIf="!w?.isDuty&&w?.isDutyOnLetters" [value]="w?.id">
+                                        {{w?.name}}
+                                    </option>
+                                </ng-container>
+                            </optgroup>
+                            <optgroup label="Группа поддержки">
+                                <ng-container *ngFor="let w of workers">
+                                    <option *ngIf="w?.isDutyOnWedn" [value]="w?.id">
+                                        {{w?.name}}
+                                    </option>
+                                </ng-container>
+                            </optgroup>
                         </select>
                     </div>
                     {{selectedWorker?.name}}
