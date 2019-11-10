@@ -16,6 +16,7 @@ var AppComponent = /** @class */ (function () {
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
+        this.isDisableSettings = false;
         this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
         //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
@@ -31,8 +32,6 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
     };
-    AppComponent.prototype.generateTextInfo = function () {
-    };
     AppComponent.prototype.save = function () {
         var _this = this;
         console.log(this.worker);
@@ -45,8 +44,9 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.changeStaff = function (worker) {
         var _this = this;
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
+        this.isDisableSettings = true;
         //this.currenStaffIsDutyCheck = this.worker.isDuty;
-        //console.log(this.worker);
+        console.log(this.worker);
         //console.log(this.currenStaffIsDutyCheck);
         //this.date = this.datepicker.model;
         //console.log(this.date);
@@ -57,9 +57,6 @@ var AppComponent = /** @class */ (function () {
         console.log('1');
         this.dataService.getWorker()
             .subscribe(function (data) { return _this.workers = data; });
-        //this.selectedWorker = this.workers[1];
-    };
-    AppComponent.prototype.generateGraph = function () {
     };
     AppComponent = __decorate([
         Component({

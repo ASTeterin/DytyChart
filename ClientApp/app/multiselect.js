@@ -51,6 +51,10 @@ var NgMultiselect = /** @class */ (function () {
     ], NgMultiselect.prototype, "placeholder", void 0);
     __decorate([
         Input(),
+        __metadata("design:type", Boolean)
+    ], NgMultiselect.prototype, "isDisable", void 0);
+    __decorate([
+        Input(),
         __metadata("design:type", String)
     ], NgMultiselect.prototype, "userName", void 0);
     __decorate([

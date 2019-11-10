@@ -7,6 +7,7 @@
 })
 export class NgMultiselect {
     @Input() placeholder: string;
+    @Input() isDisable: boolean;
     dropdownList: any[];
     selectedItems: any[];
     dropdownSettings = {};

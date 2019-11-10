@@ -21,10 +21,17 @@ namespace dutyChart.Controllers
                 db.Workers.Add(new Worker { Name = "Елена Мохова", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true, DesiredTimes = new int[] { 2, 3 }, UnwantedTimes = new int[] { 1, 4, 8 } });
                 db.Workers.Add(new Worker { Name = "Ирина Ведерникова", IsDuty = true, IsDutyOnWedn = false, IsDutyOnLetters = false, DesiredTimes = new int[] { 5, 6 }, UnwantedTimes = new int[] { 2, 3, 4 } });
                 */
-                db.Workers.Add(new Worker { Name = "Иван Зосимов", IsDuty = false, IsDutyOnWedn = true, IsDutyOnLetters = false });
-                db.Workers.Add(new Worker { Name = "Виктор Борисов", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true});
-                db.Workers.Add(new Worker { Name = "Елена Мохова", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true});
-                db.Workers.Add(new Worker { Name = "Ирина Ведерникова", IsDuty = true, IsDutyOnWedn = false, IsDutyOnLetters = false });
+                db.Workers.Add(new Worker { Name = "Иван Зосимов", IsDuty = false, IsDutyOnWedn = true, IsDutyOnLetters = false, IdGroup = 1});
+                db.Workers.Add(new Worker { Name = "Виктор Борисов", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true, IdGroup = 2});
+                db.Workers.Add(new Worker { Name = "Елена Мохова", IsDuty = false, IsDutyOnWedn = false, IsDutyOnLetters = true, IdGroup = 3});
+                db.Workers.Add(new Worker { Name = "Ирина Ведерникова", IsDuty = true, IsDutyOnWedn = false, IsDutyOnLetters = false, IdGroup = 3});
+                db.SaveChanges();
+                Worker worker = db.Workers.FirstOrDefault(w => w.Name == "Виктор Борисов");
+                worker.SetUnwantedSlots(new List<int> { 1, 6, 8 });
+                Worker worker1 = db.Workers.FirstOrDefault(w => w.Name == "Елена Мохова");
+                worker1.SetUnwantedSlots(new List<int> { 4 });
+                Worker worker2 = db.Workers.FirstOrDefault(w => w.Name == "Ирина Ведерникова");
+                worker2.SetUnwantedSlots(new List<int> { 5, 6 });
                 db.SaveChanges();
             }
         }

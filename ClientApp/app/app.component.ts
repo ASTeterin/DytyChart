@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
+    isDisableSettings: boolean = true;
     dutyWorkerArr: Worker[];
     dutyWorkerByLetterArr: Worker[];
     dutyWorkerInWednesday: Worker[];
@@ -61,10 +62,6 @@ export class AppComponent implements OnInit {
         this.loadWorkers();
     }
 
-    generateTextInfo() {
-        
-    }
-
     save() {
         console.log(this.worker);
         this.dataService.updateWorker(this.worker)
@@ -77,8 +74,9 @@ export class AppComponent implements OnInit {
 
     changeStaff(worker: any) {
         this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
+        this.isDisableSettings = false;
         //this.currenStaffIsDutyCheck = this.worker.isDuty;
-        //console.log(this.worker);
+        console.log(this.worker);
         //console.log(this.currenStaffIsDutyCheck);
         //this.date = this.datepicker.model;
         //console.log(this.date);
@@ -89,11 +87,8 @@ export class AppComponent implements OnInit {
         console.log('1');
         this.dataService.getWorker()
             .subscribe((data: Worker[]) => this.workers = data);
-        //this.selectedWorker = this.workers[1];
-    }
-
-    generateGraph() {
 
     }
+
 }
 

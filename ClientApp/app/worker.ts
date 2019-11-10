@@ -4,5 +4,8 @@
         public name?: string,
         public isDuty?: boolean,
         public isDutyOnWedn?: boolean,
-        public isDutyOnLetters?: boolean,) { }     
+        public isDutyOnLetters?: boolean,
+        public idGroup?: number,
+        public unwantedSlots?: number[]
+        ) { }
 }

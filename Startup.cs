@@ -11,7 +11,7 @@ namespace dutyChart
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=workersdb;Trusted_Connection=True;";
+            string connectionString = "Server=.\\SQLEXPRESS;Database=workersdb;Trusted_Connection=True;";
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             services.AddMvc();
