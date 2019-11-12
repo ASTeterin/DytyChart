@@ -6,7 +6,7 @@
             </div>
             <div class="row">
                 <form>
-                    <ngbd-tabset [timeArr]="timeArr"></ngbd-tabset>
+                    <ngbd-tabset [timeArr]="timeArr" (onChanged)="slotChangeHandler($event)"></ngbd-tabset>
                 </form>
             </div>
 

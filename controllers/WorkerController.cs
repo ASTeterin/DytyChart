@@ -34,6 +34,12 @@ namespace dutyChart.Controllers
                 worker2.SetUnwantedSlots(new List<int> { 5, 6 });
                 db.SaveChanges();
             }
+            if (!db.Hours.Any())
+            {
+                db.Hours.Add(new Hour { Name = "09:00", MinCount = 2, MaxCount = 3, Date = new System.DateTime(2019, 11, 12) });
+                db.SaveChanges();
+
+            }
         }
         [HttpGet]
         public IEnumerable<Worker> Get()
@@ -41,11 +47,22 @@ namespace dutyChart.Controllers
             return db.Workers.ToList();
         }
 
+        public IEnumerable<Hour> GetHour()
+        {
+            return db.Hours.ToList();
+        }
+
         [HttpGet("{id}")]
         public Worker Get(int id)
         {
             Worker worker = db.Workers.FirstOrDefault(x => x.Id == id);
             return worker;
+        }
+
+        public Hour GetHour(int id)
+        {
+            Hour hour = db.Hours.FirstOrDefault(x => x.Id == id);
+            return hour;
         }
 
         [HttpPost]
@@ -59,6 +76,16 @@ namespace dutyChart.Controllers
             }
             return BadRequest(ModelState);
         }
+        public IActionResult PostHour([FromBody]Hour hour)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Hours.Add(hour);
+                db.SaveChanges();
+                return Ok(hour);
+            }
+            return BadRequest(ModelState);
+        }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]Worker worker)
@@ -68,6 +95,16 @@ namespace dutyChart.Controllers
                 db.Update(worker);
                 db.SaveChanges();
                 return Ok(worker);
+            }
+            return BadRequest(ModelState);
+        }
+        public IActionResult PutHour(int id, [FromBody]Hour hour)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Update(hour);
+                db.SaveChanges();
+                return Ok(hour);
             }
             return BadRequest(ModelState);
         }

@@ -13,10 +13,10 @@ var DataService = /** @class */ (function () {
     function DataService(http) {
         this.http = http;
         this.url = "/api/Workers";
+        this.urlHour = "/api/Hours";
     }
-    DataService.prototype.getWorker = function () {
-        console.log('2');
-        return this.http.get(this.url);
+    DataService.prototype.getData = function (url) {
+        return this.http.get(url);
     };
     DataService.prototype.createWorker = function (worker) {
         return this.http.post(this.url, worker);

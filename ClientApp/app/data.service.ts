@@ -5,14 +5,14 @@ import { Worker } from './worker';
 @Injectable()
 export class DataService {
 
-    private url = "/api/Workers";
+    public url = "/api/Workers";
+    public urlHour = "/api/Hours"
 
     constructor(private http: HttpClient) {
     }
 
-    getWorker() {
-        console.log('2');
-        return this.http.get(this.url);
+    getData(url: string) {
+        return this.http.get(url);
     }
 
     createWorker(worker: Worker) {

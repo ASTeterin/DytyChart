@@ -7,15 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Input, Component } from '@angular/core';
+import { Input, Component, Output, EventEmitter } from '@angular/core';
 var NgbdTabset = /** @class */ (function () {
     function NgbdTabset() {
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
+        this.onChanged = new EventEmitter();
+        /*public onChange($event: NgbTabChangeEvent) {
+            this.id = $event.nextId;
+        }*/
     }
+    NgbdTabset.prototype.onChange = function ($event) {
+        this.onChanged.emit($event);
+    };
     __decorate([
         Input(),
         __metadata("design:type", String)
     ], NgbdTabset.prototype, "timeArr", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", Object)
+    ], NgbdTabset.prototype, "onChanged", void 0);
     NgbdTabset = __decorate([
         Component({
             selector: 'ngbd-tabset',

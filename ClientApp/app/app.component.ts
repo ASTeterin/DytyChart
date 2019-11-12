@@ -2,6 +2,8 @@
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect'
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { Hour } from './hour';
+import { NgbdTabset } from './tabset';
 import { NgMultiselect } from './multiselect';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdDatepicker } from './datepicker';
@@ -36,11 +38,14 @@ export class AppComponent implements OnInit {
     desiredTimeId: number[];
     unwantedTimeId: number[];
     isDisableSettings: boolean = true;
-    dutyWorkerArr: Worker[];
-    dutyWorkerByLetterArr: Worker[];
-    dutyWorkerInWednesday: Worker[];
+    //dutyWorkerArr: Worker[];
+    //dutyWorkerByLetterArr: Worker[];
+    //dutyWorkerInWednesday: Worker[];
     timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-   
+
+    newHour: Hour = new Hour;
+    @ViewChild(NgbdTabset, { static: false })
+    private tab: NgbdTabset;
 
     constructor(private dataService: DataService) {
         //this.datepicker = new NgbdDatepicker(this.calendar);
@@ -49,13 +54,19 @@ export class AppComponent implements OnInit {
         //this.day = this.date.day;
         //this.month = this.date.month;
     }
-
-
+    slotChangeHandler(t: any) {
+        console.log(t);
+        this.newHour.name = t.nextId;
+        //this.newHour.date = new Date(this.day, this.month);
+        //this.newHour.date = new Date(this.day, this.month);
+        console.log(this.newHour);
+    }
 
     dateChangeHandler(date: NgbDateStruct) {
         this.day = date.day;
         this.month = date.month;
         console.log(date)
+        this.newHour.date = new Date(date.year, date.month-1, date.day);
     }
 
     ngOnInit() {
@@ -84,8 +95,7 @@ export class AppComponent implements OnInit {
 
     loadWorkers() {
         //this.workers = this.dataService.getWorkers();
-        console.log('1');
-        this.dataService.getWorker()
+        this.dataService.getData(this.dataService.url)
             .subscribe((data: Worker[]) => this.workers = data);
 
     }

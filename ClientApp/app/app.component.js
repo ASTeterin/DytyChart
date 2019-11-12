@@ -7,16 +7,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { NgbdTabset } from './tabset';
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService) {
         this.dataService = dataService;
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
-        this.isDisableSettings = false;
+        this.isDisableSettings = true;
+        //dutyWorkerArr: Worker[];
+        //dutyWorkerByLetterArr: Worker[];
+        //dutyWorkerInWednesday: Worker[];
         this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
         //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
@@ -24,6 +28,9 @@ var AppComponent = /** @class */ (function () {
         //this.day = this.date.day;
         //this.month = this.date.month;
     }
+    AppComponent.prototype.tabChangeHandler = function (t) {
+        console.log(t.id);
+    };
     AppComponent.prototype.dateChangeHandler = function (date) {
         this.day = date.day;
         this.month = date.month;
@@ -44,7 +51,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.changeStaff = function (worker) {
         var _this = this;
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
-        this.isDisableSettings = true;
+        this.isDisableSettings = false;
         //this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
         //console.log(this.currenStaffIsDutyCheck);
@@ -54,10 +61,13 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.loadWorkers = function () {
         var _this = this;
         //this.workers = this.dataService.getWorkers();
-        console.log('1');
-        this.dataService.getWorker()
+        this.dataService.getData(this.dataService.url)
             .subscribe(function (data) { return _this.workers = data; });
     };
+    __decorate([
+        ViewChild(NgbdTabset, { static: false }),
+        __metadata("design:type", NgbdTabset)
+    ], AppComponent.prototype, "tab", void 0);
     AppComponent = __decorate([
         Component({
             selector: 'app',
