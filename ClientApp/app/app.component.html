@@ -6,7 +6,11 @@
             </div>
             <div class="row">
                 <form>
-                    <ngbd-tabset [timeArr]="timeArr" (onChanged)="slotChangeHandler($event)"></ngbd-tabset>
+                    <ngbd-tabset [timeArr]="timeArr" 
+                                 (onChanged)="tabChangeHandler($event)" 
+                                 (onMinSlotChanged)="minSlotChangeHandler($event)"
+                                 (onMaxSlotChanged)="maxSlotChangeHandler($event)">
+                    </ngbd-tabset>
                 </form>
             </div>
 
@@ -83,29 +87,29 @@
             <h1>График дежурств на {{day}}.{{month}} </h1>
             <p> <b>Дежурный: </b>
                 <ng-container *ngFor="let w of workers">
-                    <div *ngIf="w?.isDuty">
-                        {{w?.name}}
+                    <div class="worker_info_item" *ngIf="w?.isDuty">
+                        {{w?.name}},&nbsp;
                     </div>
                 </ng-container>
             </p>
             <p><b>Дежурные на письмах: </b>
                <ng-container *ngFor="let w of workers">
-                   <div *ngIf="w?.isDutyOnLetters">
-                       {{w?.name}}
+                   <div class="worker_info_item" *ngIf="w?.isDutyOnLetters">
+                       {{w?.name}}; &nbsp;
                    </div>
                </ng-container>
             </p>
             <p><b>Дежурный в среду: </b>
                <ng-container *ngFor="let w of workers">
-                   <div *ngIf="w?.isDutyOnWedn">
-                       {{w?.name}}
+                   <div class="worker_info_item" *ngIf="w?.isDutyOnWedn">
+                       {{w?.name}}; &nbsp;
                    </div>
                </ng-container>
             </p>
             <div class="form-group">
-                <button class="btn btn-default" (click)="generateGraph()">Сформировать график</button>
+                <button class="btn btn-default" (click)="generateGraph(newHour.date)">Сформировать график</button>
             </div>
-            <duty-chart [minSlotsCount]="minSlotsCount" [maxSlotsCount]="maxSlotsCount"></duty-chart>
+            <duty-chart [slots]="slots" [selectedDateHours]="selectedDateHours" [workers]="workers"></duty-chart>
         </div>   
     </div>
 </div>

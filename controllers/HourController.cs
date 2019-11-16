@@ -2,8 +2,8 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using dutyChart.Models;
-
-
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace dutyChart.Controllers
 {
@@ -22,9 +22,12 @@ namespace dutyChart.Controllers
             }
         }
         [HttpGet]
-        public IEnumerable<Hour> Get()
+        public IEnumerable<Hour> Get(DateTime date)
         {
-            return db.Hours.ToList();
+            var hours = db.Hours
+                .Include( Hour.SlotsProperty )
+                .Where(h => h.Date == date).ToList();
+            return hours;
         }
 
         [HttpGet("{id}")]

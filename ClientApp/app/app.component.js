@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component, ViewChild } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { Hour } from './hour';
 import { NgbdTabset } from './tabset';
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService) {
@@ -17,11 +18,14 @@ var AppComponent = /** @class */ (function () {
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
+        this.isFirstHour = true;
         this.isDisableSettings = true;
         //dutyWorkerArr: Worker[];
         //dutyWorkerByLetterArr: Worker[];
         //dutyWorkerInWednesday: Worker[];
         this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        this.slots = [1, 2, 3];
+        this.newHour = new Hour;
         //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
         //this.date = this.datepicker.model;
@@ -29,15 +33,50 @@ var AppComponent = /** @class */ (function () {
         //this.month = this.date.month;
     }
     AppComponent.prototype.tabChangeHandler = function (t) {
-        console.log(t.id);
+        console.log(t);
+        /*if (this.isFirstHour) {
+            this.newHour.name = t.activeId;
+            this.isFirstHour = false;
+        } else {
+            this.newHour.name = t.nextId;
+        }*/
+        this.newHour.name = t.activeId;
+        console.log(this.newHour);
+    };
+    AppComponent.prototype.minSlotChangeHandler = function (count) {
+        this.newHour.minCount = count;
+        this.slots = this.getArray(count);
+        //console.log(count);
+    };
+    AppComponent.prototype.maxSlotChangeHandler = function (count) {
+        this.newHour.maxCount = count;
+        //console.log(count);
+    };
+    AppComponent.prototype.getArray = function (countElem) {
+        var arr = [];
+        for (var i = 1; i <= countElem; i++) {
+            arr.push(i);
+        }
+        console.log(arr);
+        return arr;
     };
     AppComponent.prototype.dateChangeHandler = function (date) {
         this.day = date.day;
         this.month = date.month;
         console.log(date);
+        this.newHour.date = new Date(date.year, date.month - 1, date.day);
+    };
+    AppComponent.prototype.generateGraph = function (date) {
+        var _this = this;
+        this.dataService.getHours(date).subscribe(function (data) {
+            _this.selectedDateHours = data;
+            console.log(_this.selectedDateHours);
+            console.log(_this.workers);
+        });
     };
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
+        this.newHour.date = new Date();
     };
     AppComponent.prototype.save = function () {
         var _this = this;

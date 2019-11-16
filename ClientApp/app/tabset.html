@@ -6,7 +6,7 @@
                 <div class="form-group col-sm-6">
                     <label for="min_slot" class="count_slot_label">Минимальное количество слотов</label>
                     <select class="form-control" name="min_slot"
-                            [(ngModel)]="minSlotsCount" #minSlots="ngModel" (ngModelChange)="onModelChange()">
+                            [(ngModel)]="minSlotsCount" #minSlots="ngModel" (ngModelChange)="onMinSlotChange($event)">
                         <option *ngFor="let i of countSlots">
                             {{i}}
                         </option>
@@ -15,7 +15,7 @@
                 <div class="form-group col-sm-6">
                     <label for="max_slot" class="count_slot_label">Максимальное количество слотов</label>
                     <select class="form-control" name="max_slot"
-                            [(ngModel)]="maxSlotsCount" #maxSlots="ngModel">
+                            [(ngModel)]="maxSlotsCount" #maxSlots="ngModel" (ngModelChange)="onMaxSlotChange($event)">
                         <option *ngFor="let i of countSlots">
                             {{i}}
                         </option>

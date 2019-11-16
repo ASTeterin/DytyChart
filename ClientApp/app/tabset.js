@@ -12,12 +12,20 @@ var NgbdTabset = /** @class */ (function () {
     function NgbdTabset() {
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.onChanged = new EventEmitter();
+        this.onMinSlotChanged = new EventEmitter();
+        this.onMaxSlotChanged = new EventEmitter();
         /*public onChange($event: NgbTabChangeEvent) {
             this.id = $event.nextId;
         }*/
     }
     NgbdTabset.prototype.onChange = function ($event) {
         this.onChanged.emit($event);
+    };
+    NgbdTabset.prototype.onMinSlotChange = function ($event) {
+        this.onMinSlotChanged.emit($event);
+    };
+    NgbdTabset.prototype.onMaxSlotChange = function ($event) {
+        this.onMaxSlotChanged.emit($event);
     };
     __decorate([
         Input(),
@@ -27,6 +35,14 @@ var NgbdTabset = /** @class */ (function () {
         Output(),
         __metadata("design:type", Object)
     ], NgbdTabset.prototype, "onChanged", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", Object)
+    ], NgbdTabset.prototype, "onMinSlotChanged", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", Object)
+    ], NgbdTabset.prototype, "onMaxSlotChanged", void 0);
     NgbdTabset = __decorate([
         Component({
             selector: 'ngbd-tabset',

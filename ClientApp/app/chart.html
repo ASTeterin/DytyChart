@@ -1,29 +1,33 @@
 ﻿
 <table class="table table-bordered">
     <tbody>
-        <tr>
+        <tr *ngFor="let hour of selectedDateHours">
+            <th scope="row">{{hour.name}}</th>
+            <th *ngFor="let slot of hour.slots">{{getWorkerName(slot.workerId)}}</th>
+        </tr>
+        <!--<tr>
             <th scope="row">09:00</th>
-            <th *ngFor="let i of minSlotsArray">{{minSlotsCount}}</th>
+            <th *ngFor="let i of slots">Иванов</th>
         </tr>
         <tr>
             <th scope="row">10:00</th>
-            <th *ngFor="let i of [1, 2, 3]">{{i}}</th>
+            <th *ngFor="let i of slots">Алексеев</th>
         </tr>
         <tr>
             <th scope="row">11:00</th>
-            <th *ngFor="let i of [1, 2, 3]">{{i}}</th>
+            <th *ngFor="let i of slots">Михеев</th>
         </tr>
         <tr>
             <th scope="row">12:00</th>
-            <th *ngFor="let i of [1, 2, 3, 4]">{{i}}</th>
+            <th *ngFor="let i of slots">Лапин</th>
         </tr>
         <tr>
             <th scope="row">13:00</th>
-            <th *ngFor="let i of [1, 2, 3, 4, 5]">{{i}}</th>
+            <th *ngFor="let i of slots">Ионов</th>
         </tr>
         <tr>
             <th scope="row">14:00</th>
-            <th *ngFor="let i of [1, 2, 3, 4, 5, 6]">{{i}}</th>
+            <th *ngFor="let i of slots">Степанов</th>
         </tr>
         <tr>
             <th scope="row">15:00</th>
@@ -44,6 +48,6 @@
         <tr>
             <th scope="row">19:00</th>
             <th *ngFor="let i of [1, 2]">{{i}}</th>
-        </tr>
+        </tr>-->
     </tbody>
 </table>

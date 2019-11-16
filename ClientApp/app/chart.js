@@ -8,9 +8,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Input, Component } from '@angular/core';
+import { Hour } from "./hour";
 var DutyChart = /** @class */ (function () {
     function DutyChart() {
-        this.getChartParam();
+        //this.getChartParam();
     }
     DutyChart.prototype.createArray = function (countElement) {
         var arr;
@@ -20,9 +21,25 @@ var DutyChart = /** @class */ (function () {
         return arr;
     };
     DutyChart.prototype.getChartParam = function () {
-        this.maxSlotsArray = this.createArray(this.maxSlotsCount);
-        this.minSlotsArray = this.createArray(this.minSlotsCount);
+        //this.maxSlotsArray = this.createArray(this.maxSlotsCount);
+        this.minSlotsArray = (this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
+        console.log(this.minSlotsArray);
     };
+    DutyChart.prototype.getWorkerName = function (workerId) {
+        return this.workers.find(function (w) { return w.id == workerId; }).name;
+    };
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], DutyChart.prototype, "slots", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], DutyChart.prototype, "workers", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], DutyChart.prototype, "selectedDateHours", void 0);
     __decorate([
         Input(),
         __metadata("design:type", Number)
@@ -31,6 +48,10 @@ var DutyChart = /** @class */ (function () {
         Input(),
         __metadata("design:type", Number)
     ], DutyChart.prototype, "maxSlotsCount", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Hour)
+    ], DutyChart.prototype, "hour", void 0);
     DutyChart = __decorate([
         Component({
             selector: 'duty-chart',

@@ -14,7 +14,8 @@ import { NgbdDatepicker } from './datepicker';
     templateUrl: './app.component.html',
     //styleUrls: ['./app.component.css'],
     styles: [` 
-            .form-group {width: 100%;
+            .form-group {width: 100%;}
+            .worker_info_item {display: inline-block;}
     `],
     providers: [DataService]    
 })
@@ -27,21 +28,26 @@ export class AppComponent implements OnInit {
     month: number;
     worker: Worker = new Worker();   
     workers: Worker[];
-    selectedWorkerId: number;//Worker = new Worker();
+    selectedWorkerId: number;
     minSlotsCount: String;
     maxSlotsCount: Number;
     tableMode: boolean = true;  
     optionsModel: number[];
     myOptions: IMultiSelectOption[];
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
+  
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
+    isFirstHour: boolean = true;
     isDisableSettings: boolean = true;
     //dutyWorkerArr: Worker[];
     //dutyWorkerByLetterArr: Worker[];
     //dutyWorkerInWednesday: Worker[];
     timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+    slots: number[] = [1, 2, 3];
+    //selectedDate: 
+    selectedDateHours: Hour[];
 
     newHour: Hour = new Hour;
     @ViewChild(NgbdTabset, { static: false })
@@ -54,12 +60,36 @@ export class AppComponent implements OnInit {
         //this.day = this.date.day;
         //this.month = this.date.month;
     }
-    slotChangeHandler(t: any) {
+    tabChangeHandler(t: any) {
         console.log(t);
-        this.newHour.name = t.nextId;
-        //this.newHour.date = new Date(this.day, this.month);
-        //this.newHour.date = new Date(this.day, this.month);
+        /*if (this.isFirstHour) {
+            this.newHour.name = t.activeId;
+            this.isFirstHour = false;
+        } else {
+            this.newHour.name = t.nextId;
+        }*/
+        this.newHour.name = t.activeId;
         console.log(this.newHour);
+    }
+
+    minSlotChangeHandler(count: number) {
+        this.newHour.minCount = count;
+        this.slots = this.getArray(count);
+        //console.log(count);
+    }
+
+    maxSlotChangeHandler(count: number) {
+        this.newHour.maxCount = count;
+        //console.log(count);
+    }
+
+    getArray(countElem: number) {
+        var arr: number[] = [];
+        for (var i = 1; i <= countElem; i++) {
+            arr.push(i);
+        }
+        console.log(arr);
+        return arr;
     }
 
     dateChangeHandler(date: NgbDateStruct) {
@@ -69,8 +99,18 @@ export class AppComponent implements OnInit {
         this.newHour.date = new Date(date.year, date.month-1, date.day);
     }
 
+    generateGraph(date: Date): void {
+        this.dataService.getHours(date).subscribe((data: Hour[]) => {
+
+            this.selectedDateHours = data;
+            console.log(this.selectedDateHours);
+            console.log(this.workers);
+        });
+    }
+
     ngOnInit() {
         this.loadWorkers();
+        this.newHour.date = new Date();
     }
 
     save() {

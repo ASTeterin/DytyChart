@@ -1,14 +1,21 @@
 ﻿import { Input, Component } from '@angular/core';
+import { Hour } from "./hour"
+import { log } from 'util';
 
 @Component({
     selector: 'duty-chart',
     templateUrl: 'chart.html'
 })
 export class DutyChart {
+    @Input() slots: any[];
+    @Input() workers: any[];
+    @Input() selectedDateHours: any[];
     maxSlotsArray: number[];
     minSlotsArray: number[];
-    @Input() minSlotsCount: number;
-    @Input() maxSlotsCount: number;
+    //@Input() minSlotsCount: number;
+    //@Input() maxSlotsCount: number;
+    @Input() hour: Hour;
+
 
     createArray(countElement: number): number[] {
         var arr: number[];
@@ -19,11 +26,18 @@ export class DutyChart {
     }
 
     getChartParam() {
-        this.maxSlotsArray = this.createArray(this.maxSlotsCount);
-        this.minSlotsArray = this.createArray(this.minSlotsCount);
+        //this.maxSlotsArray = this.createArray(this.maxSlotsCount);
+
+        this.minSlotsArray = (this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
+        console.log(this.minSlotsArray);
+    }
+
+    getWorkerName(workerId: number) {
+        return this.workers.find(w => w.id == workerId).name;
     }
 
     constructor() {
-        this.getChartParam();
+        //this.getChartParam();
+        
     }
 }

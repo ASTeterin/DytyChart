@@ -13,7 +13,7 @@ public class Worker
     public int IdGroup { get; set; }
     private string _unwantedSlotsJson { get; set; }
 
-    //public IReadOnlyCollection<int> UnwantedSlots => JsonConvert.DeserializeObject<List<int>>(_unwantedSlotsJson);
+    public IReadOnlyCollection<int> UnwantedSlots => JsonConvert.DeserializeObject<List<int>>(_unwantedSlotsJson ?? "[]");
 
     public void SetUnwantedSlots(List<int> slots)
     {

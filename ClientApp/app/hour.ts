@@ -4,6 +4,7 @@
         public name?: string,
         public minCount?: number,
         public maxCount?: number,
-        public date?: Date
+        public date?: Date,
+        public slots?: any[]
     ) { }
 }

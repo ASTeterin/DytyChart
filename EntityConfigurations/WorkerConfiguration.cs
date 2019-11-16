@@ -13,7 +13,7 @@ namespace dutyChart.EntityConfigurations
         {
             builder.ToTable(nameof(Worker)).HasKey(t => t.Id);
             builder.Property(Worker.UnwantedSlotsJsonProperty).HasColumnName("UnwantedSlotsJson");
-            //builder.Ignore(t => t.UnwantedSlots);
+            builder.Ignore(t => t.UnwantedSlots);
         }
     }
 }

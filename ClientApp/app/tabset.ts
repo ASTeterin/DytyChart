@@ -24,6 +24,16 @@ export class NgbdTabset {
         this.onChanged.emit($event)
     }
 
+    @Output() onMinSlotChanged = new EventEmitter<number>()
+    onMinSlotChange($event: any) {
+        this.onMinSlotChanged.emit($event);
+    }
+
+    @Output() onMaxSlotChanged = new EventEmitter<number>()
+    onMaxSlotChange($event: any) {
+        this.onMaxSlotChanged.emit($event);
+    }
+
     /*public onChange($event: NgbTabChangeEvent) {
         this.id = $event.nextId;
     }*/
