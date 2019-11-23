@@ -40,18 +40,19 @@ export class AppComponent implements OnInit {
     desiredTimeId: number[];
     unwantedTimeId: number[];
     isFirstHour: boolean = true;
+    isNewDay: boolean = true;
     isDisableSettings: boolean = true;
     //dutyWorkerArr: Worker[];
     //dutyWorkerByLetterArr: Worker[];
     //dutyWorkerInWednesday: Worker[];
-    timeArr: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-    slots: number[] = [1, 2, 3];
-    //selectedDate: 
+    timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+    //slots: number[] = [1, 2, 3];
+    selectedDate: Date;
+    selectedHour: Hour = new Hour;
     selectedDateHours: Hour[];
 
     newHour: Hour = new Hour;
-    @ViewChild(NgbdTabset, { static: false })
-    private tab: NgbdTabset;
+
 
     constructor(private dataService: DataService) {
         //this.datepicker = new NgbdDatepicker(this.calendar);
@@ -62,19 +63,19 @@ export class AppComponent implements OnInit {
     }
     tabChangeHandler(t: any) {
         console.log(t);
-        /*if (this.isFirstHour) {
-            this.newHour.name = t.activeId;
-            this.isFirstHour = false;
-        } else {
-            this.newHour.name = t.nextId;
-        }*/
-        this.newHour.name = t.activeId;
+
+
+        if (!this.isNewDay) {
+            this.selectedHour = this.selectedDateHours.find(x => x.name == t.nextId);
+            console.log(this.selectedHour);
+        }
+        this.newHour.name = t.nextId;
         console.log(this.newHour);
     }
 
     minSlotChangeHandler(count: number) {
         this.newHour.minCount = count;
-        this.slots = this.getArray(count);
+        //this.slots = this.getArray(count);
         //console.log(count);
     }
 
@@ -95,8 +96,27 @@ export class AppComponent implements OnInit {
     dateChangeHandler(date: NgbDateStruct) {
         this.day = date.day;
         this.month = date.month;
-        console.log(date)
-        this.newHour.date = new Date(date.year, date.month-1, date.day);
+        console.log(date);
+        this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        //
+        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
+
+            if (data.length == 0) {
+                this.isNewDay = true;
+                this.newHour.date = this.selectedDate;
+            } else {
+                this.selectedHour = data[0];
+                this.selectedDateHours = data;
+                this.isNewDay = false;
+                console.log(this.selectedDateHours);
+                //console.log(this.workers);
+            }
+
+
+        });
+        
+        
+
     }
 
     generateGraph(date: Date): void {
@@ -126,11 +146,7 @@ export class AppComponent implements OnInit {
     changeStaff(worker: any) {
         this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
         this.isDisableSettings = false;
-        //this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
-        //console.log(this.currenStaffIsDutyCheck);
-        //this.date = this.datepicker.model;
-        //console.log(this.date);
     }   
 
     loadWorkers() {

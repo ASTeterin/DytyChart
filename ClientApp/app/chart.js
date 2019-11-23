@@ -42,14 +42,6 @@ var DutyChart = /** @class */ (function () {
     ], DutyChart.prototype, "selectedDateHours", void 0);
     __decorate([
         Input(),
-        __metadata("design:type", Number)
-    ], DutyChart.prototype, "minSlotsCount", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Number)
-    ], DutyChart.prototype, "maxSlotsCount", void 0);
-    __decorate([
-        Input(),
         __metadata("design:type", Hour)
     ], DutyChart.prototype, "hour", void 0);
     DutyChart = __decorate([

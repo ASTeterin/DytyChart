@@ -1,6 +1,7 @@
 ﻿import { Input, Component, ViewChild, Output, EventEmitter} from '@angular/core';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { Hour } from './hour';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class NgbdTabset {
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
     id: string;
     @Input() timeArr: string;
+    @Input() selectedHour: Hour;
 
     @Output() onChanged = new EventEmitter<any>()
     onChange($event: any) {

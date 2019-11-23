@@ -23,7 +23,7 @@ var AppComponent = /** @class */ (function () {
         //dutyWorkerArr: Worker[];
         //dutyWorkerByLetterArr: Worker[];
         //dutyWorkerInWednesday: Worker[];
-        this.timeArr = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        this.timeArr = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
         this.slots = [1, 2, 3];
         this.newHour = new Hour;
         //this.datepicker = new NgbdDatepicker(this.calendar);
@@ -112,7 +112,7 @@ var AppComponent = /** @class */ (function () {
             selector: 'app',
             templateUrl: './app.component.html',
             //styleUrls: ['./app.component.css'],
-            styles: [" \n            .form-group {width: 100%;\n    "],
+            styles: [" \n            .form-group {width: 100%;}\n            .worker_info_item {display: inline-block;}\n    "],
             providers: [DataService]
         }),
         __metadata("design:paramtypes", [DataService])
