@@ -63,14 +63,22 @@ export class AppComponent implements OnInit {
     }
     tabChangeHandler(t: any) {
         console.log(t);
-
+        this.saveHour();
 
         if (!this.isNewDay) {
-            this.selectedHour = this.selectedDateHours.find(x => x.name == t.nextId);
+            let hour = this.selectedDateHours.find(x => x.name == t.nextId);
+            if (!hour) {
+                this.selectedHour.name = t.nextId;
+                this.selectedHour.date = this.selectedDate;
+            } else {
+                this.selectedHour = hour;
+            }
+            console.log(this.selectedHour);
+        } else {
+            this.selectedHour.name = t.nextId;
+            this.selectedHour.date = this.selectedDate;
             console.log(this.selectedHour);
         }
-        this.newHour.name = t.nextId;
-        console.log(this.newHour);
     }
 
     minSlotChangeHandler(count: number) {
@@ -97,13 +105,14 @@ export class AppComponent implements OnInit {
         this.day = date.day;
         this.month = date.month;
         console.log(date);
-        this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        this.selectedDate = new Date (date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        console.log(this.selectedDate);
         //
         this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
 
             if (data.length == 0) {
                 this.isNewDay = true;
-                this.newHour.date = this.selectedDate;
+                //this.selectedHour.date = new Date (Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
             } else {
                 this.selectedHour = data[0];
                 this.selectedDateHours = data;
@@ -128,15 +137,47 @@ export class AppComponent implements OnInit {
         });
     }
 
+    getToday(): Date {
+        var today: Date;
+        today = new Date();
+        today.setHours(0, 0, 0, 0);
+        //today.setDate(today.getDate());
+        return today;
+    }
+
     ngOnInit() {
         this.loadWorkers();
-        this.newHour.date = new Date();
+        this.selectedDate = this.getToday();
+        this.loadHours();
     }
 
     save() {
         console.log(this.worker);
         this.dataService.updateWorker(this.worker)
             .subscribe(data => this.loadWorkers());
+    }
+
+    saveHour() {
+        //this.selectedHour.date = new Date(Date.UTC(toISOString());
+        this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
+        if (!this.selectedHour.id) {
+            this.dataService.createHour(this.selectedHour)
+                .subscribe((data: Hour) => this.selectedDateHours.push(data));
+        } else {
+            this.dataService.updateHour(this.selectedHour)
+                .subscribe(data => this.loadHours());
+        }
+        this.cancel();
+    }
+
+    loadHours() {
+        this.dataService.getHours(this.selectedDate)
+            .subscribe((data: Hour[]) => this.selectedDateHours = data);
+        console.log(this.selectedDateHours);
+    }
+
+    cancel() {
+        this.selectedHour = new Hour();
     }
 
     isFind(itemId: number, item: any) {

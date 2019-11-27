@@ -30,6 +30,12 @@ var DataService = /** @class */ (function () {
     DataService.prototype.getHours = function (date) {
         return this.http.get(this.urlHour + "?date=" + date.toISOString());
     };
+    DataService.prototype.createHour = function (hour) {
+        return this.http.post(this.urlHour, hour);
+    };
+    DataService.prototype.updateHour = function (hour) {
+        return this.http.put(this.urlHour + '/' + hour.id, hour);
+    };
     DataService = __decorate([
         Injectable(),
         __metadata("design:paramtypes", [HttpClient])

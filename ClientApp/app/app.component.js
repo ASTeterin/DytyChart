@@ -7,11 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { Hour } from './hour';
-import { NgbdTabset } from './tabset';
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService) {
         this.dataService = dataService;
@@ -19,12 +18,13 @@ var AppComponent = /** @class */ (function () {
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.isFirstHour = true;
+        this.isNewDay = true;
         this.isDisableSettings = true;
         //dutyWorkerArr: Worker[];
         //dutyWorkerByLetterArr: Worker[];
         //dutyWorkerInWednesday: Worker[];
         this.timeArr = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-        this.slots = [1, 2, 3];
+        this.selectedHour = new Hour;
         this.newHour = new Hour;
         //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
@@ -34,18 +34,27 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.tabChangeHandler = function (t) {
         console.log(t);
-        /*if (this.isFirstHour) {
-            this.newHour.name = t.activeId;
-            this.isFirstHour = false;
-        } else {
-            this.newHour.name = t.nextId;
-        }*/
-        this.newHour.name = t.activeId;
-        console.log(this.newHour);
+        this.saveHour();
+        if (!this.isNewDay) {
+            var hour = this.selectedDateHours.find(function (x) { return x.name == t.nextId; });
+            if (!hour) {
+                this.selectedHour.name = t.nextId;
+                this.selectedHour.date = this.selectedDate;
+            }
+            else {
+                this.selectedHour = hour;
+            }
+            console.log(this.selectedHour);
+        }
+        else {
+            this.selectedHour.name = t.nextId;
+            this.selectedHour.date = this.selectedDate;
+            console.log(this.selectedHour);
+        }
     };
     AppComponent.prototype.minSlotChangeHandler = function (count) {
         this.newHour.minCount = count;
-        this.slots = this.getArray(count);
+        //this.slots = this.getArray(count);
         //console.log(count);
     };
     AppComponent.prototype.maxSlotChangeHandler = function (count) {
@@ -61,10 +70,26 @@ var AppComponent = /** @class */ (function () {
         return arr;
     };
     AppComponent.prototype.dateChangeHandler = function (date) {
+        var _this = this;
         this.day = date.day;
         this.month = date.month;
         console.log(date);
-        this.newHour.date = new Date(date.year, date.month - 1, date.day);
+        this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        console.log(this.selectedDate);
+        //
+        this.dataService.getHours(this.selectedDate).subscribe(function (data) {
+            if (data.length == 0) {
+                _this.isNewDay = true;
+                //this.selectedHour.date = new Date (Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
+            }
+            else {
+                _this.selectedHour = data[0];
+                _this.selectedDateHours = data;
+                _this.isNewDay = false;
+                console.log(_this.selectedDateHours);
+                //console.log(this.workers);
+            }
+        });
     };
     AppComponent.prototype.generateGraph = function (date) {
         var _this = this;
@@ -74,15 +99,46 @@ var AppComponent = /** @class */ (function () {
             console.log(_this.workers);
         });
     };
+    AppComponent.prototype.getToday = function () {
+        var today;
+        today = new Date();
+        today.setHours(0, 0, 0, 0);
+        //today.setDate(today.getDate());
+        return today;
+    };
     AppComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
-        this.newHour.date = new Date();
+        this.selectedDate = this.getToday();
+        this.loadHours();
     };
     AppComponent.prototype.save = function () {
         var _this = this;
         console.log(this.worker);
         this.dataService.updateWorker(this.worker)
             .subscribe(function (data) { return _this.loadWorkers(); });
+    };
+    AppComponent.prototype.saveHour = function () {
+        var _this = this;
+        //this.selectedHour.date = new Date(Date.UTC(toISOString());
+        this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
+        if (!this.selectedHour.id) {
+            this.dataService.createHour(this.selectedHour)
+                .subscribe(function (data) { return _this.selectedDateHours.push(data); });
+        }
+        else {
+            this.dataService.updateHour(this.selectedHour)
+                .subscribe(function (data) { return _this.loadHours(); });
+        }
+        this.cancel();
+    };
+    AppComponent.prototype.loadHours = function () {
+        var _this = this;
+        this.dataService.getHours(this.selectedDate)
+            .subscribe(function (data) { return _this.selectedDateHours = data; });
+        console.log(this.selectedDateHours);
+    };
+    AppComponent.prototype.cancel = function () {
+        this.selectedHour = new Hour();
     };
     AppComponent.prototype.isFind = function (itemId, item) {
         return itemId == item.id;
@@ -91,11 +147,7 @@ var AppComponent = /** @class */ (function () {
         var _this = this;
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         this.isDisableSettings = false;
-        //this.currenStaffIsDutyCheck = this.worker.isDuty;
         console.log(this.worker);
-        //console.log(this.currenStaffIsDutyCheck);
-        //this.date = this.datepicker.model;
-        //console.log(this.date);
     };
     AppComponent.prototype.loadWorkers = function () {
         var _this = this;
@@ -103,10 +155,6 @@ var AppComponent = /** @class */ (function () {
         this.dataService.getData(this.dataService.url)
             .subscribe(function (data) { return _this.workers = data; });
     };
-    __decorate([
-        ViewChild(NgbdTabset, { static: false }),
-        __metadata("design:type", NgbdTabset)
-    ], AppComponent.prototype, "tab", void 0);
     AppComponent = __decorate([
         Component({
             selector: 'app',

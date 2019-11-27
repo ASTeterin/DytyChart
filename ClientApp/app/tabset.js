@@ -8,6 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Input, Component, Output, EventEmitter } from '@angular/core';
+import { Hour } from './hour';
 var NgbdTabset = /** @class */ (function () {
     function NgbdTabset() {
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
@@ -31,6 +32,10 @@ var NgbdTabset = /** @class */ (function () {
         Input(),
         __metadata("design:type", String)
     ], NgbdTabset.prototype, "timeArr", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Hour)
+    ], NgbdTabset.prototype, "selectedHour", void 0);
     __decorate([
         Output(),
         __metadata("design:type", Object)
