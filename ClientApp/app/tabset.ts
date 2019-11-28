@@ -17,9 +17,11 @@ import { Hour } from './hour';
 })
 export class NgbdTabset {
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
+    //activeIdString: string;
     id: string;
     @Input() timeArr: string;
     @Input() selectedHour: Hour;
+    @Input() activeIdString: string;
 
     @Output() onChanged = new EventEmitter<any>()
     onChange($event: any) {

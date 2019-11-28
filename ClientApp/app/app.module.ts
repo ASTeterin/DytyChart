@@ -1,20 +1,27 @@
 ﻿import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
+import { GenerateChartComponent } from './generateChart.component';
+import { EditWorkerComponent } from './editWorker.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgbdDatepicker } from './datepicker';
-import { DutyChart } from './chart'
-import { NgMultiselect } from './multiselect'
-//import { NgbdTabset } from './tabset'
-import { NgbdTabsetModule} from './tabset.module'
+import { DutyChart } from './chart';
+import { NgMultiselect } from './multiselect';
+import { NgbdTabsetModule } from './tabset.module';
 
+const appRoutes: Routes = [
+    { path: '', component: GenerateChartComponent },
+    { path: 'editUser', component: EditWorkerComponent },
+    { path: '**', redirectTo: '/' }
+];
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule],
-    declarations: [AppComponent, NgbdDatepicker, DutyChart, NgMultiselect],
+    imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes)],
+    declarations: [AppComponent, NgbdDatepicker, DutyChart, NgMultiselect, GenerateChartComponent, EditWorkerComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

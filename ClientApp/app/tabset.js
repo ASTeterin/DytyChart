@@ -37,6 +37,10 @@ var NgbdTabset = /** @class */ (function () {
         __metadata("design:type", Hour)
     ], NgbdTabset.prototype, "selectedHour", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], NgbdTabset.prototype, "activeIdString", void 0);
+    __decorate([
         Output(),
         __metadata("design:type", Object)
     ], NgbdTabset.prototype, "onChanged", void 0);
