@@ -1,4 +1,22 @@
 ﻿<div class="container">
-    <p>hello</p>
-    <p><a routerLink="/" class="nav-link">Формирование графика</a></p>
+    <div class="row">
+        <div class="col-sm-4">
+            <select size ="20" id="name" class="form-control" [(ngModel)]="selectedWorkerId">
+                <ng-container *ngFor="let w of workers">
+                    <option class="worker_item" [value]="w?.id">
+                        {{w?.name}}
+                    </option>
+                </ng-container>
+            </select>
+
+            <p><a class="btn" routerLink="/" class="nav-link">Формирование графика</a></p>
+        </div>
+
+        <div class="col-sm-8">
+        </div>
+    </div>
+
+
+            
+               
 </div>
