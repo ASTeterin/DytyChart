@@ -9,7 +9,9 @@
                     </option>
                 </ng-container>
             </select>
-            <input type="button" />
+            <div class="form-group">
+                <button class="btn btn-default" (click)="createNewWorker()">Создать пользователя</button>
+            </div>
             <p><a routerLink="/" class="nav-link btn">Формирование графика</a></p>
         </div>
 
@@ -17,13 +19,13 @@
 
             <div class="form-group">
                 <label>Имя</label>
-                <input class="form-control" name="name" required />
+                <input class="form-control" name="name" [(ngModel)]="currentWorker.name" #workerName="ngModel" [disabled]="this.isDisableSettings" required />
             </div>
             <div class="form-group">
                 <label for="group">Группа</label>
-                <select id="group" class="form-control">
-                    <option>
-                        группа 1
+                <select id="group" class="form-control" [disabled]="this.isDisableSettings" [(ngModel)]="currentWorker.idGroup" #workerGroup="ngModel">>
+                    <option *ngFor="let g of groups" [value]="g.id">
+                        {{g.name}}
                     </option>
                 </select>
 
@@ -31,21 +33,23 @@
             <div class="row">
                 <div class="form-group">
                     <label for="desirable_slots">Желаемые часы</label>
-                    <multiselect [placeholder]="'Желательные часы'"></multiselect>
+                    <multiselect [placeholder]="'Желательные часы'" [isDisable]="isDisableSettings"></multiselect>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
                     <label for="unwanted_slots">Нежелательные часы</label>
-                    <multiselect [placeholder]="'Нежелательные часы'"></multiselect>
+                    <multiselect [placeholder]="'Нежелательные часы'" [isDisable]="isDisableSettings"></multiselect>
 
                 </div>
             </div>
 
             <div class="form-group">
-                <button class="btn btn-default" (click)="addUser()">Добавить</button>
+                <button class="btn btn-default" (click)="saveWorker()">Добавить</button>
             </div>
+
+            
         </div>
     </div>
 

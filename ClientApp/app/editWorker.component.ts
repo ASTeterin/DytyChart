@@ -13,8 +13,10 @@ import { Worker } from './worker';
 export class EditWorkerComponent implements OnInit {
 
     workers: Worker[];
-    currentWorker: Worker = new Worker;
+    currentWorker: Worker = new Worker();
     selectedWorkerId: number;
+    isDisableSettings: boolean = true;
+    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
     constructor(private dataService: DataService) { }
 
     compare(a: Worker, b: Worker) {
@@ -26,15 +28,43 @@ export class EditWorkerComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.dataService.getData(this.dataService.url).subscribe((data: Worker[]) => { this.workers = data; this.workers.sort(this.compare); console.log(this.workers) });
-        console.log(this.workers);
+        this.loadWorkers();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
         //console.log(this.currentWorker);
         
     }
 
-    changeStaff() {
+    loadWorkers() {
+        this.dataService.getData(this.dataService.url).subscribe((data: Worker[]) => {
+            this.workers = data;
+            this.workers.sort(this.compare);
+            console.log(this.workers)
+        });
+    }
 
+    cancel() {
+        this.currentWorker = new Worker();
+    }
+
+    saveWorker() {
+        if (!this.currentWorker.id) {
+            this.dataService.createWorker(this.currentWorker)
+                .subscribe((data: Worker) => this.workers.push(data));
+        } else {
+            this.dataService.updateWorker(this.currentWorker)
+                .subscribe(data => this.loadWorkers());
+        }
+        this.cancel();
+    }
+
+    createNewWorker() {
+        this.isDisableSettings = false;
+    }
+
+    changeStaff(worker: Worker) {
+        this.currentWorker = this.workers.find(x => x.id == this.selectedWorkerId);
+        this.isDisableSettings = false;
+        console.log(this.currentWorker);
     }
 }
