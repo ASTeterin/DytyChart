@@ -9,17 +9,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
+import { Worker } from './worker';
 var EditWorkerComponent = /** @class */ (function () {
     function EditWorkerComponent(dataService) {
         this.dataService = dataService;
+        this.currentWorker = new Worker;
     }
+    EditWorkerComponent.prototype.compare = function (a, b) {
+        //console.log(a);
+        //console.log(b);
+        if (a.name > b.name)
+            return 1; // если первое значение больше второго
+        if (a.name == b.name)
+            return 0; // если равны
+        if (a.name < b.name)
+            return -1; // если первое значение меньше второго
+    };
     EditWorkerComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.dataService.getData(this.dataService.url).subscribe(function (data) { return _this.workers = data; });
+        this.dataService.getData(this.dataService.url).subscribe(function (data) { _this.workers = data; console.log(data); });
+        //console.log(this.workers);
+        //this.workers.sort();
+        //this.currentWorker = this.workers[0];
+        //console.log(this.currentWorker);
+    };
+    EditWorkerComponent.prototype.changeStaff = function () {
     };
     EditWorkerComponent = __decorate([
         Component({
             templateUrl: './editWorker.component.html',
+            styles: [" \n            .worker_item {  margin-top: 5px;\n                            font-size: 20px; }\n    "],
             providers: [DataService]
         }),
         __metadata("design:paramtypes", [DataService])

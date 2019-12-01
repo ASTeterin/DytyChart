@@ -1,18 +1,51 @@
 ﻿<div class="container">
     <div class="row">
         <div class="col-sm-4">
-            <select size ="20" id="name" class="form-control" [(ngModel)]="selectedWorkerId">
+            <h3>Сотрудники техподдержки</h3>
+            <select size="20" id="name" class="form-control" [(ngModel)]="selectedWorkerId" (change)="changeStaff($event)">
                 <ng-container *ngFor="let w of workers">
                     <option class="worker_item" [value]="w?.id">
                         {{w?.name}}
                     </option>
                 </ng-container>
             </select>
-
-            <p><a class="btn" routerLink="/" class="nav-link">Формирование графика</a></p>
+            <input type="button" />
+            <p><a routerLink="/" class="nav-link btn">Формирование графика</a></p>
         </div>
 
         <div class="col-sm-8">
+
+            <div class="form-group">
+                <label>Имя</label>
+                <input class="form-control" name="name" required />
+            </div>
+            <div class="form-group">
+                <label for="group">Группа</label>
+                <select id="group" class="form-control">
+                    <option>
+                        группа 1
+                    </option>
+                </select>
+
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="desirable_slots">Желаемые часы</label>
+                    <multiselect [placeholder]="'Желательные часы'"></multiselect>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="unwanted_slots">Нежелательные часы</label>
+                    <multiselect [placeholder]="'Нежелательные часы'"></multiselect>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-default" (click)="addUser()">Добавить</button>
+            </div>
         </div>
     </div>
 
