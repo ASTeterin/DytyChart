@@ -34,6 +34,7 @@ export class GenerateChartComponent implements OnInit {
     optionsModel: number[];
     myOptions: IMultiSelectOption[];
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
+    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
 
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];

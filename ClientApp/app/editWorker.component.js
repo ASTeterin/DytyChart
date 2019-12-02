@@ -13,7 +13,9 @@ import { Worker } from './worker';
 var EditWorkerComponent = /** @class */ (function () {
     function EditWorkerComponent(dataService) {
         this.dataService = dataService;
-        this.currentWorker = new Worker;
+        this.currentWorker = new Worker();
+        this.isDisableSettings = true;
+        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
     }
     EditWorkerComponent.prototype.compare = function (a, b) {
         //console.log(a);
@@ -26,14 +28,42 @@ var EditWorkerComponent = /** @class */ (function () {
             return -1; // если первое значение меньше второго
     };
     EditWorkerComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.dataService.getData(this.dataService.url).subscribe(function (data) { _this.workers = data; console.log(data); });
-        //console.log(this.workers);
+        this.loadWorkers();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
         //console.log(this.currentWorker);
     };
-    EditWorkerComponent.prototype.changeStaff = function () {
+    EditWorkerComponent.prototype.loadWorkers = function () {
+        var _this = this;
+        this.dataService.getData(this.dataService.url).subscribe(function (data) {
+            _this.workers = data;
+            _this.workers.sort(_this.compare);
+            console.log(_this.workers);
+        });
+    };
+    EditWorkerComponent.prototype.cancel = function () {
+        this.currentWorker = new Worker();
+    };
+    EditWorkerComponent.prototype.saveWorker = function () {
+        var _this = this;
+        if (!this.currentWorker.id) {
+            this.dataService.createWorker(this.currentWorker)
+                .subscribe(function (data) { return _this.workers.push(data); });
+        }
+        else {
+            this.dataService.updateWorker(this.currentWorker)
+                .subscribe(function (data) { return _this.loadWorkers(); });
+        }
+        this.cancel();
+    };
+    EditWorkerComponent.prototype.createNewWorker = function () {
+        this.isDisableSettings = false;
+    };
+    EditWorkerComponent.prototype.changeStaff = function (worker) {
+        var _this = this;
+        this.currentWorker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
+        this.isDisableSettings = false;
+        console.log(this.currentWorker);
     };
     EditWorkerComponent = __decorate([
         Component({

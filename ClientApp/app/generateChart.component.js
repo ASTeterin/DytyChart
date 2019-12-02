@@ -17,6 +17,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.worker = new Worker();
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
+        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
         this.isFirstHour = true;
         this.isNewDay = true;
         this.isDisableSettings = true;
