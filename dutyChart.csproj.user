@@ -2,52 +2,62 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\editWorker.component.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\nav.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\generateChart.component.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\rangeSelectionDatepicker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\hour.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\editWorker.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\tabset.module.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\generateChart.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\tabset.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\hour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\multiselect.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\tabset.module.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\chart.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\tabset.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\datepicker.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\multiselect.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\data.service.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\chart.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\worker.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\datepicker.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\app\ts\data.service.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\app\ts\worker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
@@ -62,12 +72,12 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\app.module.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\app.module.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\app.component.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\app.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

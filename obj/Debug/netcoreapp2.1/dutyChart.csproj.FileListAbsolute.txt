@@ -14,4 +14,5 @@ C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart
 C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\dutyChart.pdb
 C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.dll
 C:\Users\user\source\repos\dutyChart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.pdb
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\libman.json
 C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\package-lock.json

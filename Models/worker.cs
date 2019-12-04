@@ -11,6 +11,8 @@ public class Worker
     public bool IsDutyOnWedn { get; set; }
     public bool IsDutyOnLetters { get; set; }
     public int IdGroup { get; set; }
+    public string Color { get; set; }
+    public int CountAbsencePeriod { get; set; }
     private string _unwantedSlotsJson { get; set; }
 
     public IReadOnlyCollection<int> UnwantedSlots => JsonConvert.DeserializeObject<List<int>>(_unwantedSlotsJson ?? "[]");

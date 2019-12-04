@@ -1,0 +1,81 @@
+﻿<div class="container">
+    <div class="row">
+        <nav-component></nav-component>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Сотрудники техподдержки</h3>
+            <select size="20" id="name" class="form-control" [(ngModel)]="selectedWorkerId" (change)="changeStaff($event)">
+                <ng-container *ngFor="let w of workers">
+                    <option class="worker_item" [value]="w?.id">
+                        {{w?.name}}
+                    </option>
+                </ng-container>
+            </select>
+            <div class="form-group">
+                <button class="btn btn-default" (click)="createNewWorker()">Создать пользователя</button>
+            </div>
+            
+        </div>
+
+        <div class="col-sm-8">
+
+            <div class="form-group">
+                <label>Имя</label>
+                <input class="form-control" name="name" [(ngModel)]="currentWorker.name" #workerName="ngModel" [disabled]="this.isDisableSettings" required />
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col">
+                        <label for="group">Группа</label>
+                        <select id="group" class="form-control" [disabled]="this.isDisableSettings" [(ngModel)]="currentWorker.idGroup" #workerGroup="ngModel">
+                            <option *ngFor="let g of groups" [value]="g.id">
+                                {{g.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="color">Цвет</label>
+                        <input class="form-control" [disabled]="this.isDisableSettings" id="color" [(ngModel)]="currentWorker.color" [style.background]="currentWorker.color" [(colorPicker)]="currentWorker.color" (colorPickerChange)="onColorPickerSelected($event)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col">
+                        <label for="desirable_slots">Желаемые часы</label>
+                        <multiselect [placeholder]="'Желательные часы'" [isDisable]="isDisableSettings"></multiselect>
+                    </div>
+
+
+
+                    <div class="form-group col">
+                        <label for="unwanted_slots">Нежелательные часы</label>
+                        <multiselect [placeholder]="'Нежелательные часы'" [isDisable]="isDisableSettings"></multiselect>
+
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngFor="let p of periods">
+                <div class="form-group">
+                    <ngbd-datepicker-range-popup></ngbd-datepicker-range-popup>
+                </div>
+            </ng-container>
+
+
+            <div class="form-group">
+                <button class="btn" (click)="addAbsencePeriod()" [disabled]="this.isDisableSettings">Добавить период отсутствия</button>
+            </div>
+            <div class="form-group">
+                <button class="btn" (click)="saveWorker()" [disabled]="this.isDisableSettings">Сохранить</button>
+                <button class="btn" (click)="deleteWorker(this.currentWorker.id)" [disabled]="this.isDisableSettings">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
