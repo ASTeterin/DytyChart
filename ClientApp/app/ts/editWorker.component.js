@@ -15,6 +15,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.dataService = dataService;
         this.currentWorker = new Worker();
         this.isDisableSettings = true;
+        this.periods = [];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
         this.availableColors = [
             '#33cccc',
@@ -27,6 +28,13 @@ var EditWorkerComponent = /** @class */ (function () {
             '#ffcc66'
         ];
     }
+    EditWorkerComponent.prototype.createArray = function (countElement) {
+        var arr = [];
+        for (var j = 1; j <= countElement; j++) {
+            arr.push(j);
+        }
+        return arr;
+    };
     EditWorkerComponent.prototype.compare = function (a, b) {
         //console.log(a);
         //console.log(b);
@@ -53,9 +61,11 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.cancel = function () {
         this.currentWorker = new Worker();
+        this.periods = [];
     };
     EditWorkerComponent.prototype.saveWorker = function () {
         var _this = this;
+        console.log(this.currentWorker);
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.workers.push(data); });
@@ -64,16 +74,30 @@ var EditWorkerComponent = /** @class */ (function () {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
-        this.cancel();
+        //this.cancel();
+        //this.periods = [];
     };
     EditWorkerComponent.prototype.createNewWorker = function () {
         this.isDisableSettings = false;
+        this.cancel();
+        this.currentWorker.countAbsencePeriod = 0;
+    };
+    EditWorkerComponent.prototype.addAbsencePeriod = function () {
+        this.currentWorker.countAbsencePeriod++;
+        this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
     };
     EditWorkerComponent.prototype.changeStaff = function (worker) {
         var _this = this;
+        this.cancel();
         this.currentWorker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         this.isDisableSettings = false;
+        this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         console.log(this.currentWorker);
+    };
+    EditWorkerComponent.prototype.deleteWorker = function (id) {
+        var _this = this;
+        this.dataService.deleteWorker(id).subscribe(function (data) { return _this.loadWorkers(); });
+        this.cancel();
     };
     EditWorkerComponent.prototype.onColorPickerSelected = function (event) {
         console.log(event);

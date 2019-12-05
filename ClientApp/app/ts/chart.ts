@@ -36,6 +36,10 @@ export class DutyChart {
         return this.workers.find(w => w.id == workerId).name;
     }
 
+    getWorkerColor(workerId: number) {
+        return this.workers.find(w => w.id == workerId).color;
+    }
+
     constructor() {
         //this.getChartParam();
         
