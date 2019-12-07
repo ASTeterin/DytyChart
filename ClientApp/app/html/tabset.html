@@ -1,5 +1,5 @@
 ﻿<ngb-tabset [justify]="justified" type="pills" (tabChange)="onChange($event)" [activeId]="activeIdString">
-<ngb-tab class="tab_time" *ngFor="let time of timeArr" [id] = 'time' [title]="time">
+<ngb-tab class="tab_time" *ngFor="let time of timeArr" [id] = 'time.time' [title]="time.time">
     <ng-template ngbTabContent>
         <div class="container">
             <div class="row">

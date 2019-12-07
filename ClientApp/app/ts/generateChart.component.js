@@ -15,7 +15,9 @@ var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
         this.worker = new Worker();
-        this.tableMode = true;
+        //tableMode: boolean = true;
+        //optionsModel: number[];
+        //myOptions: IMultiSelectOption[];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
         this.isFirstHour = true;
@@ -24,21 +26,31 @@ var GenerateChartComponent = /** @class */ (function () {
         //dutyWorkerArr: Worker[];
         //dutyWorkerByLetterArr: Worker[];
         //dutyWorkerInWednesday: Worker[];
-        this.timeArr = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-        this.firstTabSelectEvent = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
-        this.activeIdString = "09:00";
-        this.selectedHour = new Hour;
+        this.timeArr = [{ time: "08:00", minSlots: 1, maxSlots: 2 },
+            { time: "09:00", minSlots: 1, maxSlots: 3 },
+            { time: "10:00", minSlots: 2, maxSlots: 3 },
+            { time: "11:00", minSlots: 3, maxSlots: 4 },
+            { time: "12:00", minSlots: 4, maxSlots: 6 },
+            { time: "13:00", minSlots: 4, maxSlots: 6 },
+            { time: "14:00", minSlots: 5, maxSlots: 7 },
+            { time: "15:00", minSlots: 6, maxSlots: 7 },
+            { time: "16:00", minSlots: 4, maxSlots: 5 },
+            { time: "17:00", minSlots: 4, maxSlots: 4 },
+            { time: "18:00", minSlots: 2, maxSlots: 4 },
+            { time: "19:00", minSlots: 1, maxSlots: 2 },
+        ];
+        //timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        this.firstTabSelectEvent = { activeId: this.timeArr[0].time, nextId: this.timeArr[0].time, preventDefault: "ƒ" };
+        this.activeIdString = this.timeArr[0].time;
+        this.selectedHour = new Hour();
+        this.selectedDateHours = [];
+        this.allHours = [];
         this.newHour = new Hour;
-        //this.datepicker = new NgbdDatepicker(this.calendar);
-        //this.today = calendar.getToday();
-        //this.date = this.datepicker.model;
-        //this.day = this.date.day;
-        //this.month = this.date.month;
     }
     GenerateChartComponent.prototype.tabChangeHandler = function (t) {
         console.log(t);
         if (this.selectedHour.name) {
-            this.saveHour();
+            //this.saveHour();
         }
         this.loadHours();
         if (!this.isNewDay) {
@@ -54,7 +66,7 @@ var GenerateChartComponent = /** @class */ (function () {
         }
         else {
             this.isNewDay = false;
-            this.selectedHour.name = this.timeArr[0];
+            this.selectedHour.name = this.timeArr[0].time;
             this.selectedHour.date = this.selectedDate;
             console.log(this.selectedHour);
         }
@@ -76,16 +88,47 @@ var GenerateChartComponent = /** @class */ (function () {
         console.log(arr);
         return arr;
     };
+    GenerateChartComponent.prototype.creareAllHoursInDay = function (date) {
+        //let hour: Hour = new Hour();
+        var hours = [];
+        this.timeArr.forEach(function (item, i, arr) {
+            var hour = new Hour();
+            //console.log(item);
+            hour.date = date;
+            hour.name = item.time;
+            hour.maxCount = item.maxSlots;
+            hour.minCount = item.minSlots;
+            //console.log(hour);
+            hours.push(hour);
+        });
+        return hours;
+    };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
         var _this = this;
         this.day = date.day;
         this.month = date.month;
-        this.activeIdString = "09:00";
+        this.selectedDateHours = [];
+        this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
-            this.saveHour();
+            //this.saveHour();
         }
         ;
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        this.convertedDate = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
+        /*this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
+            if (data.length == 0) {
+                this.selectedDateHours = this.creareAllHoursInDay(this.convertedDate);
+            } else {
+                this.selectedHour = data[0];
+                this.selectedDateHours = data;
+            }
+
+        });
+        console.log(this.selectedDateHours);
+        this.selectedDateHours.forEach((item, i, arr) =>
+        this.dataService.createHour(item)
+            .subscribe((data: Hour) => this.selectedDateHours.push(data))
+        );*/
         this.dataService.getHours(this.selectedDate).subscribe(function (data) {
             if (data.length == 0) {
                 _this.isNewDay = true;
@@ -116,9 +159,9 @@ var GenerateChartComponent = /** @class */ (function () {
         return today;
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
-        this.loadWorkers();
         this.selectedDate = this.getToday();
         this.loadHours();
+        this.loadWorkers();
     };
     GenerateChartComponent.prototype.save = function () {
         var _this = this;
@@ -126,30 +169,41 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.updateWorker(this.worker)
             .subscribe(function (data) { return _this.loadWorkers(); });
     };
-    GenerateChartComponent.prototype.saveHour = function () {
-        var _this = this;
+    /*
+    saveHour() {
         this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
         if (!this.selectedHour.id) {
             this.dataService.createHour(this.selectedHour)
+                .subscribe((data: Hour) => this.selectedDateHours.push(data));
+        } else {
+            this.dataService.updateHour(this.selectedHour)
+                .subscribe(data => this.loadHours());
+        }
+        this.cancel();
+    }
+    */
+    GenerateChartComponent.prototype.saveHour = function (hour) {
+        var _this = this;
+        if (!hour.id) {
+            this.dataService.createHour(hour)
                 .subscribe(function (data) { return _this.selectedDateHours.push(data); });
         }
         else {
-            this.dataService.updateHour(this.selectedHour)
+            this.dataService.updateHour(hour)
                 .subscribe(function (data) { return _this.loadHours(); });
         }
-        this.cancel();
     };
     GenerateChartComponent.prototype.loadHours = function () {
         var _this = this;
         this.dataService.getHours(this.selectedDate)
-            .subscribe(function (data) { return _this.selectedDateHours = data; });
-        console.log(this.selectedDateHours);
+            .subscribe(function (data) { console.log(data); _this.selectedDateHours = data; });
+        //console.log(this.selectedDateHours);
+        //this.dataService.getAllHours()
+        //.subscribe((data: Hour[]) => { this.allHours = data; console.log(data)});
+        //console.log(this.allHours);
     };
     GenerateChartComponent.prototype.cancel = function () {
         this.selectedHour = new Hour();
-    };
-    GenerateChartComponent.prototype.isFind = function (itemId, item) {
-        return itemId == item.id;
     };
     GenerateChartComponent.prototype.changeStaff = function (worker) {
         var _this = this;

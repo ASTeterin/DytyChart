@@ -1,5 +1,5 @@
 var Worker = /** @class */ (function () {
-    function Worker(id, name, isDuty, isDutyOnWedn, isDutyOnLetters, idGroup, countAbsencePeriod, color, unwantedSlots) {
+    function Worker(id, name, isDuty, isDutyOnWedn, isDutyOnLetters, idGroup, countAbsencePeriod, color, unwantedSlots, desiredSlots) {
         this.id = id;
         this.name = name;
         this.isDuty = isDuty;
@@ -9,6 +9,7 @@ var Worker = /** @class */ (function () {
         this.countAbsencePeriod = countAbsencePeriod;
         this.color = color;
         this.unwantedSlots = unwantedSlots;
+        this.desiredSlots = desiredSlots;
     }
     return Worker;
 }());

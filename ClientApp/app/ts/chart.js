@@ -28,6 +28,9 @@ var DutyChart = /** @class */ (function () {
     DutyChart.prototype.getWorkerName = function (workerId) {
         return this.workers.find(function (w) { return w.id == workerId; }).name;
     };
+    DutyChart.prototype.getWorkerColor = function (workerId) {
+        return this.workers.find(function (w) { return w.id == workerId; }).color;
+    };
     __decorate([
         Input(),
         __metadata("design:type", Array)

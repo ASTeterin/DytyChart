@@ -11,7 +11,6 @@ import { Input, Component, Output, EventEmitter } from '@angular/core';
 import { Hour } from './hour';
 var NgbdTabset = /** @class */ (function () {
     function NgbdTabset() {
-        this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.onChanged = new EventEmitter();
         this.onMinSlotChanged = new EventEmitter();
         this.onMaxSlotChanged = new EventEmitter();
@@ -30,7 +29,7 @@ var NgbdTabset = /** @class */ (function () {
     };
     __decorate([
         Input(),
-        __metadata("design:type", String)
+        __metadata("design:type", Array)
     ], NgbdTabset.prototype, "timeArr", void 0);
     __decorate([
         Input(),

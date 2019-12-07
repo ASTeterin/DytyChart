@@ -17,10 +17,20 @@ public class Worker
 
     public IReadOnlyCollection<int> UnwantedSlots => JsonConvert.DeserializeObject<List<int>>(_unwantedSlotsJson ?? "[]");
 
+    private string _desiredSlotsJson { get; set; }
+
+    public IReadOnlyCollection<int> DesiredSlots => JsonConvert.DeserializeObject<List<int>>(_desiredSlotsJson ?? "[]");
+
     public void SetUnwantedSlots(List<int> slots)
     {
         _unwantedSlotsJson = JsonConvert.SerializeObject(slots);
     }
 
     public static Expression<Func<Worker, string>> UnwantedSlotsJsonProperty => (of => of._unwantedSlotsJson);
+    public void SetDesiredSlots(List<int> slots)
+    {
+        _desiredSlotsJson = JsonConvert.SerializeObject(slots);
+    }
+
+    public static Expression<Func<Worker, string>> DesiredSlotsJsonProperty => (of => of._desiredSlotsJson);
 }

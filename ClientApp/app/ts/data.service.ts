@@ -31,6 +31,10 @@ export class DataService {
         return this.http.get(`${this.urlHour}?date=${date.toISOString()}`);
     }
 
+    getAllHours() {
+        return this.http.get(this.urlHour);
+    }
+
     createHour(hour: Hour) {
         return this.http.post(this.urlHour, hour);
     }

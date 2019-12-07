@@ -16,10 +16,10 @@ import { Hour } from './hour';
     `]*/
 })
 export class NgbdTabset {
-    countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
+    //countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
     //activeIdString: string;
     id: string;
-    @Input() timeArr: string;
+    @Input() timeArr: any[];
     @Input() selectedHour: Hour;
     @Input() activeIdString: string;
 

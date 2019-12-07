@@ -30,6 +30,9 @@ var DataService = /** @class */ (function () {
     DataService.prototype.getHours = function (date) {
         return this.http.get(this.urlHour + "?date=" + date.toISOString());
     };
+    DataService.prototype.getAllHours = function () {
+        return this.http.get(this.urlHour);
+    };
     DataService.prototype.createHour = function (hour) {
         return this.http.post(this.urlHour, hour);
     };
