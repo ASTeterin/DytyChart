@@ -17,16 +17,6 @@ var EditWorkerComponent = /** @class */ (function () {
         this.isDisableSettings = true;
         this.periods = [];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
-        this.availableColors = [
-            '#33cccc',
-            '#99cc99',
-            '#cc99cc',
-            '#fabf8f',
-            '#bfbfbf',
-            '#6699ff',
-            '#ff6666',
-            '#ffcc66'
-        ];
     }
     EditWorkerComponent.prototype.createArray = function (countElement) {
         var arr = [];
@@ -36,8 +26,6 @@ var EditWorkerComponent = /** @class */ (function () {
         return arr;
     };
     EditWorkerComponent.prototype.compare = function (a, b) {
-        //console.log(a);
-        //console.log(b);
         if (a.name > b.name)
             return 1; // если первое значение больше второго
         if (a.name == b.name)

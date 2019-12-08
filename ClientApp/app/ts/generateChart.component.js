@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { Hour } from './hour';
+import { Slot } from './slot';
 var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
@@ -21,9 +22,6 @@ var GenerateChartComponent = /** @class */ (function () {
         this.isFirstHour = true;
         this.isNewDay = true;
         this.isDisableSettings = true;
-        //dutyWorkerArr: Worker[];
-        //dutyWorkerByLetterArr: Worker[];
-        //dutyWorkerInWednesday: Worker[];
         this.timeArr = [
             { time: "08:00", minSlots: 1, maxSlots: 2 },
             { time: "09:00", minSlots: 1, maxSlots: 3 },
@@ -40,8 +38,12 @@ var GenerateChartComponent = /** @class */ (function () {
         ];
         //timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
         this.firstTabSelectEvent = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
-        this.activeIdString = "09:00";
+        this.activeIdString = this.timeArr[0].time;
         this.selectedHour = new Hour;
+        this.selectedDateHours = [];
+        this.chartData = [];
+        this.slot = new Slot;
+        this.slots = [];
         this.newHour = new Hour;
         //this.datepicker = new NgbdDatepicker(this.calendar);
         //this.today = calendar.getToday();
@@ -75,12 +77,9 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.minSlotChangeHandler = function (count) {
         this.newHour.minCount = count;
-        //this.slots = this.getArray(count);
-        //console.log(count);
     };
     GenerateChartComponent.prototype.maxSlotChangeHandler = function (count) {
         this.newHour.maxCount = count;
-        //console.log(count);
     };
     GenerateChartComponent.prototype.getArray = function (countElem) {
         var arr = [];
@@ -116,6 +115,14 @@ var GenerateChartComponent = /** @class */ (function () {
             }
         });
     };
+    GenerateChartComponent.prototype.compare = function (a, b) {
+        if (a.name > b.name)
+            return 1; // если первое значение больше второго
+        if (a.name == b.name)
+            return 0; // если равны
+        if (a.name < b.name)
+            return -1; // если первое значение меньше второго
+    };
     GenerateChartComponent.prototype.creareAllHoursInDay = function (date) {
         var _this = this;
         var hours = [];
@@ -133,13 +140,38 @@ var GenerateChartComponent = /** @class */ (function () {
         });
         //return hours;
     };
-    GenerateChartComponent.prototype.generateGraph = function (date) {
+    GenerateChartComponent.prototype.randomInteger = function (min, max) {
+        return Math.floor(min + Math.random() * (max + 1 - min));
+    };
+    GenerateChartComponent.prototype.createSlots = function () {
         var _this = this;
-        this.dataService.getHours(date).subscribe(function (data) {
-            _this.selectedDateHours = data;
-            console.log(_this.selectedDateHours);
-            console.log(_this.workers);
+        var countSlotsInDay = 0;
+        //var h: any;
+        var slotIndex = 1;
+        var countWorker = this.workers.length;
+        this.selectedDateHours.forEach(function (item, i, arr) {
+            for (var i = 0; i < item.minCount; i++) {
+                _this.slot.hourId = item.id;
+                _this.slot.index = slotIndex++;
+                _this.slot.workerId = _this.workers[_this.randomInteger(0, countWorker - 1)].id;
+                console.log(_this.slot);
+                _this.saveSlot();
+            }
+            //countSlotsInDay += item.minCount;
         });
+        console.log(countSlotsInDay);
+    };
+    GenerateChartComponent.prototype.generateGraph = function () {
+        /*this.dataService.getHours(this.selectedHour.date).subscribe((data: Hour[]) => {
+
+            this.selectedDateHours = data;
+            this.selectedDateHours.sort(this.compare);
+            console.log(this.selectedDateHours);
+            console.log(this.workers);
+        });*/
+        this.createSlots();
+        this.selectedDateHours.sort(this.compare);
+        this.chartData = this.selectedDateHours;
     };
     GenerateChartComponent.prototype.getToday = function () {
         var today;
@@ -158,6 +190,12 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.updateWorker(this.worker)
             .subscribe(function (data) { return _this.loadWorkers(); });
     };
+    GenerateChartComponent.prototype.saveSlot = function () {
+        var _this = this;
+        this.dataService.createSlot(this.slot)
+            .subscribe(function (data) { return _this.slots.push(data); });
+        this.calcelSlot();
+    };
     GenerateChartComponent.prototype.saveHour = function () {
         var _this = this;
         this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
@@ -173,16 +211,15 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.loadHours = function () {
         var _this = this;
-        /*this.dataService.getAllHours()
-            .subscribe((data: Hour[]) => { console.log(data); });*/
         this.dataService.getHours(this.selectedDate)
             .subscribe(function (data) { console.log(data); _this.selectedDateHours = data; });
-        //console.log('s');
-        //
         console.log(this.selectedDateHours);
     };
     GenerateChartComponent.prototype.cancel = function () {
         this.selectedHour = new Hour();
+    };
+    GenerateChartComponent.prototype.calcelSlot = function () {
+        this.slot = new Slot;
     };
     GenerateChartComponent.prototype.isFind = function (itemId, item) {
         return itemId == item.id;
@@ -198,6 +235,11 @@ var GenerateChartComponent = /** @class */ (function () {
         //this.workers = this.dataService.getWorkers();
         this.dataService.getData(this.dataService.url)
             .subscribe(function (data) { return _this.workers = data; });
+    };
+    GenerateChartComponent.prototype.loadSlots = function () {
+        var _this = this;
+        this.dataService.getSlots()
+            .subscribe(function (data) { return _this.slots = data; });
     };
     GenerateChartComponent = __decorate([
         Component({

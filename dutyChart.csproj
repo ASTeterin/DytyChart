@@ -23,6 +23,7 @@
     <None Remove="ClientApp\app\tabset.module.ts" />
     <None Remove="ClientApp\app\tabset.ts" />
     <None Remove="ClientApp\app\ts\nav.ts" />
+    <None Remove="ClientApp\app\ts\slot.ts" />
     <None Remove="ClientApp\app\worker.ts" />
     <None Remove="ClientApp\main.ts" />
     <None Remove="ClientApp\polyfills.ts" />

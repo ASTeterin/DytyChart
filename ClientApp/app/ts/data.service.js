@@ -14,9 +14,19 @@ var DataService = /** @class */ (function () {
         this.http = http;
         this.url = "/api/Workers";
         this.urlHour = "/api/Hours";
+        this.urlSlot = "/api/Slot";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
+    };
+    DataService.prototype.getSlots = function () {
+        return this.http.get(this.urlSlot);
+    };
+    DataService.prototype.createSlot = function (slot) {
+        return this.http.post(this.urlSlot, slot);
+    };
+    DataService.prototype.updateSlot = function (slot) {
+        return this.http.put(this.urlSlot + '/' + slot.id, slot);
     };
     DataService.prototype.createWorker = function (worker) {
         return this.http.post(this.url, worker);

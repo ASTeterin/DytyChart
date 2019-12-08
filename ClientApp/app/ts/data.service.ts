@@ -2,18 +2,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Worker } from './worker';
 import { Hour } from './hour';
+import { Slot } from './slot';
 
 @Injectable()
 export class DataService {
 
     public url = "/api/Workers";
-    public urlHour = "/api/Hours"
+    public urlHour = "/api/Hours";
+    public urlSlot = "/api/Slot";
 
     constructor(private http: HttpClient) {
     }
 
     getData(url: string) {
         return this.http.get(url);
+    }
+
+    getSlots() {
+        return this.http.get(this.urlSlot); 
+    }
+
+    createSlot(slot: Slot) {
+        return this.http.post(this.urlSlot, slot);
+    }
+
+    updateSlot(slot: Slot) {
+
+        return this.http.put(this.urlSlot + '/' + slot.id, slot);
     }
 
     createWorker(worker: Worker) {
