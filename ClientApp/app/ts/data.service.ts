@@ -32,7 +32,7 @@ export class DataService {
     }
 
     getAllHours() {
-        return this.http.get(this.urlHour);
+        return this.http.get(`${this.urlHour}`);
     }
 
     createHour(hour: Hour) {

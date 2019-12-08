@@ -14,6 +14,12 @@ namespace dutyChart.Controllers
         public HourController(ApplicationContext context)
         {
             db = context;
+            if (!db.Hours.Any())
+            {
+                db.Hours.Add(new Hour { Name = "09:00", MinCount = 2, MaxCount = 3, Date = new System.DateTime(2019, 11, 12)});
+                db.SaveChanges();
+               
+            }
         }
         [HttpGet]
         public IEnumerable<Hour> Get(DateTime date)

@@ -30,13 +30,13 @@ export class GenerateChartComponent implements OnInit {
     selectedWorkerId: number;
     minSlotsCount: String;
     maxSlotsCount: Number;
-    //tableMode: boolean = true;
-    //optionsModel: number[];
-    //myOptions: IMultiSelectOption[];
+    tableMode: boolean = true;
+    optionsModel: number[];
+    myOptions: IMultiSelectOption[];
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
 
-    //currenStaffIsDutyCheck: boolean;
+    currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
     isFirstHour: boolean = true;
@@ -45,8 +45,8 @@ export class GenerateChartComponent implements OnInit {
     //dutyWorkerArr: Worker[];
     //dutyWorkerByLetterArr: Worker[];
     //dutyWorkerInWednesday: Worker[];
-
-    timeArr: any[] = [{ time: "08:00", minSlots: 1, maxSlots: 2 },
+    timeArr: any[] = [
+        { time: "08:00", minSlots: 1, maxSlots: 2 },
         { time: "09:00", minSlots: 1, maxSlots: 3 },
         { time: "10:00", minSlots: 2, maxSlots: 3 },
         { time: "11:00", minSlots: 3, maxSlots: 4 },
@@ -59,23 +59,27 @@ export class GenerateChartComponent implements OnInit {
         { time: "18:00", minSlots: 2, maxSlots: 4 },
         { time: "19:00", minSlots: 1, maxSlots: 2 },
     ];
+
+
     //timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-    firstTabSelectEvent: any = { activeId: this.timeArr[0].time, nextId: this.timeArr[0].time, preventDefault: "ƒ" };
-    activeIdString: string = this.timeArr[0].time;
+    firstTabSelectEvent: any = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
+    activeIdString: string = "09:00";
 
     //slots: number[] = [1, 2, 3];
     selectedDate: Date;
-    convertedDate: Date;
-    selectedHour: Hour = new Hour();
-    selectedDateHours: Hour[] = [];
-    allHours: Hour[] = [];
+    selectedHour: Hour = new Hour;
+    selectedDateHours: Hour[];
 
     newHour: Hour = new Hour;
 
 
     constructor(private dataService: DataService) {
+        //this.datepicker = new NgbdDatepicker(this.calendar);
+        //this.today = calendar.getToday();
+        //this.date = this.datepicker.model;
+        //this.day = this.date.day;
+        //this.month = this.date.month;
     }
-
     tabChangeHandler(t: any) {
         console.log(t);
         if (this.selectedHour.name) {
@@ -94,7 +98,7 @@ export class GenerateChartComponent implements OnInit {
             console.log(this.selectedHour);
         } else {
             this.isNewDay = false;
-            this.selectedHour.name = this.timeArr[0].time;
+            this.selectedHour.name = this.timeArr[0];
             this.selectedHour.date = this.selectedDate;
             console.log(this.selectedHour);
         }
@@ -120,53 +124,20 @@ export class GenerateChartComponent implements OnInit {
         return arr;
     }
 
-    creareAllHoursInDay(date: Date): Hour[] {
-        //let hour: Hour = new Hour();
-        let hours: Hour[] = [];
-        this.timeArr.forEach((item, i, arr) => {
-            let hour: Hour = new Hour();
-            //console.log(item);
-            hour.date = date;
-            hour.name = item.time;
-            hour.maxCount = item.maxSlots;
-            hour.minCount = item.minSlots;
-            //console.log(hour);
-            hours.push(hour);
-            
-        });
-        return hours;
-    }
-    
-
     dateChangeHandler(date: NgbDateStruct) {
         this.day = date.day;
         this.month = date.month;
-        this.selectedDateHours = [];
         this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
         };
 
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
-        this.convertedDate = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
 
-        /*this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
-            if (data.length == 0) {
-                this.selectedDateHours = this.creareAllHoursInDay(this.convertedDate);
-            } else {
-                this.selectedHour = data[0];
-                this.selectedDateHours = data;
-            }
-
-        });
-        console.log(this.selectedDateHours);
-        this.selectedDateHours.forEach((item, i, arr) =>
-        this.dataService.createHour(item)
-            .subscribe((data: Hour) => this.selectedDateHours.push(data))
-        );*/
         this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
             if (data.length == 0) {
                 this.isNewDay = true;
+                this.creareAllHoursInDay(this.selectedDate);
                 //this.tabChangeHandler(this.firstTabSelectEvent);
                 //this.selectedHour.date = new Date (Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
             } else {
@@ -179,6 +150,25 @@ export class GenerateChartComponent implements OnInit {
 
         });
     }
+
+    creareAllHoursInDay(date: Date) {
+        let hours: Hour[] = [];
+        this.timeArr.forEach((item, i, arr) => {
+            let hour: Hour = new Hour();
+            //console.log(item);
+            hour.date = date;
+            hour.name = item.time;
+            hour.maxCount = item.maxSlots;
+            hour.minCount = item.minSlots;
+            this.selectedHour = hour;
+            this.saveHour();
+            //console.log(hour);
+            //hours.push(hour);
+
+        });
+        //return hours;
+    }
+
 
     generateGraph(date: Date): void {
         this.dataService.getHours(date).subscribe((data: Hour[]) => {
@@ -197,10 +187,9 @@ export class GenerateChartComponent implements OnInit {
     }
 
     ngOnInit() {
-        
+        this.loadWorkers();
         this.selectedDate = this.getToday();
         this.loadHours();
-        this.loadWorkers();
     }
 
     save() {
@@ -208,7 +197,7 @@ export class GenerateChartComponent implements OnInit {
         this.dataService.updateWorker(this.worker)
             .subscribe(data => this.loadWorkers());
     }
-    
+
     saveHour() {
         this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
         if (!this.selectedHour.id) {
@@ -220,31 +209,23 @@ export class GenerateChartComponent implements OnInit {
         }
         this.cancel();
     }
-    
-/*
-    saveHour(hour: Hour) {
-        if (!hour.id) {
-            this.dataService.createHour(hour)
-                .subscribe((data: Hour) => this.selectedDateHours.push(data));
-        } else {
-            this.dataService.updateHour(hour)
-                .subscribe(data => this.loadHours());
-        }    
-    }
-*/
+
     loadHours() {
+        /*this.dataService.getAllHours()
+            .subscribe((data: Hour[]) => { console.log(data); });*/
         this.dataService.getHours(this.selectedDate)
             .subscribe((data: Hour[]) => { console.log(data); this.selectedDateHours = data });
-        //console.log(this.selectedDateHours);
-        //this.dataService.getAllHours()
-            //.subscribe((data: Hour[]) => { this.allHours = data; console.log(data)});
-        //console.log(this.allHours);
-
-
+        //console.log('s');
+        //
+        console.log(this.selectedDateHours);
     }
 
     cancel() {
         this.selectedHour = new Hour();
+    }
+
+    isFind(itemId: number, item: any) {
+        return itemId == item.id;
     }
 
     changeStaff(worker: any) {

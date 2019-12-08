@@ -9,6 +9,5 @@
         public countAbsencePeriod?: number,
         public color?: string,
         public unwantedSlots?: number[],
-        public desiredSlots?: number[],
         ) { }
 }
