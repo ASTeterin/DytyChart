@@ -105,9 +105,9 @@
                 </ng-container>
             </p>
             <div class="form-group">
-                <button class="btn btn-default" (click)="generateGraph(newHour.date)">Сформировать график</button>
+                <button class="btn btn-default" (click)="generateGraph(selectedHour.date)">Сформировать график</button>
             </div>
-            <duty-chart [slots]="slots" [selectedDateHours]="selectedDateHours" [workers]="workers"></duty-chart>
+            <duty-chart [slots]="slots" [selectedDateHours]="chartData" [workers]="workers"></duty-chart>
         </div>
     </div>
 </div>

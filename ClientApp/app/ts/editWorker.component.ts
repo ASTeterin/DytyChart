@@ -20,16 +20,7 @@ export class EditWorkerComponent implements OnInit {
     periods: number[] = [];
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
     public model: any;
-    public availableColors: string[] = [
-        '#33cccc',
-        '#99cc99',
-        '#cc99cc',
-        '#fabf8f',
-        '#bfbfbf',
-        '#6699ff',
-        '#ff6666',
-        '#ffcc66'
-    ];
+   
 
 
     constructor(private dataService: DataService) { }
@@ -43,8 +34,6 @@ export class EditWorkerComponent implements OnInit {
     }
 
     compare(a: Worker, b: Worker) {
-        //console.log(a);
-        //console.log(b);
         if (a.name > b.name) return 1; // если первое значение больше второго
         if (a.name == b.name) return 0; // если равны
         if (a.name < b.name) return -1; // если первое значение меньше второго

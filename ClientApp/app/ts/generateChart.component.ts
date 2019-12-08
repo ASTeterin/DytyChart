@@ -68,7 +68,8 @@ export class GenerateChartComponent implements OnInit {
     //slots: number[] = [1, 2, 3];
     selectedDate: Date;
     selectedHour: Hour = new Hour;
-    selectedDateHours: Hour[];
+    selectedDateHours: Hour[] = [];
+    chartData: Hour[] = [];
 
     newHour: Hour = new Hour;
 
@@ -151,6 +152,12 @@ export class GenerateChartComponent implements OnInit {
         });
     }
 
+    compare(a: Hour, b: Hour) {
+        if (a.name > b.name) return 1; // если первое значение больше второго
+        if (a.name == b.name) return 0; // если равны
+        if (a.name < b.name) return -1; // если первое значение меньше второго
+    }
+
     creareAllHoursInDay(date: Date) {
         let hours: Hour[] = [];
         this.timeArr.forEach((item, i, arr) => {
@@ -170,13 +177,16 @@ export class GenerateChartComponent implements OnInit {
     }
 
 
-    generateGraph(date: Date): void {
-        this.dataService.getHours(date).subscribe((data: Hour[]) => {
+    generateGraph(): void {
+        /*this.dataService.getHours(this.selectedHour.date).subscribe((data: Hour[]) => {
 
             this.selectedDateHours = data;
+            this.selectedDateHours.sort(this.compare);
             console.log(this.selectedDateHours);
             console.log(this.workers);
-        });
+        });*/
+        this.selectedDateHours.sort(this.compare);
+        this.chartData = this.selectedDateHours;
     }
 
     getToday(): Date {
