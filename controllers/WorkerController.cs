@@ -22,11 +22,11 @@ namespace dutyChart.Controllers
             return db.Workers.ToList();
         }
 
-        public IEnumerable<Hour> GetHour()
+        /*public IEnumerable<Hour> GetHour()
         {
             return db.Hours.ToList();
         }
-
+        */
         [HttpGet("{id}")]
         public Worker Get(int id)
         {
@@ -34,12 +34,12 @@ namespace dutyChart.Controllers
             return worker;
         }
 
-        public Hour GetHour(int id)
+        /*public Hour GetHour(int id)
         {
             Hour hour = db.Hours.FirstOrDefault(x => x.Id == id);
             return hour;
         }
-
+        */
         [HttpPost]
         public IActionResult Post([FromBody]Worker worker)
         {
@@ -51,7 +51,7 @@ namespace dutyChart.Controllers
             }
             return BadRequest(ModelState);
         }
-        public IActionResult PostHour([FromBody]Hour hour)
+        /*public IActionResult PostHour([FromBody]Hour hour)
         {
             if (ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace dutyChart.Controllers
             }
             return BadRequest(ModelState);
         }
-
+        */
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]Worker worker)
         {
@@ -73,7 +73,7 @@ namespace dutyChart.Controllers
             }
             return BadRequest(ModelState);
         }
-        public IActionResult PutHour(int id, [FromBody]Hour hour)
+        /*public IActionResult PutHour(int id, [FromBody]Hour hour)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace dutyChart.Controllers
             }
             return BadRequest(ModelState);
         }
-
+        */
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

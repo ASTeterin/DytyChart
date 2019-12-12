@@ -33,8 +33,8 @@ namespace dutyChart.Controllers
         [HttpGet("{id}")]
         public Hour Get(int id)
         {
-            Hour Hour = db.Hours.FirstOrDefault(x => x.Id == id);
-            return Hour;
+            Hour hour = db.Hours.FirstOrDefault(x => x.Id == id);
+            return hour;
         }
 
         [HttpPost]

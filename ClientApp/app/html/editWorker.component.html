@@ -66,11 +66,11 @@
 
 
             <div class="form-group">
-                <button class="btn" (click)="addAbsencePeriod()" [disabled]="this.isDisableSettings">Добавить период отсутствия</button>
+                <button class="btn btn-primary" (click)="addAbsencePeriod()" [disabled]="this.isDisableSettings">Добавить период отсутствия</button>
             </div>
             <div class="form-group">
-                <button class="btn" (click)="saveWorker()" [disabled]="this.isDisableSettings">Сохранить</button>
-                <button class="btn" (click)="deleteWorker(this.currentWorker.id)" [disabled]="this.isDisableSettings">Удалить</button>
+                <button class="btn btn-success" (click)="saveWorker()" [disabled]="this.isDisableSettings">Сохранить</button>
+                <button class="btn btn-danger" (click)="deleteWorker(this.currentWorker.id)" [disabled]="this.isDisableSettings">Удалить</button>
             </div>
         </div>
     </div>

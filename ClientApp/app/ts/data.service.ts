@@ -18,6 +18,10 @@ export class DataService {
         return this.http.get(url);
     }
 
+    getSlotsByHourId(hourId: number) {
+        return this.http.get(`${this.urlSlot}?hourId=${hourId}`);
+    }
+
     getSlots() {
         return this.http.get(this.urlSlot); 
     }
@@ -29,6 +33,10 @@ export class DataService {
     updateSlot(slot: Slot) {
 
         return this.http.put(this.urlSlot + '/' + slot.id, slot);
+    }
+
+    deleteSlotsInHour(id: number) {
+        return this.http.delete(this.urlSlot + '/' + id);
     }
 
     createWorker(worker: Worker) {

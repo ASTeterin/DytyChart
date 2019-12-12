@@ -12,23 +12,39 @@ namespace dutyChart.controllers
     [Route("api/Slot")]
     public class SlotController : Controller
     {
-        
         ApplicationContext db;
+
+        private IActionResult delSlot(int hourId)
+        {
+            var slots = Get(hourId);
+            foreach (var slot in slots) {
+                Delete(slot.Id);
+            }
+            return Ok();
+        }
         public SlotController(ApplicationContext context)
         {
             db = context;
         }
         [HttpGet]
-        public IEnumerable<Slot> Get()
+        /*public IEnumerable<Slot> Get()
         {
             return db.Slots.ToList();
         }
 
         [HttpGet("{id}")]
-        public Slot Get(int id)
+        /*public Slot Get(int id)
         {
             Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
             return slot;
+        }*/
+
+        [HttpGet("{id}")]
+        public IEnumerable<Slot> Get(int hourId)
+        {
+            var slots = db.Slots
+                .Where(s => s.HourId == hourId).ToList();
+            return slots;
         }
 
         [HttpPost]
@@ -59,13 +75,19 @@ namespace dutyChart.controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
-            if (slot != null)
+            //Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
+            var slots = Get(id);
+          
+            if (slots != null)
             {
-                db.Slots.Remove(slot);
-                db.SaveChanges();
+                foreach (Slot slot in slots)
+                {
+                    db.Slots.Remove(slot);
+                    db.SaveChanges();
+                }
+                
             }
-            return Ok(slot);
+            return Ok(slots);
         }
 
 

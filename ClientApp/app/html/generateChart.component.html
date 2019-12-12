@@ -75,7 +75,6 @@
                     Дежурный по письмам
                 </label>
             </div>
-            <p><a routerLink="editUser" class="nav-link">К списку пользователей</a></p>
         </div>
 
         <div class="col-sm-9">
@@ -105,7 +104,7 @@
                 </ng-container>
             </p>
             <div class="form-group">
-                <button class="btn btn-default" (click)="generateGraph(selectedHour.date)">Сформировать график</button>
+                <button class="btn btn-primary" (click)="generateGraph(selectedHour.date)">Сформировать график</button>
             </div>
             <duty-chart [slots]="slots" [selectedDateHours]="chartData" [workers]="workers"></duty-chart>
         </div>

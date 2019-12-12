@@ -19,6 +19,9 @@ var DataService = /** @class */ (function () {
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
     };
+    DataService.prototype.getSlotsByHourId = function (hourId) {
+        return this.http.get(this.urlSlot + "?hourId=" + hourId);
+    };
     DataService.prototype.getSlots = function () {
         return this.http.get(this.urlSlot);
     };
@@ -27,6 +30,9 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.updateSlot = function (slot) {
         return this.http.put(this.urlSlot + '/' + slot.id, slot);
+    };
+    DataService.prototype.deleteSlot = function (id) {
+        return this.http.delete(this.urlSlot + '/' + id);
     };
     DataService.prototype.createWorker = function (worker) {
         return this.http.post(this.url, worker);

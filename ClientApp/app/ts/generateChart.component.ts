@@ -45,18 +45,18 @@ export class GenerateChartComponent implements OnInit {
     isDisableSettings: boolean = true;
 
     timeArr: any[] = [
-        { time: "08:00", minSlots: 1, maxSlots: 2 },
-        { time: "09:00", minSlots: 1, maxSlots: 3 },
-        { time: "10:00", minSlots: 2, maxSlots: 3 },
-        { time: "11:00", minSlots: 3, maxSlots: 4 },
-        { time: "12:00", minSlots: 4, maxSlots: 6 },
-        { time: "13:00", minSlots: 4, maxSlots: 6 },
-        { time: "14:00", minSlots: 5, maxSlots: 7 },
+        { time: "08:00", minSlots: 1, maxSlots: 1 },
+        { time: "09:00", minSlots: 1, maxSlots: 1 },
+        { time: "10:00", minSlots: 2, maxSlots: 2 },
+        { time: "11:00", minSlots: 3, maxSlots: 3 },
+        { time: "12:00", minSlots: 4, maxSlots: 4 },
+        { time: "13:00", minSlots: 5, maxSlots: 6 },
+        { time: "14:00", minSlots: 6, maxSlots: 7 },
         { time: "15:00", minSlots: 6, maxSlots: 7 },
         { time: "16:00", minSlots: 4, maxSlots: 5 },
-        { time: "17:00", minSlots: 4, maxSlots: 4 },
-        { time: "18:00", minSlots: 2, maxSlots: 4 },
-        { time: "19:00", minSlots: 1, maxSlots: 2 },
+        { time: "17:00", minSlots: 3, maxSlots: 3 },
+        { time: "18:00", minSlots: 2, maxSlots: 2 },
+        { time: "19:00", minSlots: 1, maxSlots: 1 },
     ];
 
 
@@ -138,8 +138,6 @@ export class GenerateChartComponent implements OnInit {
             if (data.length == 0) {
                 this.isNewDay = true;
                 this.creareAllHoursInDay(this.selectedDate);
-                //this.tabChangeHandler(this.firstTabSelectEvent);
-                //this.selectedHour.date = new Date (Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
             } else {
                 this.selectedHour = data[0];
                 this.selectedDateHours = data;
@@ -184,6 +182,9 @@ export class GenerateChartComponent implements OnInit {
         //var h: any;
         let slotIndex: number = 1;
         let countWorker = this.workers.length;
+        //this.loadSlots();
+
+        
         this.selectedDateHours.forEach((item, i, arr) => {
             for (var i = 0; i < item.minCount; i++) {
                 this.slot.hourId = item.id;
@@ -194,7 +195,7 @@ export class GenerateChartComponent implements OnInit {
             }
             //countSlotsInDay += item.minCount;
         });
-
+        
         console.log(countSlotsInDay);
     }
 
@@ -206,6 +207,9 @@ export class GenerateChartComponent implements OnInit {
             console.log(this.selectedDateHours);
             console.log(this.workers);
         });*/
+        this.selectedDateHours.forEach((item, i, arr) => {
+            this.deleteSlots(item.id)
+        });
         this.createSlots();
         this.selectedDateHours.sort(this.compare);
         this.chartData = this.selectedDateHours;
@@ -259,7 +263,7 @@ export class GenerateChartComponent implements OnInit {
     }
 
     calcelSlot() {
-        this.slot = new Slot;
+        this.slot = new Slot();
     }
 
     isFind(itemId: number, item: any) {
@@ -281,6 +285,11 @@ export class GenerateChartComponent implements OnInit {
     loadSlots() {
         this.dataService.getSlots()
             .subscribe((data: Slot[]) => this.slots = data);
+    }
+
+    deleteSlots(id: number) {
+        this.dataService.deleteSlotsInHour(id)
+            .subscribe(data => { console.log(data); this.loadSlots() });
     }
 
 }
