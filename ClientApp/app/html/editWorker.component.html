@@ -60,7 +60,7 @@
 
             <ng-container *ngFor="let p of periods">
                 <div class="form-group">
-                    <ngbd-datepicker-range-popup></ngbd-datepicker-range-popup>
+                    <ngbd-datepicker-range-popup (onChanged)="showDate($event)"></ngbd-datepicker-range-popup>
                 </div>
             </ng-container>
 

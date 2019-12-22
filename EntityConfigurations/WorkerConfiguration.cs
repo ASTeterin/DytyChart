@@ -12,8 +12,15 @@ namespace dutyChart.EntityConfigurations
         public void Configure(EntityTypeBuilder<Worker> builder)
         {
             builder.ToTable(nameof(Worker)).HasKey(t => t.Id);
+            builder.HasMany(Worker.AbsentPeriodsProperty)
+                .WithOne()
+                .HasForeignKey(fk => fk.WorkerId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.Property(Worker.UnwantedSlotsJsonProperty).HasColumnName("UnwantedSlotsJson");
+            builder.Property(Worker.DesirableSlotsJsonProperty).HasColumnName("DesirableSlotsJson");
+            builder.Ignore(t => t.AbsentPeriods);
             builder.Ignore(t => t.UnwantedSlots);
+            builder.Ignore(t => t.DesirableSlots);
         }
     }
 }

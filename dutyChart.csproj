@@ -22,6 +22,7 @@
     <None Remove="ClientApp\app\rangeSelectionDatepicker.ts" />
     <None Remove="ClientApp\app\tabset.module.ts" />
     <None Remove="ClientApp\app\tabset.ts" />
+    <None Remove="ClientApp\app\ts\absentPeriod.ts" />
     <None Remove="ClientApp\app\ts\nav.ts" />
     <None Remove="ClientApp\app\ts\slot.ts" />
     <None Remove="ClientApp\app\worker.ts" />
@@ -31,6 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Analyzers" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.4">
       <PrivateAssets>all</PrivateAssets>

@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './worker';
+import { AbsentPeriod } from './absentPeriod';
 
 @Component({
     templateUrl: '../html/editWorker.component.html',
@@ -19,6 +20,8 @@ export class EditWorkerComponent implements OnInit {
     isDisableSettings: boolean = true;
     periods: number[] = [];
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
+    absentPeriod: AbsentPeriod = new AbsentPeriod();
+    absentPeriods: AbsentPeriod[];
     public model: any;
    
 
@@ -41,6 +44,7 @@ export class EditWorkerComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
+        this.loadAbsentPeriods();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
         //console.log(this.currentWorker);
@@ -51,7 +55,7 @@ export class EditWorkerComponent implements OnInit {
         this.dataService.getData(this.dataService.url).subscribe((data: Worker[]) => {
             this.workers = data;
             this.workers.sort(this.compare);
-            console.log(this.workers)
+            //console.log(this.workers)
         });
     }
 
@@ -69,8 +73,20 @@ export class EditWorkerComponent implements OnInit {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(data => this.loadWorkers());
         }
+        //this.saveAbsentPeriod()
         //this.cancel();
         //this.periods = [];
+    }
+
+    saveAbsentPeriod() {
+        console.log(this.absentPeriod);
+        if (!this.absentPeriod.id) {
+            this.dataService.createAbsentPeriod(this.absentPeriod)
+                .subscribe((data: AbsentPeriod) => this.absentPeriods.push(data));
+        } else {
+            this.dataService.updateAbsentPeriod(this.absentPeriod)
+                .subscribe(data => this.loadAbsentPeriods());
+        }
     }
 
     createNewWorker() {
@@ -82,6 +98,15 @@ export class EditWorkerComponent implements OnInit {
     addAbsencePeriod() {
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
+        //this.absentPeriod.start = 
+
+    }
+    showDate($event: any) {
+        console.log($event);
+    }
+
+    loadAbsentPeriods() {
+        this.dataService.getAbsentPeriods().subscribe((data: AbsentPeriod[]) => this.absentPeriods = data);
     }
 
     changeStaff(worker: Worker) {

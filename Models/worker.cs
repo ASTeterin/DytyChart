@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using dutyChart.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 public class Worker
@@ -14,13 +16,28 @@ public class Worker
     public string Color { get; set; }
     public int CountAbsencePeriod { get; set; }
     private string _unwantedSlotsJson { get; set; }
-
+    protected List<AbsentPeriod> _absentPeriods { get; set; } = new List<AbsentPeriod>();
     public IReadOnlyCollection<int> UnwantedSlots => JsonConvert.DeserializeObject<List<int>>(_unwantedSlotsJson ?? "[]");
+    private string _desirableSlotsJson { get; set; }
+
+    public IReadOnlyCollection<int> DesirableSlots => JsonConvert.DeserializeObject<List<int>>(_desirableSlotsJson ?? "[]");
 
     public void SetUnwantedSlots(List<int> slots)
     {
         _unwantedSlotsJson = JsonConvert.SerializeObject(slots);
     }
 
+    public void SetDesirableSlots(List<int> slots)
+    {
+        _desirableSlotsJson = JsonConvert.SerializeObject(slots);
+    }
+    
+    public IReadOnlyCollection<AbsentPeriod> AbsentPeriods
+    {
+        get { return _absentPeriods.ToList(); }
+    }
+
+    public static Expression<Func<Worker, IEnumerable<AbsentPeriod>>> AbsentPeriodsProperty => (s => s._absentPeriods);
     public static Expression<Func<Worker, string>> UnwantedSlotsJsonProperty => (of => of._unwantedSlotsJson);
+    public static Expression<Func<Worker, string>> DesirableSlotsJsonProperty => (of => of._desirableSlotsJson);
 }

@@ -9,11 +9,13 @@ export class NgMultiselect {
     @Input() placeholder: string;
     @Input() isDisable: boolean;
     dropdownList: any[];
-    selectedItems: any[];
+    selectedItems: any[] = [];
+    selectedIds: number[] = [];
     dropdownSettings = {};
 
     constructor() {
         this.dropdownList = [
+            { item_id: 0, item_text: '08:00' },
             { item_id: 1, item_text: '09:00' },
             { item_id: 2, item_text: '10:00' },
             { item_id: 3, item_text: '11:00' },
@@ -37,19 +39,42 @@ export class NgMultiselect {
         };
         
     }
-    onItemSelect(item: any) {
-        console.log(item);
-        
+    
+    @Input() userName: string;
+    @Output() onChanged = new EventEmitter<any>()
+
+    onSelect(event: any) {
+        console.log(event);
     }
+
+    onItemSelect(item: any): void {
+        this.selectedItems.push(item.item_id);
+        this.selectedIds.push(item.item_id);
+        //this.timeChange.emit(this.selectedItems);
+        this.onChanged.emit(this.selectedIds);
+        //console.log(this.selectedItems);
+
+    }
+
+    onItemDeSelect(item: any): void {
+        //splice indexOf
+        this.selectedItems.push(item.item_id);
+        this.selectedIds.push(item.item_id);
+        //this.timeChange.emit(this.selectedItems);
+        this.onChanged.emit(this.selectedIds);
+        //console.log(this.selectedItems);
+
+    }
+
     onSelectAll(items: any) {
         console.log(items);
     }
-    @Input() userName: string;
-    @Output() timeChange = new EventEmitter<string>();
-    onTimeChange(model: any[]) {
+
+    onTimeChange($event: any) {
 
         //this.userName = model;
-        //this.timeChange.emit(model  );
+        //this.selectedItems.push($event.id);
+        //this.timeChange.emit($event);
     }
     
 }

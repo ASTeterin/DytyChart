@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using dutyChart.Models;
+using dutyChart.Dto;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +14,7 @@ namespace dutyChart.controllers
     public class SlotController : Controller
     {
         ApplicationContext db;
+        DataProcessor dp;
 
         private IActionResult delSlot(int hourId)
         {
@@ -22,9 +24,10 @@ namespace dutyChart.controllers
             }
             return Ok();
         }
-        public SlotController(ApplicationContext context)
+        public SlotController(ApplicationContext context, DataProcessor dataProcessor)
         {
             db = context;
+            dp = dataProcessor;
         }
         [HttpGet]
         /*public IEnumerable<Slot> Get()
@@ -38,6 +41,12 @@ namespace dutyChart.controllers
             Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
             return slot;
         }*/
+
+        [HttpGet, Route("get-filled-slots")]
+        public List<SlotDto> GetFilledSlots(DateTime date)
+        {
+            return dp.DistributeSlots(date);
+        }
 
         [HttpGet("{id}")]
         public IEnumerable<Slot> Get(int hourId)

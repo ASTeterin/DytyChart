@@ -12,11 +12,11 @@ import { NgbdDatepicker } from './datepicker';
 
 @Component({
     templateUrl: '../html/generateChart.component.html',
-    //styleUrls: ['./app.component.css'],
-    styles: [` 
+    styleUrls: ['../css/generateChart.css'],
+    /*styles: [` 
             .form-group {width: 100%;}
             .worker_info_item {display: inline-block;}
-    `],
+    `],*/
     providers: [DataService]
 })
 
@@ -98,12 +98,12 @@ export class GenerateChartComponent implements OnInit {
             } else {
                 this.selectedHour = hour;
             }
-            console.log(this.selectedHour);
+            //console.log(this.selectedHour);
         } else {
             this.isNewDay = false;
             this.selectedHour.name = this.timeArr[0];
             this.selectedHour.date = this.selectedDate;
-            console.log(this.selectedHour);
+            //console.log(this.selectedHour);
         }
     }
 
@@ -120,7 +120,7 @@ export class GenerateChartComponent implements OnInit {
         for (var i = 1; i <= countElem; i++) {
             arr.push(i);
         }
-        console.log(arr);
+        //console.log(arr);
         return arr;
     }
 
@@ -190,13 +190,13 @@ export class GenerateChartComponent implements OnInit {
                 this.slot.hourId = item.id;
                 this.slot.index = slotIndex++;
                 this.slot.workerId = this.workers[this.randomInteger(0, countWorker-1)].id;
-                console.log(this.slot);
+                //console.log(this.slot);
                 this.saveSlot();
             }
             //countSlotsInDay += item.minCount;
         });
         
-        console.log(countSlotsInDay);
+        
     }
 
     generateGraph(): void {
@@ -208,7 +208,9 @@ export class GenerateChartComponent implements OnInit {
             console.log(this.workers);
         });*/
         this.selectedDateHours.forEach((item, i, arr) => {
-            this.deleteSlots(item.id)
+            this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
+            //console.log(item);
+            //this.deleteSlots(item.id)
         });
         this.createSlots();
         this.selectedDateHours.sort(this.compare);
@@ -228,7 +230,7 @@ export class GenerateChartComponent implements OnInit {
         this.loadHours();
     }
 
-    save() {
+    saveWorker() {
         console.log(this.worker);
         this.dataService.updateWorker(this.worker)
             .subscribe(data => this.loadWorkers());
@@ -254,8 +256,8 @@ export class GenerateChartComponent implements OnInit {
 
     loadHours() {
         this.dataService.getHours(this.selectedDate)
-            .subscribe((data: Hour[]) => { console.log(data); this.selectedDateHours = data });
-        console.log(this.selectedDateHours);
+            .subscribe((data: Hour[]) => { /*console.log(data);*/ this.selectedDateHours = data });
+        //console.log(this.selectedDateHours);
     }
 
     cancel() {
@@ -291,6 +293,28 @@ export class GenerateChartComponent implements OnInit {
         this.dataService.deleteSlotsInHour(id)
             .subscribe(data => { console.log(data); this.loadSlots() });
     }
+
+    //addUnwantedSlots(slotId: number) {
+    //    //console.log("111111111");
+    //    this.worker.unwantedSlots.push(slotId);
+    //    this.saveWorker();
+    //    console.log(this.worker);
+    //    //console.log(s);
+    //}
+
+    updateUnwantedSlots(selectedItems: any) {
+        console.log(selectedItems);
+    }
+
+    addDesirableSlots(slotId: number) {
+        //console.log("111111111");
+        this.worker.desirableSlots.push(slotId);
+        this.saveWorker();
+        console.log(this.worker);
+        //console.log(s);
+    }
+
+
 
 }
 

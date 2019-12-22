@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Worker } from './worker';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { AbsentPeriod } from './absentPeriod';
 
 @Injectable()
 export class DataService {
@@ -10,6 +11,7 @@ export class DataService {
     public url = "/api/Workers";
     public urlHour = "/api/Hours";
     public urlSlot = "/api/Slot";
+    public urlAbsentPeriods = "/api/AbsentPeriod";
 
     constructor(private http: HttpClient) {
     }
@@ -65,5 +67,23 @@ export class DataService {
     updateHour(hour: Hour) {
         return this.http.put(this.urlHour + '/' + hour.id, hour);
     }
+
+    getAbsentPeriod(workerId: number) {
+        return this.http.get(`${this.urlAbsentPeriods}?workerId=${workerId}`);
+    }
+
+    getAbsentPeriods() {
+        return this.http.get(`${this.urlAbsentPeriods}`);
+    }
+
+    createAbsentPeriod(absentPeriod: AbsentPeriod) {
+        return this.http.post(this.urlAbsentPeriods, absentPeriod);
+    }
+
+    updateAbsentPeriod(absentPeriod: AbsentPeriod) {
+        return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
+    }
+
+
 
 }

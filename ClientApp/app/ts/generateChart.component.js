@@ -66,13 +66,13 @@ var GenerateChartComponent = /** @class */ (function () {
             else {
                 this.selectedHour = hour;
             }
-            console.log(this.selectedHour);
+            //console.log(this.selectedHour);
         }
         else {
             this.isNewDay = false;
             this.selectedHour.name = this.timeArr[0];
             this.selectedHour.date = this.selectedDate;
-            console.log(this.selectedHour);
+            //console.log(this.selectedHour);
         }
     };
     GenerateChartComponent.prototype.minSlotChangeHandler = function (count) {
@@ -86,7 +86,7 @@ var GenerateChartComponent = /** @class */ (function () {
         for (var i = 1; i <= countElem; i++) {
             arr.push(i);
         }
-        console.log(arr);
+        //console.log(arr);
         return arr;
     };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
@@ -148,26 +148,19 @@ var GenerateChartComponent = /** @class */ (function () {
         var slotIndex = 1;
         var countWorker = this.workers.length;
         //this.loadSlots();
-        this.dataService.deleteSlot(559)
-            .subscribe(function (data) { console.log(data); _this.loadSlots(); });
-        this.dataService.getSlotsByHourId(559)
-            .subscribe(function (data) { console.log(data); _this.slots = data; });
-        //console.log(this.slots);
-        /*
-        this.selectedDateHours.forEach((item, i, arr) => {
+        this.selectedDateHours.forEach(function (item, i, arr) {
             for (var i = 0; i < item.minCount; i++) {
-                this.slot.hourId = item.id;
-                this.slot.index = slotIndex++;
-                this.slot.workerId = this.workers[this.randomInteger(0, countWorker-1)].id;
-                console.log(this.slot);
-                this.saveSlot();
+                _this.slot.hourId = item.id;
+                _this.slot.index = slotIndex++;
+                _this.slot.workerId = _this.workers[_this.randomInteger(0, countWorker - 1)].id;
+                //console.log(this.slot);
+                _this.saveSlot();
             }
             //countSlotsInDay += item.minCount;
         });
-        */
-        console.log(countSlotsInDay);
     };
     GenerateChartComponent.prototype.generateGraph = function () {
+        var _this = this;
         /*this.dataService.getHours(this.selectedHour.date).subscribe((data: Hour[]) => {
 
             this.selectedDateHours = data;
@@ -175,6 +168,11 @@ var GenerateChartComponent = /** @class */ (function () {
             console.log(this.selectedDateHours);
             console.log(this.workers);
         });*/
+        this.selectedDateHours.forEach(function (item, i, arr) {
+            _this.dataService.getSlotsByHourId(item.id).subscribe(function (data) { return console.log(data); });
+            //console.log(item);
+            //this.deleteSlots(item.id)
+        });
         this.createSlots();
         this.selectedDateHours.sort(this.compare);
         this.chartData = this.selectedDateHours;
@@ -190,7 +188,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedDate = this.getToday();
         this.loadHours();
     };
-    GenerateChartComponent.prototype.save = function () {
+    GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;
         console.log(this.worker);
         this.dataService.updateWorker(this.worker)
@@ -218,8 +216,8 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.loadHours = function () {
         var _this = this;
         this.dataService.getHours(this.selectedDate)
-            .subscribe(function (data) { console.log(data); _this.selectedDateHours = data; });
-        console.log(this.selectedDateHours);
+            .subscribe(function (data) { /*console.log(data);*/ _this.selectedDateHours = data; });
+        //console.log(this.selectedDateHours);
     };
     GenerateChartComponent.prototype.cancel = function () {
         this.selectedHour = new Hour();
@@ -247,11 +245,36 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.getSlots()
             .subscribe(function (data) { return _this.slots = data; });
     };
+    GenerateChartComponent.prototype.deleteSlots = function (id) {
+        var _this = this;
+        this.dataService.deleteSlotsInHour(id)
+            .subscribe(function (data) { console.log(data); _this.loadSlots(); });
+    };
+    //addUnwantedSlots(slotId: number) {
+    //    //console.log("111111111");
+    //    this.worker.unwantedSlots.push(slotId);
+    //    this.saveWorker();
+    //    console.log(this.worker);
+    //    //console.log(s);
+    //}
+    GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedItems) {
+        console.log(selectedItems);
+    };
+    GenerateChartComponent.prototype.addDesirableSlots = function (slotId) {
+        //console.log("111111111");
+        this.worker.desirableSlots.push(slotId);
+        this.saveWorker();
+        console.log(this.worker);
+        //console.log(s);
+    };
     GenerateChartComponent = __decorate([
         Component({
             templateUrl: '../html/generateChart.component.html',
-            //styleUrls: ['./app.component.css'],
-            styles: [" \n            .form-group {width: 100%;}\n            .worker_info_item {display: inline-block;}\n    "],
+            styleUrls: ['../css/generateChart.css'],
+            /*styles: [`
+                    .form-group {width: 100%;}
+                    .worker_info_item {display: inline-block;}
+            `],*/
             providers: [DataService]
         }),
         __metadata("design:paramtypes", [DataService])

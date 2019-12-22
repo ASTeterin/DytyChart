@@ -15,6 +15,7 @@ var DataService = /** @class */ (function () {
         this.url = "/api/Workers";
         this.urlHour = "/api/Hours";
         this.urlSlot = "/api/Slot";
+        this.urlAbsentPeriods = "/api/AbsentPeriod";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -31,7 +32,7 @@ var DataService = /** @class */ (function () {
     DataService.prototype.updateSlot = function (slot) {
         return this.http.put(this.urlSlot + '/' + slot.id, slot);
     };
-    DataService.prototype.deleteSlot = function (id) {
+    DataService.prototype.deleteSlotsInHour = function (id) {
         return this.http.delete(this.urlSlot + '/' + id);
     };
     DataService.prototype.createWorker = function (worker) {
@@ -54,6 +55,18 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.updateHour = function (hour) {
         return this.http.put(this.urlHour + '/' + hour.id, hour);
+    };
+    DataService.prototype.getAbsentPeriod = function (workerId) {
+        return this.http.get(this.urlAbsentPeriods + "?workerId=" + workerId);
+    };
+    DataService.prototype.getAbsentPeriods = function () {
+        return this.http.get("" + this.urlAbsentPeriods);
+    };
+    DataService.prototype.createAbsentPeriod = function (absentPeriod) {
+        return this.http.post(this.urlAbsentPeriods, absentPeriod);
+    };
+    DataService.prototype.updateAbsentPeriod = function (absentPeriod) {
+        return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
     };
     DataService = __decorate([
         Injectable(),

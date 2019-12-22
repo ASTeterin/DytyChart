@@ -13,6 +13,7 @@ namespace dutyChart
         {
             string connectionString = "Server=.\\SQLEXPRESS;Database=workersdb;Trusted_Connection=True;";
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
+            services.AddScoped<DataProcessor>();
 
             services.AddMvc();
         }

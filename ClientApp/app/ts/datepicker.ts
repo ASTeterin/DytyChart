@@ -19,7 +19,7 @@ export class NgbdDatepicker {
     @Output() onChanged = new EventEmitter<NgbDateStruct>()
 
     getDate($event: any): void {
-        console.log(this.model.day);
+        //console.log(this.model.day);
         this.onChanged.emit(this.model);
     }
     

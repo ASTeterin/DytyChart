@@ -7,12 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 var NgbdDatepickerRangePopup = /** @class */ (function () {
     function NgbdDatepickerRangePopup(calendar, formatter) {
         this.calendar = calendar;
         this.formatter = formatter;
+        this.onChanged = new EventEmitter();
         this.fromDate = calendar.getToday();
         this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
     }
@@ -27,6 +28,11 @@ var NgbdDatepickerRangePopup = /** @class */ (function () {
             this.toDate = null;
             this.fromDate = date;
         }
+        var period = {
+            fromDate: this.fromDate,
+            todate: this.toDate
+        };
+        this.onChanged.emit(period);
     };
     NgbdDatepickerRangePopup.prototype.isHovered = function (date) {
         return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
@@ -41,6 +47,10 @@ var NgbdDatepickerRangePopup = /** @class */ (function () {
         var parsed = this.formatter.parse(input);
         return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
     };
+    __decorate([
+        Output(),
+        __metadata("design:type", Object)
+    ], NgbdDatepickerRangePopup.prototype, "onChanged", void 0);
     NgbdDatepickerRangePopup = __decorate([
         Component({
             selector: 'ngbd-datepicker-range-popup',

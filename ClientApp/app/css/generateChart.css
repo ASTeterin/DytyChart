@@ -1,0 +1,12 @@
+﻿.form-group {
+    width: 100%;
+}
+
+.worker_info_item {
+    display: inline-block;
+}
+
+.datapicker {
+    display:block;
+    width: 100%;
+}

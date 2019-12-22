@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './worker';
+import { AbsentPeriod } from './absentPeriod';
 var EditWorkerComponent = /** @class */ (function () {
     function EditWorkerComponent(dataService) {
         this.dataService = dataService;
@@ -17,6 +18,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.isDisableSettings = true;
         this.periods = [];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
+        this.absentPeriod = new AbsentPeriod();
     }
     EditWorkerComponent.prototype.createArray = function (countElement) {
         var arr = [];
@@ -35,6 +37,7 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
+        this.loadAbsentPeriods();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
         //console.log(this.currentWorker);
@@ -44,7 +47,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.dataService.getData(this.dataService.url).subscribe(function (data) {
             _this.workers = data;
             _this.workers.sort(_this.compare);
-            console.log(_this.workers);
+            //console.log(this.workers)
         });
     };
     EditWorkerComponent.prototype.cancel = function () {
@@ -62,8 +65,21 @@ var EditWorkerComponent = /** @class */ (function () {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
+        //this.saveAbsentPeriod()
         //this.cancel();
         //this.periods = [];
+    };
+    EditWorkerComponent.prototype.saveAbsentPeriod = function () {
+        var _this = this;
+        console.log(this.absentPeriod);
+        if (!this.absentPeriod.id) {
+            this.dataService.createAbsentPeriod(this.absentPeriod)
+                .subscribe(function (data) { return _this.absentPeriods.push(data); });
+        }
+        else {
+            this.dataService.updateAbsentPeriod(this.absentPeriod)
+                .subscribe(function (data) { return _this.loadAbsentPeriods(); });
+        }
     };
     EditWorkerComponent.prototype.createNewWorker = function () {
         this.isDisableSettings = false;
@@ -73,6 +89,14 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent.prototype.addAbsencePeriod = function () {
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
+        //this.absentPeriod.start = 
+    };
+    EditWorkerComponent.prototype.showDate = function ($event) {
+        console.log($event);
+    };
+    EditWorkerComponent.prototype.loadAbsentPeriods = function () {
+        var _this = this;
+        this.dataService.getAbsentPeriods().subscribe(function (data) { return _this.absentPeriods = data; });
     };
     EditWorkerComponent.prototype.changeStaff = function (worker) {
         var _this = this;

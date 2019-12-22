@@ -18,7 +18,7 @@ var NgbdDatepicker = /** @class */ (function () {
         this.getDate(this.today);
     }
     NgbdDatepicker.prototype.getDate = function ($event) {
-        console.log(this.model.day);
+        //console.log(this.model.day);
         this.onChanged.emit(this.model);
     };
     __decorate([

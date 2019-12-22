@@ -1,5 +1,5 @@
-﻿import { Component } from '@angular/core';
-import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+﻿import { Component, Output, EventEmitter } from '@angular/core';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'ngbd-datepicker-range-popup',
@@ -36,6 +36,7 @@ export class NgbdDatepickerRangePopup {
 
     fromDate: NgbDate;
     toDate: NgbDate;
+    @Output() onChanged = new EventEmitter<any>()
 
     constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) {
         this.fromDate = calendar.getToday();
@@ -51,6 +52,12 @@ export class NgbdDatepickerRangePopup {
             this.toDate = null;
             this.fromDate = date;
         }
+        var period = {
+            fromDate:this.fromDate,
+            todate: this.toDate
+        };
+        
+        this.onChanged.emit(period);
     }
 
     isHovered(date: NgbDate) {
@@ -69,4 +76,6 @@ export class NgbdDatepickerRangePopup {
         const parsed = this.formatter.parse(input);
         return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
     }
+
+
 }

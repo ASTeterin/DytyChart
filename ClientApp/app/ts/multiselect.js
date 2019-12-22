@@ -10,9 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Input, Component, Output, EventEmitter } from '@angular/core';
 var NgMultiselect = /** @class */ (function () {
     function NgMultiselect() {
+        this.selectedItems = [];
+        this.selectedIds = [];
         this.dropdownSettings = {};
-        this.timeChange = new EventEmitter();
+        this.onChanged = new EventEmitter();
         this.dropdownList = [
+            { item_id: 0, item_text: '08:00' },
             { item_id: 1, item_text: '09:00' },
             { item_id: 2, item_text: '10:00' },
             { item_id: 3, item_text: '11:00' },
@@ -35,15 +38,31 @@ var NgMultiselect = /** @class */ (function () {
             allowSearchFilter: false
         };
     }
+    NgMultiselect.prototype.onSelect = function (event) {
+        console.log(event);
+    };
     NgMultiselect.prototype.onItemSelect = function (item) {
-        console.log(item);
+        this.selectedItems.push(item.item_id);
+        this.selectedIds.push(item.item_id);
+        //this.timeChange.emit(this.selectedItems);
+        this.onChanged.emit(this.selectedIds);
+        //console.log(this.selectedItems);
+    };
+    NgMultiselect.prototype.onItemDeSelect = function (item) {
+        //splice indexOf
+        this.selectedItems.push(item.item_id);
+        this.selectedIds.push(item.item_id);
+        //this.timeChange.emit(this.selectedItems);
+        this.onChanged.emit(this.selectedIds);
+        //console.log(this.selectedItems);
     };
     NgMultiselect.prototype.onSelectAll = function (items) {
         console.log(items);
     };
-    NgMultiselect.prototype.onTimeChange = function (model) {
+    NgMultiselect.prototype.onTimeChange = function ($event) {
         //this.userName = model;
-        //this.timeChange.emit(model  );
+        //this.selectedItems.push($event.id);
+        //this.timeChange.emit($event);
     };
     __decorate([
         Input(),
@@ -60,7 +79,7 @@ var NgMultiselect = /** @class */ (function () {
     __decorate([
         Output(),
         __metadata("design:type", Object)
-    ], NgMultiselect.prototype, "timeChange", void 0);
+    ], NgMultiselect.prototype, "onChanged", void 0);
     NgMultiselect = __decorate([
         Component({
             selector: 'multiselect',
