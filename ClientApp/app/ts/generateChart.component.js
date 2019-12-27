@@ -37,7 +37,7 @@ var GenerateChartComponent = /** @class */ (function () {
             { time: "19:00", minSlots: 1, maxSlots: 1 },
         ];
         //timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-        this.firstTabSelectEvent = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
+        //firstTabSelectEvent: any = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
         this.activeIdString = this.timeArr[0].time;
         this.selectedHour = new Hour;
         this.selectedDateHours = [];
@@ -45,18 +45,12 @@ var GenerateChartComponent = /** @class */ (function () {
         this.slot = new Slot;
         this.slots = [];
         this.newHour = new Hour;
-        //this.datepicker = new NgbdDatepicker(this.calendar);
-        //this.today = calendar.getToday();
-        //this.date = this.datepicker.model;
-        //this.day = this.date.day;
-        //this.month = this.date.month;
     }
     GenerateChartComponent.prototype.tabChangeHandler = function (t) {
-        console.log(t);
         if (this.selectedHour.name) {
             this.saveHour();
         }
-        this.loadHours();
+        //this.loadHours();
         if (!this.isNewDay) {
             var hour = this.selectedDateHours.find(function (x) { return x.name == t.nextId; });
             if (!hour) {
@@ -93,25 +87,28 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.day = date.day;
         this.month = date.month;
-        this.activeIdString = this.timeArr[0].time;
+        //this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
         }
         ;
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
-        this.dataService.getHours(this.selectedDate).subscribe(function (data) {
+        console.log(this.selectedDate);
+        this.dataService.getHours(this.selectedDate).subscribe(function (data) { return _this.selectedDateHours = data; });
+        /*
+        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
             if (data.length == 0) {
-                _this.isNewDay = true;
-                _this.creareAllHoursInDay(_this.selectedDate);
-            }
-            else {
-                _this.selectedHour = data[0];
-                _this.selectedDateHours = data;
-                _this.isNewDay = false;
-                console.log(_this.selectedDateHours);
+                this.isNewDay = true;
+                //this.creareAllHoursInDay(this.selectedDate);
+            } else {
+                this.selectedHour = data[0];
+                this.selectedDateHours = data;
+                this.isNewDay = false;
+                console.log(this.selectedDateHours);
                 //console.log(this.workers);
             }
-        });
+
+        });*/
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -148,16 +145,18 @@ var GenerateChartComponent = /** @class */ (function () {
         var slotIndex = 1;
         var countWorker = this.workers.length;
         //this.loadSlots();
-        this.selectedDateHours.forEach(function (item, i, arr) {
+        /*this.selectedDateHours.forEach((item, i, arr) => {
             for (var i = 0; i < item.minCount; i++) {
-                _this.slot.hourId = item.id;
-                _this.slot.index = slotIndex++;
-                _this.slot.workerId = _this.workers[_this.randomInteger(0, countWorker - 1)].id;
+                this.slot.hourId = item.id;
+                this.slot.index = slotIndex++;
+                this.slot.workerId = this.workers[this.randomInteger(0, countWorker-1)].id;
                 //console.log(this.slot);
-                _this.saveSlot();
+                this.saveSlot();
             }
             //countSlotsInDay += item.minCount;
-        });
+        });*/
+        this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) { return _this.slots = data; });
+        console.log(this.slots);
     };
     GenerateChartComponent.prototype.generateGraph = function () {
         var _this = this;
@@ -167,14 +166,16 @@ var GenerateChartComponent = /** @class */ (function () {
             this.selectedDateHours.sort(this.compare);
             console.log(this.selectedDateHours);
             console.log(this.workers);
-        });*/
-        this.selectedDateHours.forEach(function (item, i, arr) {
-            _this.dataService.getSlotsByHourId(item.id).subscribe(function (data) { return console.log(data); });
-            //console.log(item);
-            //this.deleteSlots(item.id)
         });
-        this.createSlots();
-        this.selectedDateHours.sort(this.compare);
+        this.selectedDateHours.forEach((item, i, arr) => {
+            this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
+            //console.log(item);
+            this.deleteSlots(item.id)
+        });*/
+        //this.createSlots();
+        this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) { return _this.slots = data; });
+        console.log(this.slots);
+        //this.selectedDateHours.sort(this.compare);
         this.chartData = this.selectedDateHours;
     };
     GenerateChartComponent.prototype.getToday = function () {
@@ -186,7 +187,7 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
         this.selectedDate = this.getToday();
-        this.loadHours();
+        //this.loadHours();
     };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;

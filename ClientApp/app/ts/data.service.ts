@@ -11,6 +11,7 @@ export class DataService {
     public url = "/api/Workers";
     public urlHour = "/api/Hours";
     public urlSlot = "/api/Slot";
+    public urlFiledSlot = "/api/Slot/get-filled-slots";
     public urlAbsentPeriods = "/api/AbsentPeriod";
 
     constructor(private http: HttpClient) {
@@ -54,6 +55,7 @@ export class DataService {
 
     getHours(date: Date) {
         return this.http.get(`${this.urlHour}?date=${date.toISOString()}`);
+        //return this.http.get(`${this.urlHour}?date=${date}`);
     }
 
     getAllHours() {
@@ -82,6 +84,11 @@ export class DataService {
 
     updateAbsentPeriod(absentPeriod: AbsentPeriod) {
         return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
+    }
+
+    getFilledSlots(date: Date)
+    {
+        return this.http.get(`${this.urlFiledSlot}?date=${date.toISOString()}`);
     }
 
 

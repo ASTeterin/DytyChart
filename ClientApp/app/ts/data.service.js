@@ -15,6 +15,7 @@ var DataService = /** @class */ (function () {
         this.url = "/api/Workers";
         this.urlHour = "/api/Hours";
         this.urlSlot = "/api/Slot";
+        this.urlFiledSlot = "/api/Slot/get-filled-slots";
         this.urlAbsentPeriods = "/api/AbsentPeriod";
     }
     DataService.prototype.getData = function (url) {
@@ -46,6 +47,7 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.getHours = function (date) {
         return this.http.get(this.urlHour + "?date=" + date.toISOString());
+        //return this.http.get(`${this.urlHour}?date=${date}`);
     };
     DataService.prototype.getAllHours = function () {
         return this.http.get("" + this.urlHour);
@@ -67,6 +69,9 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.updateAbsentPeriod = function (absentPeriod) {
         return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
+    };
+    DataService.prototype.getFilledSlots = function (date) {
+        return this.http.get(this.urlFiledSlot + "?date=" + date.toISOString());
     };
     DataService = __decorate([
         Injectable(),

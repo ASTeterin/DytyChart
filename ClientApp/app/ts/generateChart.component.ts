@@ -58,11 +58,7 @@ export class GenerateChartComponent implements OnInit {
         { time: "18:00", minSlots: 2, maxSlots: 2 },
         { time: "19:00", minSlots: 1, maxSlots: 1 },
     ];
-
-
-    //timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-    firstTabSelectEvent: any = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
-    activeIdString: string = this.timeArr[0].time;
+    //activeIdString: string = this.timeArr[0].time;
 
 
     selectedDate: Date;
@@ -77,18 +73,13 @@ export class GenerateChartComponent implements OnInit {
 
 
     constructor(private dataService: DataService) {
-        //this.datepicker = new NgbdDatepicker(this.calendar);
-        //this.today = calendar.getToday();
-        //this.date = this.datepicker.model;
-        //this.day = this.date.day;
-        //this.month = this.date.month;
     }
+
     tabChangeHandler(t: any) {
-        console.log(t);
         if (this.selectedHour.name) {
             this.saveHour();
         }
-        this.loadHours();
+        //this.loadHours();
 
         if (!this.isNewDay) {
             let hour = this.selectedDateHours.find(x => x.name == t.nextId);
@@ -125,19 +116,23 @@ export class GenerateChartComponent implements OnInit {
     }
 
     dateChangeHandler(date: NgbDateStruct) {
+        console.log(date);
         this.day = date.day;
         this.month = date.month;
-        this.activeIdString = this.timeArr[0].time;
+        //this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
         };
 
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        console.log(this.selectedDate);
+        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => this.selectedDateHours = data);
 
+        /*
         this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
             if (data.length == 0) {
                 this.isNewDay = true;
-                this.creareAllHoursInDay(this.selectedDate);
+                //this.creareAllHoursInDay(this.selectedDate);
             } else {
                 this.selectedHour = data[0];
                 this.selectedDateHours = data;
@@ -146,7 +141,7 @@ export class GenerateChartComponent implements OnInit {
                 //console.log(this.workers);
             }
 
-        });
+        });*/
     }
 
     compare(a: Hour, b: Hour) {
@@ -185,7 +180,7 @@ export class GenerateChartComponent implements OnInit {
         //this.loadSlots();
 
         
-        this.selectedDateHours.forEach((item, i, arr) => {
+        /*this.selectedDateHours.forEach((item, i, arr) => {
             for (var i = 0; i < item.minCount; i++) {
                 this.slot.hourId = item.id;
                 this.slot.index = slotIndex++;
@@ -194,7 +189,10 @@ export class GenerateChartComponent implements OnInit {
                 this.saveSlot();
             }
             //countSlotsInDay += item.minCount;
-        });
+        });*/
+
+        this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => this.slots = data);
+        console.log(this.slots);
         
         
     }
@@ -206,14 +204,17 @@ export class GenerateChartComponent implements OnInit {
             this.selectedDateHours.sort(this.compare);
             console.log(this.selectedDateHours);
             console.log(this.workers);
-        });*/
+        });
         this.selectedDateHours.forEach((item, i, arr) => {
             this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
             //console.log(item);
-            //this.deleteSlots(item.id)
-        });
-        this.createSlots();
-        this.selectedDateHours.sort(this.compare);
+            this.deleteSlots(item.id)
+        });*/
+        //this.createSlots();
+        this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => this.slots = data);
+        console.log(this.slots);
+
+        //this.selectedDateHours.sort(this.compare);
         this.chartData = this.selectedDateHours;
     }
 
@@ -227,7 +228,10 @@ export class GenerateChartComponent implements OnInit {
     ngOnInit() {
         this.loadWorkers();
         this.selectedDate = this.getToday();
-        this.loadHours();
+        console.log(this.selectedDate);
+        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
+        this.dateChangeHandler(date);
+        //this.loadHours();
     }
 
     saveWorker() {

@@ -20,5 +20,6 @@ namespace dutyChart.Models
         }
 
         public static Expression<Func<Hour, IEnumerable<Slot>>> SlotsProperty => (s => s._slots);
+
     }
 }
