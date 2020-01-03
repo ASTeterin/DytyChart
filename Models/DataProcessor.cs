@@ -50,7 +50,7 @@ namespace dutyChart.Models
             vipCustomerSupport = GetRandomPermutation<Worker>(data: vipCustomerSupport);
         }
 
-        private List<int> GetArray(int countHours, List<int> numbersOfHours)
+        private List<int> GetArrayOfZeroesAndOnes(int countHours, List<int> numbersOfHours)
         {
             List<int> listOfZerosAndOnes = new List<int>();
             for (var i = 0; i < countHours; i++)
@@ -131,15 +131,15 @@ namespace dutyChart.Models
                 listNumbers.Add(11);
                 countSlotsForWorker = 3;
             }
-            for (int i = 0; i < countSlotsForWorker;)
+            for (int i = 0; i < countSlotsForWorker; i++)
             {
                 countAttemps = 0;
-                if (countFreeSlots == 0)
+                if ((countFreeSlots == 0) || (countAttemps == maxCountAttempts))
                 {
                     break;
                 }
                 number = rand.Next(0, countHoursInDay - 1);
-                countAttemps++;
+                //countAttemps++;
                 while (listNumbers.Contains(number) || hoursInDay[number] == 0) {
                     countAttemps++;
                     number = rand.Next(0, countHoursInDay);
@@ -149,37 +149,29 @@ namespace dutyChart.Models
                 if (countAttemps == maxCountAttempts)
                     break;
                 listNumbers.Add(number);
-
-                List<int> arrOfZeroesAndOnes = GetArray(countHoursInDay, listNumbers);
-
+                //проверка на подряд идущие часы
+                List<int> arrOfZeroesAndOnes = GetArrayOfZeroesAndOnes(countHoursInDay, listNumbers);
                 if (IsTwoHoursConsistently(arrOfZeroesAndOnes))
                 {
-                    
                     listNumbers.Remove(number);
+                    i--;
                     if (countAttemps == maxCountAttempts)
                     {
-                        return listNumbers;
+                        //return listNumbers;
+                        break;
                     }
-                    continue;
-                }
-                
-                countFreeSlots--;
-                temp = hoursInDay[number];
-                hoursInDay.RemoveAt(number);
-                temp--;
-                hoursInDay.Insert(number, temp);
-                i++;
-            }
-            //for (int i = 0; i < countSlotsForWorker; i++)
-            //{
-            //    countAttemps++;
-            //    if (countFreeSlots == 0)
-            //    {
-            //        break;
-            //    }
-            //    number = rand.Next(0, countHoursInDay);
 
-            //}
+                    //continue;
+                }
+                else
+                {
+                    countFreeSlots--;
+                    temp = hoursInDay[number];
+                    hoursInDay.RemoveAt(number);
+                    temp--;
+                    hoursInDay.Insert(number, temp);
+                }                  
+            }
             return listNumbers;
         }
 
@@ -197,7 +189,7 @@ namespace dutyChart.Models
                 }
             }
 
-            List<int> arrOfZeroesAndOnes = GetArray(count, listNumbers);
+            List<int> arrOfZeroesAndOnes = GetArrayOfZeroesAndOnes(count, listNumbers);
 
             return listNumbers;
         }

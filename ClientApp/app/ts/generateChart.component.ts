@@ -190,6 +190,8 @@ export class GenerateChartComponent implements OnInit {
             this.deleteSlots(item.id)
         });*/
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => this.slots = data);
+        this.loadHours();
+        console.log(this.selectedDateHours);
         this.chartData = this.selectedDateHours;
     }
 
