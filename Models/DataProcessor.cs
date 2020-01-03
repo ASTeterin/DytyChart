@@ -40,6 +40,7 @@ namespace dutyChart.Models
                         break;
                 }
             }
+            existingCustomerSupport = GetRandomPermutation<Worker>(data: existingCustomerSupport);
         }
 
         private List<int> GetArray(int countHours, List<int> numbersOfHours)
@@ -76,37 +77,94 @@ namespace dutyChart.Models
             }
             return false;
         }
+
+        private int GetSumm(List<int> list) 
+        {
+            int summ = 0;
+            foreach (int item in list)
+            {
+                summ += item;   
+            }
+            return summ;
+        }
         private List<int> GetSlotNumbersForWorker(ref List<int> hoursInDay, int countSlotsForWorker)
         {
-            List<int> listNumbers = new List<int>();
-            int number, temp;
+            int maxCountAttempts = 10;
+            int number, temp, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
+            countFreeSlots = GetSumm(hoursInDay);
             Random rand = new Random();
+            int countAttemps = 0;
+            List<int> listNumbers = new List<int>();//GetUniqueMaxTwoSeqRandomNumbers(countSlotsForWorker, 0, countHoursInDay);
             //List<int> ar = new List<int>() { 1, 10, 3, 7, 1 };
             for (int i = 0; i < countSlotsForWorker;)
             {
-                do
+                countAttemps = 0;
+                if (countFreeSlots == 0)
                 {
-                    number = rand.Next(0, countHoursInDay);
+                    break;
                 }
-                while ((listNumbers.Contains(number)) || (hoursInDay[number] == 0));
-
+                number = rand.Next(0, countHoursInDay);
+                countAttemps++;
+                while (listNumbers.Contains(number) || hoursInDay[number] == 0) {
+                    countAttemps++;
+                    number = rand.Next(0, countHoursInDay);
+                    if (countAttemps == maxCountAttempts)
+                        break;
+                }
+                if (countAttemps == maxCountAttempts)
+                    break;
                 listNumbers.Add(number);
 
                 List<int> arrOfZeroesAndOnes = GetArray(countHoursInDay, listNumbers);
 
                 if (IsTwoHoursConsistently(arrOfZeroesAndOnes))
                 {
+                    
                     listNumbers.Remove(number);
+                    if (countAttemps == maxCountAttempts)
+                    {
+                        return listNumbers;
+                    }
                     continue;
                 }
-
+                
+                countFreeSlots--;
                 temp = hoursInDay[number];
                 hoursInDay.RemoveAt(number);
-                hoursInDay.Add(temp);
+                temp--;
+                hoursInDay.Insert(number, temp);
                 i++;
-
             }
+            //for (int i = 0; i < countSlotsForWorker; i++)
+            //{
+            //    countAttemps++;
+            //    if (countFreeSlots == 0)
+            //    {
+            //        break;
+            //    }
+            //    number = rand.Next(0, countHoursInDay);
+
+            //}
+            return listNumbers;
+        }
+
+        private List<int> GetUniqueMaxTwoSeqRandomNumbers( int count, int from, int to )
+        {
+            var listNumbers = new List<int>();
+            var rand = new System.Random();
+
+            while(listNumbers.Count != count)
+            {
+                int randomNumber = rand.Next(from, to);
+                if (!listNumbers.Contains(randomNumber))
+                {
+                    listNumbers.Add(randomNumber);
+                }
+            }
+
+            List<int> arrOfZeroesAndOnes = GetArray(count, listNumbers);
+
             return listNumbers;
         }
         private List<SlotDto> GetSlotsDto(List<Hour> hours)
@@ -136,11 +194,11 @@ namespace dutyChart.Models
                 var slots = _db.Slots.Where(s => s.HourId == h.Id).ToList();
                 foreach (var slot in slots)
                 {
-                    slot.WorkerId = 0;
+                    slot.WorkerId = null;
                 }
-                _db.Slots.UpdateRange(slots);
-                _db.SaveChanges();
+                _db.Slots.UpdateRange(slots);        
             }
+            _db.SaveChanges();
         }
         private void CreateSlots(List<Hour> hours)
         {
@@ -161,23 +219,40 @@ namespace dutyChart.Models
             _db.SaveChanges();
         }
 
+        private static List<T> GetRandomPermutation<T>(List<T> data)
+        {
+            List<T> result = new List<T> { };
+            Random rand = new Random();
+            for (int i = 0; i < data.Count; i++)
+            {
+                int position = rand.Next(0, i);
+                result.Insert(position, data[i]);
+            }
+            return result;
+        }
+
         private void FillSlots(Worker worker, List<int> slotNumbers, List<Hour> hours)
         {
+            List<int> hourIds = hours.Select(h => h.Id).ToList();
+            Dictionary<int, List<Slot>> slotsInCurrentHourById = _db.Slots
+                .Where(s => hourIds.Contains(s.HourId))
+                .GroupBy(s => s.HourId)
+                .ToDictionary(g => g.Key, g => g.ToList());
             foreach (var slotNumber in slotNumbers)
             {
-                var slotsInCurrentHour = _db.Slots.Where(s => s.HourId == hours[slotNumber].Id).ToList();
+                List<Slot> slotsInCurrentHour = slotsInCurrentHourById[hours[slotNumber].Id];
                 foreach (var slotInCurrentHour in slotsInCurrentHour)
                 {
-                    if (slotInCurrentHour.WorkerId == 0)
+                    if (slotInCurrentHour.WorkerId == null)
                     {
                         slotInCurrentHour.WorkerId = worker.Id;
                         _db.Slots.Update(slotInCurrentHour);
-                        _db.SaveChanges();
                         break;
                     }
                 }
 
             }
+            _db.SaveChanges();
         }
 
         public List<SlotDto> DistributeSlots(DateTime date)
@@ -204,34 +279,47 @@ namespace dutyChart.Models
             else
             {
                 ResetSlots(hours);
+                //CreateSlots(hours);
             }
 
-            List<Worker> existingCustomerSupport;
-            List<Worker> newCustomerSupport;
-            List<Worker> vipCustomerSupport;
+            List<Worker> existingCustomerSupport = new List<Worker>();
+            List<Worker> newCustomerSupport = new List<Worker>();
+            List<Worker> vipCustomerSupport = new List<Worker>();
+            List<Worker> notBusyWorkers = new List<Worker>();
             GetWorkersGroups(workers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport);
 
             foreach (var w in existingCustomerSupport)
             {
                 countSlotsForWorker = 5;
-                List<int> slotsNumber = GetSlotNumbersForWorker(ref countFreeSlots, countSlotsForWorker);
-                FillSlots(w, slotsNumber, hours);
+                if (GetSumm(countFreeSlots) != 0)
+                {
+                    List<int> slotsNumber = GetSlotNumbersForWorker(ref countFreeSlots, countSlotsForWorker);
+                    FillSlots(w, slotsNumber, hours);
+                }
+                else 
+                {
+                    notBusyWorkers.Add(w);
+                }
+                
             }
 
             foreach (var w in newCustomerSupport)
             {
                 countSlotsForWorker = 1;
-                List<int> slotsNumber = GetSlotNumbersForWorker(ref countFreeSlots, countSlotsForWorker);
-                FillSlots(w, slotsNumber, hours);
+                if (GetSumm(countFreeSlots) != 0)
+                {
+                    List<int> slotsNumber = GetSlotNumbersForWorker(ref countFreeSlots, countSlotsForWorker);
+                    FillSlots(w, slotsNumber, hours);
+                }
+                else 
+                {
+                    notBusyWorkers.Add(w);
+                }
             }
 
             slots = GetSlotsDto(hours);
 
             return slots;
         }
-
-       
-
-
     }
 }

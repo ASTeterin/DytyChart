@@ -9,7 +9,7 @@ namespace dutyChart.Dto
     {
         public int Id { get; set; }
         public int Index { get; set; }
-        public int WorkerId { get; set; }
+        public int? WorkerId { get; set; }
         public int HourId { get; set; }
     }
 }

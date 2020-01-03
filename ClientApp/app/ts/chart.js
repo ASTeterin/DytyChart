@@ -26,10 +26,12 @@ var DutyChart = /** @class */ (function () {
         console.log(this.minSlotsArray);
     };
     DutyChart.prototype.getWorkerName = function (workerId) {
-        return this.workers.find(function (w) { return w.id == workerId; }).name;
+        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        return worker ? worker.name : "";
     };
     DutyChart.prototype.getWorkerColor = function (workerId) {
-        return this.workers.find(function (w) { return w.id == workerId; }).color;
+        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        return worker ? worker.color : "";
     };
     __decorate([
         Input(),

@@ -16,6 +16,7 @@ var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
         this.worker = new Worker();
+        this.activeIdString = 3;
         this.tableMode = true;
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
@@ -36,9 +37,6 @@ var GenerateChartComponent = /** @class */ (function () {
             { time: "18:00", minSlots: 2, maxSlots: 2 },
             { time: "19:00", minSlots: 1, maxSlots: 1 },
         ];
-        //timeArr: string[] = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
-        //firstTabSelectEvent: any = { activeId: "09:00", nextId: "09:00", preventDefault: "ƒ" };
-        this.activeIdString = this.timeArr[0].time;
         this.selectedHour = new Hour;
         this.selectedDateHours = [];
         this.chartData = [];
@@ -85,9 +83,10 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
         var _this = this;
+        console.log(date);
         this.day = date.day;
         this.month = date.month;
-        //this.activeIdString = this.timeArr[0].time;
+        this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
         }
@@ -95,20 +94,6 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         console.log(this.selectedDate);
         this.dataService.getHours(this.selectedDate).subscribe(function (data) { return _this.selectedDateHours = data; });
-        /*
-        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
-            if (data.length == 0) {
-                this.isNewDay = true;
-                //this.creareAllHoursInDay(this.selectedDate);
-            } else {
-                this.selectedHour = data[0];
-                this.selectedDateHours = data;
-                this.isNewDay = false;
-                console.log(this.selectedDateHours);
-                //console.log(this.workers);
-            }
-
-        });*/
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -160,22 +145,13 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.generateGraph = function () {
         var _this = this;
-        /*this.dataService.getHours(this.selectedHour.date).subscribe((data: Hour[]) => {
-
-            this.selectedDateHours = data;
-            this.selectedDateHours.sort(this.compare);
-            console.log(this.selectedDateHours);
-            console.log(this.workers);
-        });
+        /*
         this.selectedDateHours.forEach((item, i, arr) => {
             this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
             //console.log(item);
             this.deleteSlots(item.id)
         });*/
-        //this.createSlots();
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) { return _this.slots = data; });
-        console.log(this.slots);
-        //this.selectedDateHours.sort(this.compare);
         this.chartData = this.selectedDateHours;
     };
     GenerateChartComponent.prototype.getToday = function () {
@@ -187,6 +163,9 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
         this.selectedDate = this.getToday();
+        console.log(this.selectedDate);
+        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
+        this.dateChangeHandler(date);
         //this.loadHours();
     };
     GenerateChartComponent.prototype.saveWorker = function () {

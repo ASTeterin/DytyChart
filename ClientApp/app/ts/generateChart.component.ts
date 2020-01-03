@@ -29,8 +29,8 @@ export class GenerateChartComponent implements OnInit {
     worker: Worker = new Worker();
     workers: Worker[];
     selectedWorkerId: number;
-    minSlotsCount: String;
-    maxSlotsCount: Number;
+    activeIdString: number = 3;
+
     tableMode: boolean = true;
     optionsModel: number[];
     myOptions: IMultiSelectOption[];
@@ -119,7 +119,7 @@ export class GenerateChartComponent implements OnInit {
         console.log(date);
         this.day = date.day;
         this.month = date.month;
-        //this.activeIdString = this.timeArr[0].time;
+        this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
         };
@@ -127,21 +127,6 @@ export class GenerateChartComponent implements OnInit {
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         console.log(this.selectedDate);
         this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => this.selectedDateHours = data);
-
-        /*
-        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
-            if (data.length == 0) {
-                this.isNewDay = true;
-                //this.creareAllHoursInDay(this.selectedDate);
-            } else {
-                this.selectedHour = data[0];
-                this.selectedDateHours = data;
-                this.isNewDay = false;
-                console.log(this.selectedDateHours);
-                //console.log(this.workers);
-            }
-
-        });*/
     }
 
     compare(a: Hour, b: Hour) {
@@ -198,23 +183,13 @@ export class GenerateChartComponent implements OnInit {
     }
 
     generateGraph(): void {
-        /*this.dataService.getHours(this.selectedHour.date).subscribe((data: Hour[]) => {
-
-            this.selectedDateHours = data;
-            this.selectedDateHours.sort(this.compare);
-            console.log(this.selectedDateHours);
-            console.log(this.workers);
-        });
+        /*
         this.selectedDateHours.forEach((item, i, arr) => {
             this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
             //console.log(item);
             this.deleteSlots(item.id)
         });*/
-        //this.createSlots();
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => this.slots = data);
-        console.log(this.slots);
-
-        //this.selectedDateHours.sort(this.compare);
         this.chartData = this.selectedDateHours;
     }
 

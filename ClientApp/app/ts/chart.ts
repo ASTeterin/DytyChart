@@ -32,12 +32,15 @@ export class DutyChart {
         console.log(this.minSlotsArray);
     }
 
-    getWorkerName(workerId: number) {
-        return this.workers.find(w => w.id == workerId).name;
+    getWorkerName(workerId: any) {
+        let worker = this.workers.find(w => w.id == workerId);
+        
+        return worker ? worker.name : "";
     }
 
-    getWorkerColor(workerId: number) {
-        return this.workers.find(w => w.id == workerId).color;
+    getWorkerColor(workerId: any) {
+        let worker = this.workers.find(w => w.id == workerId);
+        return worker ? worker.color : "";
     }
 
     constructor() {
