@@ -2,7 +2,7 @@
     constructor(
         public id?: number,
         public start?: Date,
-        public stop?: Date,
+        public end?: Date,
         public WorkerId?: number,
     ) { }
 }

@@ -1,8 +1,8 @@
 var AbsentPeriod = /** @class */ (function () {
-    function AbsentPeriod(id, start, stop, WorkerId) {
+    function AbsentPeriod(id, start, end, WorkerId) {
         this.id = id;
         this.start = start;
-        this.stop = stop;
+        this.end = end;
         this.WorkerId = WorkerId;
     }
     return AbsentPeriod;

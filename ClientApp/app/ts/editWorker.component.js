@@ -37,7 +37,10 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
-        this.loadAbsentPeriods();
+        this.fromDate.day = 14;
+        this.fromDate.month = 2;
+        this.fromDate.year = 2020;
+        //this.loadAbsentPeriods();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
         //console.log(this.currentWorker);
@@ -65,7 +68,7 @@ var EditWorkerComponent = /** @class */ (function () {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
-        //this.saveAbsentPeriod()
+        this.saveAbsentPeriod();
         //this.cancel();
         //this.periods = [];
     };
@@ -78,7 +81,7 @@ var EditWorkerComponent = /** @class */ (function () {
         }
         else {
             this.dataService.updateAbsentPeriod(this.absentPeriod)
-                .subscribe(function (data) { return _this.loadAbsentPeriods(); });
+                .subscribe(function (data) { return _this.loadAllAbsentPeriods(); });
         }
     };
     EditWorkerComponent.prototype.createNewWorker = function () {
@@ -89,12 +92,30 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent.prototype.addAbsencePeriod = function () {
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
+        this.absentPeriod.WorkerId = this.selectedWorkerId;
+        this.saveAbsentPeriod();
+        console.log(this.periods);
+        console.log(this.absentPeriod);
+        //this.absentPeriod.start = 
+    };
+    EditWorkerComponent.prototype.deleteAbsencePeriod = function () {
+        this.currentWorker.countAbsencePeriod--;
+        console.log(this.periods);
+        //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.showDate = function ($event) {
+        this.absentPeriod.start = new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day, 0, 0, 0, 0);
+        if ($event.todate)
+            this.absentPeriod.end = new Date($event.todate.year, $event.todate.month - 1, $event.todate.day, 0, 0, 0, 0);
+        console.log(this.absentPeriod);
         console.log($event);
     };
-    EditWorkerComponent.prototype.loadAbsentPeriods = function () {
+    EditWorkerComponent.prototype.loadAbsentPeriods = function (worker) {
+        var _this = this;
+        this.dataService.getAbsentPeriodsForWorker(worker.id).subscribe(function (data) { return _this.absentPeriods = data; });
+    };
+    EditWorkerComponent.prototype.loadAllAbsentPeriods = function () {
         var _this = this;
         this.dataService.getAbsentPeriods().subscribe(function (data) { return _this.absentPeriods = data; });
     };
@@ -104,6 +125,8 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
+        this.loadAbsentPeriods(this.currentWorker);
+        console.log(this.absentPeriods);
         console.log(this.currentWorker);
     };
     EditWorkerComponent.prototype.deleteWorker = function (id) {

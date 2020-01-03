@@ -70,7 +70,7 @@ export class DataService {
         return this.http.put(this.urlHour + '/' + hour.id, hour);
     }
 
-    getAbsentPeriod(workerId: number) {
+    getAbsentPeriodsForWorker(workerId: number) {
         return this.http.get(`${this.urlAbsentPeriods}?workerId=${workerId}`);
     }
 

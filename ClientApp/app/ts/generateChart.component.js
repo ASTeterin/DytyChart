@@ -152,6 +152,8 @@ var GenerateChartComponent = /** @class */ (function () {
             this.deleteSlots(item.id)
         });*/
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) { return _this.slots = data; });
+        this.loadHours();
+        console.log(this.selectedDateHours);
         this.chartData = this.selectedDateHours;
     };
     GenerateChartComponent.prototype.getToday = function () {

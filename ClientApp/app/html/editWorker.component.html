@@ -58,9 +58,10 @@
                 </div>
             </div>
 
-            <ng-container *ngFor="let p of periods">
+            <ng-container *ngFor="let p of absentPeriods">
                 <div class="form-group">
-                    <ngbd-datepicker-range-popup (onChanged)="showDate($event)"></ngbd-datepicker-range-popup>
+                    <ngbd-datepicker-range-popup (onChanged)="showDate($event)" [from]="fromDate"></ngbd-datepicker-range-popup>
+                    <button class="btn btn-danger" (click)="deleteAbsencePeriod()">Удалить</button>
                 </div>
             </ng-container>
 

@@ -2,6 +2,7 @@
 import { DataService } from './data.service';
 import { Worker } from './worker';
 import { AbsentPeriod } from './absentPeriod';
+import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     templateUrl: '../html/editWorker.component.html',
@@ -22,6 +23,7 @@ export class EditWorkerComponent implements OnInit {
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
     absentPeriod: AbsentPeriod = new AbsentPeriod();
     absentPeriods: AbsentPeriod[];
+    fromDate: NgbDate;
     public model: any;
    
 
@@ -44,7 +46,10 @@ export class EditWorkerComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
-        this.loadAbsentPeriods();
+        this.fromDate.day = 14;
+        this.fromDate.month = 2;
+        this.fromDate.year = 2020;
+        //this.loadAbsentPeriods();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
         //console.log(this.currentWorker);
@@ -73,7 +78,8 @@ export class EditWorkerComponent implements OnInit {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(data => this.loadWorkers());
         }
-        //this.saveAbsentPeriod()
+        this.saveAbsentPeriod();
+        this.loadAbsentPeriods(this.currentWorker);
         //this.cancel();
         //this.periods = [];
     }
@@ -85,7 +91,7 @@ export class EditWorkerComponent implements OnInit {
                 .subscribe((data: AbsentPeriod) => this.absentPeriods.push(data));
         } else {
             this.dataService.updateAbsentPeriod(this.absentPeriod)
-                .subscribe(data => this.loadAbsentPeriods());
+                .subscribe(data => this.loadAbsentPeriods(this.currentWorker));
         }
     }
 
@@ -98,23 +104,46 @@ export class EditWorkerComponent implements OnInit {
     addAbsencePeriod() {
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
+        this.absentPeriod.WorkerId = this.selectedWorkerId;
+        this.absentPeriods.push(this.absentPeriod);
+
+        //this.saveAbsentPeriod();
+        console.log(this.periods);
+        console.log(this.absentPeriod);
+        //this.absentPeriod.start = 
+
+    }
+
+    deleteAbsencePeriod() {
+        this.currentWorker.countAbsencePeriod--;
+        console.log(this.periods);
+        //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         //this.absentPeriod.start = 
 
     }
     showDate($event: any) {
+        this.absentPeriod.start = new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day, 0, 0, 0, 0);
+        if ($event.todate)
+            this.absentPeriod.end = new Date($event.todate.year, $event.todate.month - 1, $event.todate.day, 0, 0, 0, 0);
+        console.log(this.absentPeriod);
         console.log($event);
     }
 
-    loadAbsentPeriods() {
+    loadAbsentPeriods(worker: Worker) {
+        this.dataService.getAbsentPeriodsForWorker(worker.id).subscribe((data: AbsentPeriod[]) => this.absentPeriods = data);
+    }
+
+    loadAllAbsentPeriods() {
         this.dataService.getAbsentPeriods().subscribe((data: AbsentPeriod[]) => this.absentPeriods = data);
     }
 
     changeStaff(worker: Worker) {
-        this.cancel();
-        
+        this.cancel();  
         this.currentWorker = this.workers.find(x => x.id == this.selectedWorkerId);
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
+        this.loadAbsentPeriods(this.currentWorker);
+        console.log(this.absentPeriods);
         console.log(this.currentWorker);
     }
 

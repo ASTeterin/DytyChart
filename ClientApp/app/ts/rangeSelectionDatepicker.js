@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 var NgbdDatepickerRangePopup = /** @class */ (function () {
     function NgbdDatepickerRangePopup(calendar, formatter) {
@@ -51,6 +51,10 @@ var NgbdDatepickerRangePopup = /** @class */ (function () {
         Output(),
         __metadata("design:type", Object)
     ], NgbdDatepickerRangePopup.prototype, "onChanged", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", NgbDate)
+    ], NgbdDatepickerRangePopup.prototype, "from", void 0);
     NgbdDatepickerRangePopup = __decorate([
         Component({
             selector: 'ngbd-datepicker-range-popup',

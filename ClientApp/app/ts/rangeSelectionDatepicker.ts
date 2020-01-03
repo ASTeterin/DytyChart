@@ -1,4 +1,4 @@
-﻿import { Component, Output, EventEmitter } from '@angular/core';
+﻿import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -37,6 +37,7 @@ export class NgbdDatepickerRangePopup {
     fromDate: NgbDate;
     toDate: NgbDate;
     @Output() onChanged = new EventEmitter<any>()
+    @Input() from: NgbDate;
 
     constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) {
         this.fromDate = calendar.getToday();

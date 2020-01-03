@@ -58,7 +58,7 @@ var DataService = /** @class */ (function () {
     DataService.prototype.updateHour = function (hour) {
         return this.http.put(this.urlHour + '/' + hour.id, hour);
     };
-    DataService.prototype.getAbsentPeriod = function (workerId) {
+    DataService.prototype.getAbsentPeriodsForWorker = function (workerId) {
         return this.http.get(this.urlAbsentPeriods + "?workerId=" + workerId);
     };
     DataService.prototype.getAbsentPeriods = function () {
