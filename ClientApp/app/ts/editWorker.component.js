@@ -69,6 +69,7 @@ var EditWorkerComponent = /** @class */ (function () {
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
         this.saveAbsentPeriod();
+        this.loadAbsentPeriods(this.currentWorker);
         //this.cancel();
         //this.periods = [];
     };
@@ -81,7 +82,7 @@ var EditWorkerComponent = /** @class */ (function () {
         }
         else {
             this.dataService.updateAbsentPeriod(this.absentPeriod)
-                .subscribe(function (data) { return _this.loadAllAbsentPeriods(); });
+                .subscribe(function (data) { return _this.loadAbsentPeriods(_this.currentWorker); });
         }
     };
     EditWorkerComponent.prototype.createNewWorker = function () {
@@ -93,7 +94,8 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.absentPeriod.WorkerId = this.selectedWorkerId;
-        this.saveAbsentPeriod();
+        this.absentPeriods.push(this.absentPeriod);
+        //this.saveAbsentPeriod();
         console.log(this.periods);
         console.log(this.absentPeriod);
         //this.absentPeriod.start = 

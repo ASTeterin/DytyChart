@@ -19,7 +19,27 @@ namespace dutyChart.Models
             _db = db;
         }
 
-        private void GetWorkersGroups(List<Worker> workers, out List<Worker> dutyWorkers, out List<Worker> existingCustomerSupport, out List<Worker> newCustomerSupport, out List<Worker> vipCustomerSupport)
+        private bool canDuty(Worker worker, DateTime date)
+        {
+            List<AbsentPeriod> absentPeriods = _db.AbsentPeriods.Where(p => p.WorkerId == worker.Id).ToList();
+            bool canDuty = true;
+            foreach (var period in absentPeriods)
+            { 
+                if ((date >= period.Start) && (date <= period.End))
+                {
+                    canDuty = false;
+                    break;
+                }
+            }
+            return canDuty;
+        }
+
+        private void GetWorkersGroups(List<Worker> workers, 
+            out List<Worker> dutyWorkers, 
+            out List<Worker> existingCustomerSupport, 
+            out List<Worker> newCustomerSupport, 
+            out List<Worker> vipCustomerSupport,
+            DateTime date)
         {
             existingCustomerSupport = new List<Worker>() { };
             newCustomerSupport = new List<Worker>() { };
@@ -27,9 +47,15 @@ namespace dutyChart.Models
             dutyWorkers = new List<Worker>() { };
             foreach (Worker w in workers)
             {
+                canDuty(w, date);
                 if (w.IsDuty)
                 {
                     dutyWorkers.Add(w);
+                    continue;
+                }
+                if ((w.IsDutyOnLetters) || (!canDuty(w, date)))
+                {
+                    //notDutyWorkers.Add(w);
                     continue;
                 }
                 switch (w.IdGroup)
@@ -307,20 +333,11 @@ namespace dutyChart.Models
             }
         }
 
-        private void FillSlotsForDutyWorker(Worker worker,  ref List<Hour> hours, ref List<int> countFreeSlots)
-        {
-            List<int> sequence = new List<int> { };
-            sequence[0] = 0;
-            sequence[1] = 1;
-            sequence[12] = 12;
-            
-        }
-
         public List<SlotDto> DistributeSlots(DateTime date)
         {
             //List<List<int>> slotsOfAllUsers = new List<List<int>>();
             var slots = new List<SlotDto>();
-            var countSlotsForWorker = 0;
+            //var countSlotsForWorker = 0;
             var hours = _db.Hours
                 .Where(h => h.Date == date)
                 .ToList();
@@ -342,15 +359,18 @@ namespace dutyChart.Models
                 ResetSlots(hours);
             }
 
-            List<Worker> existingCustomerSupport = new List<Worker>();
-            List<Worker> newCustomerSupport = new List<Worker>();
-            List<Worker> vipCustomerSupport = new List<Worker>();
-            List<Worker> notBusyWorkers = new List<Worker>();
-            GetWorkersGroups(workers, out List<Worker> dutyWorkers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport);
+            List<Worker> existingCustomerSupport = new List<Worker>() { };
+            List<Worker> newCustomerSupport = new List<Worker>() { };
+            List<Worker> vipCustomerSupport = new List<Worker>() { };
+            List<Worker> notDutyWorkers = new List<Worker>() { };
+            List<Worker> dutyWorkers = new List<Worker>() { };
+            List<Worker> notBusyWorkers = new List<Worker>() { };
+
+            GetWorkersGroups(workers, out dutyWorkers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport, date);
+            
             //Worker duty = GetDutyWorker(existingCustomerSupport);
 
             FillSlotsForGroup(dutyWorkers, 6, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: true);
-  
             FillSlotsForGroup(existingCustomerSupport, 5, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: false);
             FillSlotsForGroup(newCustomerSupport, 1, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: false);
             FillSlotsForGroup(vipCustomerSupport, 1, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: false);
