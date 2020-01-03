@@ -19,14 +19,19 @@ namespace dutyChart.Models
             _db = db;
         }
 
-        private void GetWorkersGroups(List<Worker> workers, out List<Worker> existingCustomerSupport, out List<Worker> newCustomerSupport, out List<Worker> vipCustomerSupport)
+        private void GetWorkersGroups(List<Worker> workers, out List<Worker> dutyWorkers, out List<Worker> existingCustomerSupport, out List<Worker> newCustomerSupport, out List<Worker> vipCustomerSupport)
         {
             existingCustomerSupport = new List<Worker>() { };
             newCustomerSupport = new List<Worker>() { };
             vipCustomerSupport = new List<Worker>() { };
+            dutyWorkers = new List<Worker>() { };
             foreach (Worker w in workers)
             {
-
+                if (w.IsDuty)
+                {
+                    dutyWorkers.Add(w);
+                    continue;
+                }
                 switch (w.IdGroup)
                 {
                     case 1:
@@ -41,6 +46,8 @@ namespace dutyChart.Models
                 }
             }
             existingCustomerSupport = GetRandomPermutation<Worker>(data: existingCustomerSupport);
+            newCustomerSupport = GetRandomPermutation<Worker>(data: newCustomerSupport);
+            vipCustomerSupport = GetRandomPermutation<Worker>(data: vipCustomerSupport);
         }
 
         private List<int> GetArray(int countHours, List<int> numbersOfHours)
@@ -87,16 +94,43 @@ namespace dutyChart.Models
             }
             return summ;
         }
-        private List<int> GetSlotNumbersForWorker(ref List<int> hoursInDay, int countSlotsForWorker)
+
+        private List<int> GetUniqSiq(int length, int sequenceLength)
         {
-            int maxCountAttempts = 10;
+            List<int> data = new List<int> { };
+            List<int> sequence = new List<int> { }; 
+            int index;
+            for (int i = 0; i < length; i++)
+            {
+                data.Add(i);
+            }
+
+            Random rand = new Random();
+            while (sequence.Count < sequenceLength)
+            {
+                index = rand.Next(0, data.Count - 1);
+                sequence.Add(data[index]);
+                data.RemoveAt(index);
+            }
+            return sequence;
+        }
+        private List<int> GetSlotNumbersForWorker(ref List<int> hoursInDay, int countSlotsForWorker, bool isDutyWorker)
+        {
+            int maxCountAttempts = 50;
             int number, temp, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
             countFreeSlots = GetSumm(hoursInDay);
             Random rand = new Random();
             int countAttemps = 0;
+            //GetUniqSiq(countHoursInDay, countSlotsForWorker);
             List<int> listNumbers = new List<int>();//GetUniqueMaxTwoSeqRandomNumbers(countSlotsForWorker, 0, countHoursInDay);
-            //List<int> ar = new List<int>() { 1, 10, 3, 7, 1 };
+            if (isDutyWorker)
+            {
+                listNumbers.Add(0);
+                listNumbers.Add(1);
+                listNumbers.Add(11);
+                countSlotsForWorker = 3;
+            }
             for (int i = 0; i < countSlotsForWorker;)
             {
                 countAttemps = 0;
@@ -104,7 +138,7 @@ namespace dutyChart.Models
                 {
                     break;
                 }
-                number = rand.Next(0, countHoursInDay);
+                number = rand.Next(0, countHoursInDay - 1);
                 countAttemps++;
                 while (listNumbers.Contains(number) || hoursInDay[number] == 0) {
                     countAttemps++;
@@ -231,6 +265,11 @@ namespace dutyChart.Models
             return result;
         }
 
+        private Worker GetDutyWorker(List<Worker> workers)
+        {
+            return workers.FirstOrDefault(w => w.IsDuty == true);   
+        }
+
         private void FillSlots(Worker worker, List<int> slotNumbers, List<Hour> hours)
         {
             List<int> hourIds = hours.Select(h => h.Id).ToList();
@@ -250,9 +289,39 @@ namespace dutyChart.Models
                         break;
                     }
                 }
-
             }
             _db.SaveChanges();
+        }
+
+        private void FillSlotsForGroup(List<Worker> workers, 
+            int countSlotsForWorker, 
+            ref List<Hour> hours, 
+            ref List<int> countFreeSlots, 
+            ref List<Worker> notBusyWorkers,
+            bool isDuty)
+        {
+            foreach (var w in workers)
+            {
+                if (GetSumm(countFreeSlots) != 0)
+                {
+                    List<int> slotsNumber = GetSlotNumbersForWorker(ref countFreeSlots, countSlotsForWorker, isDuty);
+                    FillSlots(w, slotsNumber, hours);
+                }
+                else
+                {
+                    notBusyWorkers.Add(w);
+                }
+
+            }
+        }
+
+        private void FillSlotsForDutyWorker(Worker worker,  ref List<Hour> hours, ref List<int> countFreeSlots)
+        {
+            List<int> sequence = new List<int> { };
+            sequence[0] = 0;
+            sequence[1] = 1;
+            sequence[12] = 12;
+            
         }
 
         public List<SlotDto> DistributeSlots(DateTime date)
@@ -279,16 +348,22 @@ namespace dutyChart.Models
             else
             {
                 ResetSlots(hours);
-                //CreateSlots(hours);
             }
 
             List<Worker> existingCustomerSupport = new List<Worker>();
             List<Worker> newCustomerSupport = new List<Worker>();
             List<Worker> vipCustomerSupport = new List<Worker>();
             List<Worker> notBusyWorkers = new List<Worker>();
-            GetWorkersGroups(workers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport);
+            GetWorkersGroups(workers, out List<Worker> dutyWorkers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport);
+            //Worker duty = GetDutyWorker(existingCustomerSupport);
 
-            foreach (var w in existingCustomerSupport)
+            FillSlotsForGroup(dutyWorkers, 6, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: true);
+  
+            FillSlotsForGroup(existingCustomerSupport, 5, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: false);
+            FillSlotsForGroup(newCustomerSupport, 1, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: false);
+            FillSlotsForGroup(vipCustomerSupport, 1, ref hours, ref countFreeSlots, ref notBusyWorkers, isDuty: false);
+
+            /*foreach (var w in existingCustomerSupport)
             {
                 countSlotsForWorker = 5;
                 if (GetSumm(countFreeSlots) != 0)
@@ -302,7 +377,7 @@ namespace dutyChart.Models
                 }
                 
             }
-
+            
             foreach (var w in newCustomerSupport)
             {
                 countSlotsForWorker = 1;
@@ -315,7 +390,7 @@ namespace dutyChart.Models
                 {
                     notBusyWorkers.Add(w);
                 }
-            }
+            }*/
 
             slots = GetSlotsDto(hours);
 
