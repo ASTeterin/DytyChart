@@ -29,11 +29,11 @@ export class GenerateChartComponent implements OnInit {
     worker: Worker = new Worker();
     workers: Worker[];
     selectedWorkerId: number;
-    activeIdString: number = 3;
+    activeIdString: string;
 
-    tableMode: boolean = true;
-    optionsModel: number[];
-    myOptions: IMultiSelectOption[];
+    //tableMode: boolean = true;
+    //optionsModel: number[];
+    //myOptions: IMultiSelectOption[];
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
 
@@ -58,44 +58,38 @@ export class GenerateChartComponent implements OnInit {
         { time: "18:00", minSlots: 2, maxSlots: 2 },
         { time: "19:00", minSlots: 1, maxSlots: 1 },
     ];
-    //activeIdString: string = this.timeArr[0].time;
-
 
     selectedDate: Date;
-    selectedHour: Hour = new Hour;
+    selectedHour: Hour = new Hour();
     selectedDateHours: Hour[] = [];
     chartData: Hour[] = [];
 
-    slot: Slot = new Slot;
+    slot: Slot = new Slot();
     slots: Slot[] = [];
+    newHour: Hour = new Hour();
 
-    newHour: Hour = new Hour;
 
-
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService)
+    {
     }
 
     tabChangeHandler(t: any) {
         if (this.selectedHour.name) {
             this.saveHour();
         }
-        //this.loadHours();
-
+        this.loadHours();
+        console.log(t);
+        let hour;
         if (!this.isNewDay) {
-            let hour = this.selectedDateHours.find(x => x.name == t.nextId);
-            if (!hour) {
-                this.selectedHour.name = t.nextId;
-                this.selectedHour.date = this.selectedDate;
-            } else {
-                this.selectedHour = hour;
-            }
-            //console.log(this.selectedHour);
-        } else {
-            this.isNewDay = false;
-            this.selectedHour.name = this.timeArr[0];
-            this.selectedHour.date = this.selectedDate;
-            //console.log(this.selectedHour);
+            hour = this.selectedDateHours.find(x => x.name == t.nextId);
+            console.log(this.selectedDateHours);
         }
+        else
+        {
+            this.isNewDay = false;
+            hour = this.selectedDateHours.find(x => x.name == this.timeArr[0].time);
+        }
+        this.selectedHour = hour;
     }
 
     minSlotChangeHandler(count: number) {
@@ -119,6 +113,8 @@ export class GenerateChartComponent implements OnInit {
         console.log(date);
         this.day = date.day;
         this.month = date.month;
+        this.isNewDay = true;
+
         this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
@@ -126,7 +122,11 @@ export class GenerateChartComponent implements OnInit {
 
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         console.log(this.selectedDate);
-        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => this.selectedDateHours = data);
+        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
+            console.log(data);
+            this.selectedDateHours = data
+        });
+        //this.tabChangeHandler(this.isNewDay);
     }
 
     compare(a: Hour, b: Hour) {
@@ -134,7 +134,7 @@ export class GenerateChartComponent implements OnInit {
         if (a.name == b.name) return 0; // если равны
         if (a.name < b.name) return -1; // если первое значение меньше второго
     }
-
+/*
     creareAllHoursInDay(date: Date) {
         let hours: Hour[] = [];
         this.timeArr.forEach((item, i, arr) => {
@@ -152,10 +152,7 @@ export class GenerateChartComponent implements OnInit {
         });
         //return hours;
     }
-
-    randomInteger(min: number, max: number) {
-        return Math.floor(min + Math.random() * (max + 1 - min));
-    }
+*/
 
     createSlots(): void {
         let countSlotsInDay: number = 0;
@@ -209,6 +206,14 @@ export class GenerateChartComponent implements OnInit {
         var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
         this.dateChangeHandler(date);
         //this.loadHours();
+        //console.log(this.selectedDateHours);
+        //this.tabChangeHandler(this.isNewDay);
+        //this.loadHours();
+    }
+
+    ngAfterContentInit()
+    {
+        this.loadHours();
     }
 
     saveWorker() {

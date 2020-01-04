@@ -16,8 +16,9 @@ var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
         this.worker = new Worker();
-        this.activeIdString = 3;
-        this.tableMode = true;
+        //tableMode: boolean = true;
+        //optionsModel: number[];
+        //myOptions: IMultiSelectOption[];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
         this.isFirstHour = true;
@@ -37,35 +38,30 @@ var GenerateChartComponent = /** @class */ (function () {
             { time: "18:00", minSlots: 2, maxSlots: 2 },
             { time: "19:00", minSlots: 1, maxSlots: 1 },
         ];
-        this.selectedHour = new Hour;
+        this.selectedHour = new Hour();
         this.selectedDateHours = [];
         this.chartData = [];
-        this.slot = new Slot;
+        this.slot = new Slot();
         this.slots = [];
-        this.newHour = new Hour;
+        this.newHour = new Hour();
     }
     GenerateChartComponent.prototype.tabChangeHandler = function (t) {
+        var _this = this;
         if (this.selectedHour.name) {
             this.saveHour();
         }
-        //this.loadHours();
+        this.loadHours();
+        console.log(t);
+        var hour;
         if (!this.isNewDay) {
-            var hour = this.selectedDateHours.find(function (x) { return x.name == t.nextId; });
-            if (!hour) {
-                this.selectedHour.name = t.nextId;
-                this.selectedHour.date = this.selectedDate;
-            }
-            else {
-                this.selectedHour = hour;
-            }
-            //console.log(this.selectedHour);
+            hour = this.selectedDateHours.find(function (x) { return x.name == t.nextId; });
+            console.log(this.selectedDateHours);
         }
         else {
             this.isNewDay = false;
-            this.selectedHour.name = this.timeArr[0];
-            this.selectedHour.date = this.selectedDate;
-            //console.log(this.selectedHour);
+            hour = this.selectedDateHours.find(function (x) { return x.name == _this.timeArr[0].time; });
         }
+        this.selectedHour = hour;
     };
     GenerateChartComponent.prototype.minSlotChangeHandler = function (count) {
         this.newHour.minCount = count;
@@ -86,6 +82,7 @@ var GenerateChartComponent = /** @class */ (function () {
         console.log(date);
         this.day = date.day;
         this.month = date.month;
+        this.isNewDay = true;
         this.activeIdString = this.timeArr[0].time;
         if (this.selectedHour.name) {
             this.saveHour();
@@ -93,7 +90,11 @@ var GenerateChartComponent = /** @class */ (function () {
         ;
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         console.log(this.selectedDate);
-        this.dataService.getHours(this.selectedDate).subscribe(function (data) { return _this.selectedDateHours = data; });
+        this.dataService.getHours(this.selectedDate).subscribe(function (data) {
+            console.log(data);
+            _this.selectedDateHours = data;
+        });
+        //this.tabChangeHandler(this.isNewDay);
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -103,26 +104,25 @@ var GenerateChartComponent = /** @class */ (function () {
         if (a.name < b.name)
             return -1; // если первое значение меньше второго
     };
-    GenerateChartComponent.prototype.creareAllHoursInDay = function (date) {
-        var _this = this;
-        var hours = [];
-        this.timeArr.forEach(function (item, i, arr) {
-            var hour = new Hour();
-            //console.log(item);
-            hour.date = date;
-            hour.name = item.time;
-            hour.maxCount = item.maxSlots;
-            hour.minCount = item.minSlots;
-            _this.selectedHour = hour;
-            _this.saveHour();
-            //console.log(hour);
-            //hours.push(hour);
-        });
-        //return hours;
-    };
-    GenerateChartComponent.prototype.randomInteger = function (min, max) {
-        return Math.floor(min + Math.random() * (max + 1 - min));
-    };
+    /*
+        creareAllHoursInDay(date: Date) {
+            let hours: Hour[] = [];
+            this.timeArr.forEach((item, i, arr) => {
+                let hour: Hour = new Hour();
+                //console.log(item);
+                hour.date = date;
+                hour.name = item.time;
+                hour.maxCount = item.maxSlots;
+                hour.minCount = item.minSlots;
+                this.selectedHour = hour;
+                this.saveHour();
+                //console.log(hour);
+                //hours.push(hour);
+    
+            });
+            //return hours;
+        }
+    */
     GenerateChartComponent.prototype.createSlots = function () {
         var _this = this;
         var countSlotsInDay = 0;
@@ -169,6 +169,12 @@ var GenerateChartComponent = /** @class */ (function () {
         var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
         this.dateChangeHandler(date);
         //this.loadHours();
+        //console.log(this.selectedDateHours);
+        //this.tabChangeHandler(this.isNewDay);
+        //this.loadHours();
+    };
+    GenerateChartComponent.prototype.ngAfterContentInit = function () {
+        this.loadHours();
     };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;

@@ -243,14 +243,42 @@ namespace dutyChart.Models
         {
             foreach (var h in hours)
             {
+                List<Slot> slotsForRemove = new List<Slot> { }; 
                 var slots = _db.Slots.Where(s => s.HourId == h.Id).ToList();
+                int countSlots = 0;
                 foreach (var slot in slots)
                 {
+                    countSlots++;
+                    if (h.MinCount < countSlots)
+                    {
+                        //_db.Slots.Remove(slot);
+                        //slots.Remove(slot);
+                        slotsForRemove.Add(slot);
+                        continue;
+                    }
                     slot.WorkerId = null;
+                }
+                if (h.MinCount < countSlots)
+                {
+                    slots.RemoveRange(h.MinCount, slotsForRemove.Count());
+                    _db.Slots.RemoveRange(slotsForRemove);
+                }
+                    
+                while (countSlots < h.MinCount)
+                {
+                    slots.Add(GetNewSlot(countSlots++, h.Id));
                 }
                 _db.Slots.UpdateRange(slots);        
             }
             _db.SaveChanges();
+        }
+
+        private Slot GetNewSlot(int slotIndex, int hourId)
+        {
+            Slot slot = new Slot();
+            slot.Index = slotIndex++;
+            slot.HourId = hourId;
+            return slot;
         }
         private void CreateSlots(List<Hour> hours)
         {
@@ -261,10 +289,10 @@ namespace dutyChart.Models
                 List<Slot> slotsInHour = new List<Slot> { };
                 for (var i = 0; i < h.MinCount; i++)
                 {
-                    var slot = new Slot();
+                    /*var slot = new Slot();
                     slot.Index = slotIndex++;
-                    slot.HourId = h.Id;
-                    slotsInHour.Add(slot);
+                    slot.HourId = h.Id;*/
+                    slotsInHour.Add(GetNewSlot(slotIndex++, h.Id));
                 }
                 _db.Slots.AddRange(slotsInHour);
             }
