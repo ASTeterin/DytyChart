@@ -47,7 +47,7 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.loadWorkers = function () {
         var _this = this;
-        this.dataService.getData(this.dataService.url).subscribe(function (data) {
+        this.dataService.getData(this.dataService.urlWorker).subscribe(function (data) {
             _this.workers = data;
             _this.workers.sort(_this.compare);
             //console.log(this.workers)

@@ -61,7 +61,8 @@
             <ng-container *ngFor="let p of absentPeriods">
                 <div class="form-group">
                     <ngbd-datepicker-range-popup (onChanged)="showDate($event)" [from]="fromDate"></ngbd-datepicker-range-popup>
-                    <button class="btn btn-danger" (click)="deleteAbsencePeriod()">Удалить</button>
+                    <input type="button" class="del_period_btn" (click)="deleteAbsencePeriod()" />
+                   
                 </div>
             </ng-container>
 
@@ -70,7 +71,7 @@
                 <button class="btn btn-primary" (click)="addAbsencePeriod()" [disabled]="this.isDisableSettings">Добавить период отсутствия</button>
             </div>
             <div class="form-group">
-                <button class="btn btn-success" (click)="saveWorker()" [disabled]="this.isDisableSettings">Сохранить</button>
+                <button class="btn btn-success first_btn_in_line" (click)="saveWorker()" [disabled]="this.isDisableSettings">Сохранить</button>
                 <button class="btn btn-danger" (click)="deleteWorker(this.currentWorker.id)" [disabled]="this.isDisableSettings">Удалить</button>
             </div>
         </div>

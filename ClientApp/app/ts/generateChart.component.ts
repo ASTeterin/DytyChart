@@ -4,6 +4,7 @@ import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { WorkersFreeSlots } from './countFreeSlotsForWorker';
 import { NgbdTabset } from './tabset';
 import { NgMultiselect } from './multiselect';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
@@ -67,6 +68,7 @@ export class GenerateChartComponent implements OnInit {
     slot: Slot = new Slot();
     slots: Slot[] = [];
     newHour: Hour = new Hour();
+    countFreeSlotsForWorker: WorkersFreeSlots[] = [];
 
 
     constructor(private dataService: DataService)
@@ -180,16 +182,12 @@ export class GenerateChartComponent implements OnInit {
     }
 
     generateGraph(): void {
-        /*
-        this.selectedDateHours.forEach((item, i, arr) => {
-            this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
-            //console.log(item);
-            this.deleteSlots(item.id)
-        });*/
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => this.slots = data);
         this.loadHours();
         console.log(this.selectedDateHours);
         this.chartData = this.selectedDateHours;
+        this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe((data: WorkersFreeSlots[]) => this.countFreeSlotsForWorker = data);
+        console.log(this.countFreeSlotsForWorker);
     }
 
     getToday(): Date {
@@ -242,7 +240,7 @@ export class GenerateChartComponent implements OnInit {
 
     loadHours() {
         this.dataService.getHours(this.selectedDate)
-            .subscribe((data: Hour[]) => { /*console.log(data);*/ this.selectedDateHours = data });
+            .subscribe((data: Hour[]) => this.selectedDateHours = data );
         //console.log(this.selectedDateHours);
     }
 
@@ -266,7 +264,7 @@ export class GenerateChartComponent implements OnInit {
 
     loadWorkers() {
         //this.workers = this.dataService.getWorkers();
-        this.dataService.getData(this.dataService.url)
+        this.dataService.getData(this.dataService.urlWorker)
             .subscribe((data: Worker[]) => this.workers = data);
     }
 

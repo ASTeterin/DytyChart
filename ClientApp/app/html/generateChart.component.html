@@ -32,8 +32,8 @@
                                         {{w?.name}}
                                     </option>
                                 </ng-container>
-                            </optgroup>    
-                        </ng-container>      
+                            </optgroup>
+                        </ng-container>
                     </select>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                 <b>Дежурный: </b>
                 <ng-container *ngFor="let w of workers">
                     <div class="worker_info_item" *ngIf="w?.isDuty">
-                        {{w?.name}},&nbsp;
+                        {{w?.name}}; &nbsp;
                     </div>
                 </ng-container>
             </p>
@@ -103,10 +103,18 @@
                     </div>
                 </ng-container>
             </p>
+            <p>
+                <b>Свободные сотрудники:</b>
+                <ng-container *ngFor="let freeSlots of countFreeSlotsForWorker">
+                    {{freeSlots?.name}} &nbsp; - &nbsp; {{freeSlots?.countFreeSlots}}; &nbsp;
+                </ng-container>
+            </p>
+
             <div class="form-group">
-                <button class="btn btn-primary" (click)="generateGraph(selectedHour.date)">Сформировать график</button>
+                <button class="btn btn-primary first_btn_in_line" (click)="generateGraph(selectedHour.date)">Сформировать график</button>
+                <button class="btn btn-outline-primary" (click)="generateGraph(selectedHour.date)">Экспортировать график</button>
             </div>
             <duty-chart [slots]="slots" [selectedDateHours]="selectedDateHours" [workers]="workers"></duty-chart>
         </div>
+       
     </div>
-</div>

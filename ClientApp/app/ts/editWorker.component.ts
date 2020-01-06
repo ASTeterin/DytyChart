@@ -6,10 +6,7 @@ import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     templateUrl: '../html/editWorker.component.html',
-    styles: [` 
-            .worker_item {  margin-top: 5px;
-                            font-size: 20px; }
-    `],
+    styleUrls: ['../css/editWorker.css'],
     providers: [DataService]
 })
 export class EditWorkerComponent implements OnInit {
@@ -46,9 +43,6 @@ export class EditWorkerComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
-        this.fromDate.day = 14;
-        this.fromDate.month = 2;
-        this.fromDate.year = 2020;
         //this.loadAbsentPeriods();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
@@ -57,7 +51,7 @@ export class EditWorkerComponent implements OnInit {
     }
 
     loadWorkers() {
-        this.dataService.getData(this.dataService.url).subscribe((data: Worker[]) => {
+        this.dataService.getData(this.dataService.urlWorker).subscribe((data: Worker[]) => {
             this.workers = data;
             this.workers.sort(this.compare);
             //console.log(this.workers)

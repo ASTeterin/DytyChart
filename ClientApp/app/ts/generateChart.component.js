@@ -44,6 +44,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.slot = new Slot();
         this.slots = [];
         this.newHour = new Hour();
+        this.countFreeSlotsForWorker = [];
     }
     GenerateChartComponent.prototype.tabChangeHandler = function (t) {
         var _this = this;
@@ -145,16 +146,12 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.generateGraph = function () {
         var _this = this;
-        /*
-        this.selectedDateHours.forEach((item, i, arr) => {
-            this.dataService.getSlotsByHourId(item.id).subscribe((data: Slot[]) => console.log(data));
-            //console.log(item);
-            this.deleteSlots(item.id)
-        });*/
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) { return _this.slots = data; });
         this.loadHours();
         console.log(this.selectedDateHours);
         this.chartData = this.selectedDateHours;
+        this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe(function (data) { return _this.countFreeSlotsForWorker = data; });
+        console.log(this.countFreeSlotsForWorker);
     };
     GenerateChartComponent.prototype.getToday = function () {
         var today;
@@ -204,7 +201,7 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.loadHours = function () {
         var _this = this;
         this.dataService.getHours(this.selectedDate)
-            .subscribe(function (data) { /*console.log(data);*/ _this.selectedDateHours = data; });
+            .subscribe(function (data) { return _this.selectedDateHours = data; });
         //console.log(this.selectedDateHours);
     };
     GenerateChartComponent.prototype.cancel = function () {
@@ -225,7 +222,7 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.loadWorkers = function () {
         var _this = this;
         //this.workers = this.dataService.getWorkers();
-        this.dataService.getData(this.dataService.url)
+        this.dataService.getData(this.dataService.urlWorker)
             .subscribe(function (data) { return _this.workers = data; });
     };
     GenerateChartComponent.prototype.loadSlots = function () {

@@ -43,38 +43,58 @@ namespace dutyChart.Controllers
             return countFreeSlots;
         }
 
-        [HttpGet, Route("get-wirker-in-day")]
+        private WorkerDto createWorkerDto(Worker worker, int countFreeSlots)
+        {
+            WorkerDto wDto = new WorkerDto();
+            wDto.Id = worker.Id;
+            wDto.IdGroup = worker.IdGroup;
+            wDto.Name = worker.Name;
+            wDto.CountFreeSlots = countFreeSlots;
+            return wDto;
+        }
+
+        private List<int?> getWorkersIdInDay(List<IGrouping<int?, Slot>> freeSlotsForWorkers)
+        {
+            List<int?> workersId = new List<int?> { };
+            foreach (var freeSlot in freeSlotsForWorkers)
+            {
+                workersId.Add(freeSlot.Key);
+            }
+            return workersId;
+        }
+            
+        [HttpGet, Route("get-worker-free-slots")]
         public IEnumerable<WorkerDto> GetWorkerDtoInDay(DateTime date)
         {
             List <WorkerDto> workersDto= new List<WorkerDto> { };
             var workers = db.Workers.ToList();
-            var hId = db.Hours.Where(h => h.Date == date).Select(h => h.Id)
+            
+            var hId = db.Hours.Where(h => h.Date == date)
+                .Select(h => h.Id)
                 .ToList();
-            var hours = db.Hours
-                .Include(Hour.SlotsProperty)
-                .Where(h => h.Date == date)
+            var countUsedSlots = db.Slots.Where(s => hId.Contains(s.HourId))
+                .GroupBy(s => s.WorkerId)
                 .ToList();
-            var coutUsedSlots = db.Slots.Where(s => hId.Contains(s.HourId)).GroupBy(s => s.WorkerId).ToList();
-            var result = coutUsedSlots.Join(workers, us => us.Key, w => w.Id, (us, w) => new {Count=us.Key,  WorkerId = w.Id, GroupId = w.IdGroup, Name = w.Name});
-            foreach (var us in coutUsedSlots)
+            //var result = coutUsedSlots.Join(workers, us => us.Key, w => w.Id, (us, w) => new {Count=us.Key,  WorkerId = w.Id, GroupId = w.IdGroup, Name = w.Name});
+            var workersId = getWorkersIdInDay(countUsedSlots);
+            
+            foreach (var w in workers)
             {
-                foreach (var w in workers)
-                {
-                    if (us.Key == w.Id)
+                foreach (var us in countUsedSlots)
+                {  
+                    if (workersId.Contains(w.Id) && (us.Key != w.Id))
                     {
-                        int countFreeSlots = getFreeSlots(w.IdGroup, us.Count());
-                        if (countFreeSlots > 0)
-                        { 
-                            WorkerDto wDto = new WorkerDto();
-                            wDto.Id = w.Id;
-                            wDto.IdGroup = w.IdGroup;
-                            wDto.Name = w.Name;
-                            wDto.countFreeSlots = countFreeSlots;
-                            //wDto.countFreeSlots = (w.IsDuty) ? 0 : getFreeSlots(w.IdGroup, us.Count());
-                            workersDto.Add(wDto);
-                            break;
-                        }
+                        continue;
                     }
+                    var countUsedSlotsForWorker = (workersId.Contains(w.Id)) ? us.Count() : 0;
+                    int countFreeSlots = getFreeSlots(w.IdGroup, countUsedSlotsForWorker);
+                    if (countFreeSlots > 0)
+                    {
+                        var wDto = createWorkerDto(w, countFreeSlots);
+                        //wDto.countFreeSlots = (w.IsDuty) ? 0 : getFreeSlots(w.IdGroup, us.Count());
+                        workersDto.Add(wDto);
+                        break;
+                    }                  
                 }
             }
             return workersDto;
@@ -121,9 +141,6 @@ namespace dutyChart.Controllers
                 db.SaveChanges();
             }
             return Ok(worker);
-        }
-
-
-        
+        }    
     }
 }

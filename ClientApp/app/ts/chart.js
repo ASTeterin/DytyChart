@@ -52,7 +52,8 @@ var DutyChart = /** @class */ (function () {
     DutyChart = __decorate([
         Component({
             selector: 'duty-chart',
-            templateUrl: '../html/chart.html'
+            templateUrl: '../html/chart.html',
+            styleUrls: ['../css/chart.css']
         }),
         __metadata("design:paramtypes", [])
     ], DutyChart);

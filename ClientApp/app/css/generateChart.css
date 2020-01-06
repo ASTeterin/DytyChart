@@ -7,6 +7,10 @@
 }
 
 .datapicker {
-    display:block;
+    display: block;
     width: 100%;
+}
+
+.first_btn_in_line {
+    margin-right: 20px;
 }

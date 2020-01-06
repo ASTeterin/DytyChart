@@ -12,11 +12,12 @@ import { HttpClient } from '@angular/common/http';
 var DataService = /** @class */ (function () {
     function DataService(http) {
         this.http = http;
-        this.url = "/api/Workers";
+        this.urlWorker = "/api/Workers";
         this.urlHour = "/api/Hours";
         this.urlSlot = "/api/Slot";
         this.urlFiledSlot = "/api/Slot/get-filled-slots";
         this.urlAbsentPeriods = "/api/AbsentPeriod";
+        this.urlFreeSlots = "/api/Workers/get-worker-free-slots";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -37,13 +38,16 @@ var DataService = /** @class */ (function () {
         return this.http.delete(this.urlSlot + '/' + id);
     };
     DataService.prototype.createWorker = function (worker) {
-        return this.http.post(this.url, worker);
+        return this.http.post(this.urlWorker, worker);
     };
     DataService.prototype.updateWorker = function (worker) {
-        return this.http.put(this.url + '/' + worker.id, worker);
+        return this.http.put(this.urlWorker + '/' + worker.id, worker);
     };
     DataService.prototype.deleteWorker = function (id) {
-        return this.http.delete(this.url + '/' + id);
+        return this.http.delete(this.urlWorker + '/' + id);
+    };
+    DataService.prototype.getCountFreeSlotsForWorkers = function (date) {
+        return this.http.get(this.urlFreeSlots + "?date=" + date.toISOString());
     };
     DataService.prototype.getHours = function (date) {
         return this.http.get(this.urlHour + "?date=" + date.toISOString());

@@ -10,6 +10,6 @@ namespace dutyChart.Dto
         public int Id { get; set; }
         public string Name { get; set; }
         public int IdGroup { get; set; }
-        public int countFreeSlots { get; set; }
+        public int CountFreeSlots { get; set; }
     }
 }

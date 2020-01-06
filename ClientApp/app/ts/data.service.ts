@@ -8,11 +8,12 @@ import { AbsentPeriod } from './absentPeriod';
 @Injectable()
 export class DataService {
 
-    public url = "/api/Workers";
+    public urlWorker = "/api/Workers";
     public urlHour = "/api/Hours";
     public urlSlot = "/api/Slot";
     public urlFiledSlot = "/api/Slot/get-filled-slots";
     public urlAbsentPeriods = "/api/AbsentPeriod";
+    public urlFreeSlots = "/api/Workers/get-worker-free-slots"
 
     constructor(private http: HttpClient) {
     }
@@ -43,14 +44,18 @@ export class DataService {
     }
 
     createWorker(worker: Worker) {
-        return this.http.post(this.url, worker);
+        return this.http.post(this.urlWorker, worker);
     }
     updateWorker(worker: Worker) {
 
-        return this.http.put(this.url + '/' + worker.id, worker);
+        return this.http.put(this.urlWorker + '/' + worker.id, worker);
     }
     deleteWorker(id: number) {
-        return this.http.delete(this.url + '/' + id);
+        return this.http.delete(this.urlWorker + '/' + id);
+    }
+
+    getCountFreeSlotsForWorkers(date: Date) {
+        return this.http.get(`${this.urlFreeSlots}?date=${date.toISOString()}`);
     }
 
     getHours(date: Date) {

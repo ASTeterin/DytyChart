@@ -4,7 +4,8 @@ import { log } from 'util';
 
 @Component({
     selector: 'duty-chart',
-    templateUrl: '../html/chart.html'
+    templateUrl: '../html/chart.html',
+    styleUrls: ['../css/chart.css']
 })
 export class DutyChart {
     @Input() slots: any[];

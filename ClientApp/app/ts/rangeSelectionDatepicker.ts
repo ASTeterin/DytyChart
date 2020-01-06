@@ -5,6 +5,10 @@ import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateAdapter } from '@n
     selector: 'ngbd-datepicker-range-popup',
     templateUrl: '../html/rangeSelectionDatepicker.html',
     styles: [`
+    .absent_period {
+        display: inline-flex;
+        margin-right 20px;
+    }
     .form-group.hidden {
       width: 0;
       margin: 0;
