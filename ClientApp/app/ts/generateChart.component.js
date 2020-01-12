@@ -46,22 +46,25 @@ var GenerateChartComponent = /** @class */ (function () {
         this.slots = [];
         this.newHour = new Hour();
         this.countFreeSlotsForWorker = [];
+        this.absentWorkers = [];
     }
     GenerateChartComponent.prototype.tabChangeHandler = function (t) {
-        var _this = this;
         if (this.selectedHour.name) {
             this.saveHour();
         }
         this.loadHours();
-        console.log(t);
-        var hour;
+        //console.log(t);
+        var hour = new Hour();
         if (!this.isNewDay) {
             hour = this.selectedDateHours.find(function (x) { return x.name == t.nextId; });
             console.log(this.selectedDateHours);
         }
         else {
             this.isNewDay = false;
-            hour = this.selectedDateHours.find(function (x) { return x.name == _this.timeArr[0].time; });
+            /*hour.date = this.selectedDate;
+            hour.name = this.timeArr[0].time;
+            hour.minCount = 1;*/
+            //hour = this.selectedDateHours.find(x => x.name == this.timeArr[0].time);
         }
         this.selectedHour = hour;
     };
@@ -79,7 +82,6 @@ var GenerateChartComponent = /** @class */ (function () {
         return arr;
     };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
-        var _this = this;
         console.log(date);
         this.day = date.day;
         this.month = date.month;
@@ -91,11 +93,14 @@ var GenerateChartComponent = /** @class */ (function () {
         ;
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         console.log(this.selectedDate);
-        this.dataService.getHours(this.selectedDate).subscribe(function (data) {
-            console.log(data);
-            _this.selectedDateHours = data;
-        });
-        //this.tabChangeHandler(this.isNewDay);
+        /*this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
+            //console.log(data);
+            this.selectedDateHours = data
+        });*/
+        //this.loadHours();
+        //console.log(this.selectedDateHours);
+        this.tabChangeHandler(this.isNewDay);
+        this.getWorkersInfo();
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -131,12 +136,22 @@ var GenerateChartComponent = /** @class */ (function () {
         this.loadHours();
         console.log(this.selectedDateHours);
         this.chartData = this.selectedDateHours;
-        this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe(function (data) { return _this.countFreeSlotsForWorker = data; });
+        this.getWorkersInfo();
+        console.log(this.absentWorkers);
         console.log(this.countFreeSlotsForWorker);
     };
     GenerateChartComponent.prototype.getWorkerName = function (workerId) {
         var worker = this.workers.find(function (w) { return w.id == workerId; });
         return worker ? worker.name : "";
+    };
+    GenerateChartComponent.prototype.getWorkersInfo = function () {
+        var _this = this;
+        this.dataService.getAbsentWorkers(this.selectedDate).subscribe(function (data) { return _this.absentWorkers = data; });
+        this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe(function (data) { return _this.countFreeSlotsForWorker = data; });
+    };
+    GenerateChartComponent.prototype.clearData = function () {
+        this.countFreeSlotsForWorker = [];
+        this.absentWorkers = [];
     };
     GenerateChartComponent.prototype.getDataToExport = function () {
         var _this = this;
@@ -147,19 +162,11 @@ var GenerateChartComponent = /** @class */ (function () {
             hour.slots.forEach(function (s) {
                 hourData.push(_this.getWorkerName(s.workerId));
             });
-            /*chartData.hourName = hour.name;
-            chartData.workerName = [];
-            
-            hour.slots.forEach((s) => {
-                chartData.workerName.push(s.workerId.toString());
-                
-            });*/
             dataToExport.push(hourData);
         });
         return dataToExport;
     };
     GenerateChartComponent.prototype.exportGraph = function () {
-        //let jsonData = [1];
         var fileName = 'dutyChart';
         var data = [];
         data = this.getDataToExport();
@@ -175,17 +182,21 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
         this.selectedDate = this.getToday();
-        console.log(this.selectedDate);
-        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
-        this.dateChangeHandler(date);
         //this.loadHours();
         //console.log(this.selectedDateHours);
         //this.tabChangeHandler(this.isNewDay);
         //this.loadHours();
     };
     GenerateChartComponent.prototype.ngAfterContentInit = function () {
-        this.loadHours();
+        //this.selectedDate = this.getToday();
+        //console.log(this.selectedDate);
+        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
+        this.dateChangeHandler(date);
     };
+    //ngAfterContentInit()
+    //{
+    //this.loadHours();
+    //}
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;
         console.log(this.worker);

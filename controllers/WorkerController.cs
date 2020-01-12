@@ -75,11 +75,13 @@ namespace dutyChart.Controllers
             var countUsedSlots = db.Slots.Where(s => hId.Contains(s.HourId))
                 .GroupBy(s => s.WorkerId)
                 .ToList();
-            //var result = coutUsedSlots.Join(workers, us => us.Key, w => w.Id, (us, w) => new {Count=us.Key,  WorkerId = w.Id, GroupId = w.IdGroup, Name = w.Name});
             var workersId = getWorkersIdInDay(countUsedSlots);
+            var absentWorkers = GetAbsentWorkers(date);
             
             foreach (var w in workers)
             {
+                if (absentWorkers.Contains(w))
+                    continue;
                 foreach (var us in countUsedSlots)
                 {  
                     if (workersId.Contains(w.Id) && (us.Key != w.Id))
@@ -98,6 +100,27 @@ namespace dutyChart.Controllers
                 }
             }
             return workersDto;
+        }
+
+        [HttpGet, Route("get-absent-workers")]
+        public IEnumerable<Worker> GetAbsentWorkers(DateTime date)
+        {
+            List<Worker> absentWorkers = new List<Worker> { };
+            List<Worker> workers = db.Workers.ToList();
+            foreach (Worker w in workers)
+            {
+                List<AbsentPeriod> absentPeriods = db.AbsentPeriods.Where(p => p.WorkerId == w.Id).ToList();
+                foreach (AbsentPeriod period in absentPeriods)
+                {
+                    if ((date <= period.End) && (date >= period.Start))
+                    {
+                        absentWorkers.Add(w);
+                        break;
+                    }
+                    
+                }
+            }
+            return absentWorkers;
         }
 
         [HttpGet("{id}")]

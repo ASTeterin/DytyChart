@@ -14,6 +14,7 @@ export class DataService {
     public urlFiledSlot = "/api/Slot/get-filled-slots";
     public urlAbsentPeriods = "/api/AbsentPeriod";
     public urlFreeSlots = "/api/Workers/get-worker-free-slots"
+    public urlAbsentWorker = "/api/Workers/get-absent-workers";
 
     constructor(private http: HttpClient) {
     }
@@ -56,6 +57,10 @@ export class DataService {
 
     getCountFreeSlotsForWorkers(date: Date) {
         return this.http.get(`${this.urlFreeSlots}?date=${date.toISOString()}`);
+    }
+
+    getAbsentWorkers(date: Date) {
+        return this.http.get(`${this.urlAbsentWorker}?date=${date.toISOString()}`);
     }
 
     getHours(date: Date) {

@@ -67,6 +67,7 @@ export class GenerateChartComponent implements OnInit {
     slots: Slot[] = [];
     newHour: Hour = new Hour();
     countFreeSlotsForWorker: WorkersFreeSlots[] = [];
+    absentWorkers: Worker[] = [];
 
 
     constructor(private dataService: DataService)
@@ -78,8 +79,8 @@ export class GenerateChartComponent implements OnInit {
             this.saveHour();
         }
         this.loadHours();
-        console.log(t);
-        let hour;
+        //console.log(t);
+        let hour: Hour = new Hour();
         if (!this.isNewDay) {
             hour = this.selectedDateHours.find(x => x.name == t.nextId);
             console.log(this.selectedDateHours);
@@ -87,7 +88,10 @@ export class GenerateChartComponent implements OnInit {
         else
         {
             this.isNewDay = false;
-            hour = this.selectedDateHours.find(x => x.name == this.timeArr[0].time);
+            /*hour.date = this.selectedDate;
+            hour.name = this.timeArr[0].time;
+            hour.minCount = 1;*/
+            //hour = this.selectedDateHours.find(x => x.name == this.timeArr[0].time);
         }
         this.selectedHour = hour;
     }
@@ -121,11 +125,14 @@ export class GenerateChartComponent implements OnInit {
 
         this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         console.log(this.selectedDate);
-        this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
-            console.log(data);
+        /*this.dataService.getHours(this.selectedDate).subscribe((data: Hour[]) => {
+            //console.log(data);
             this.selectedDateHours = data
-        });
-        //this.tabChangeHandler(this.isNewDay);
+        });*/
+        //this.loadHours();
+        //console.log(this.selectedDateHours);
+        this.tabChangeHandler(this.isNewDay);
+        this.getWorkersInfo();
     }
 
     compare(a: Hour, b: Hour) {
@@ -164,7 +171,8 @@ export class GenerateChartComponent implements OnInit {
         this.loadHours();
         console.log(this.selectedDateHours);
         this.chartData = this.selectedDateHours;
-        this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe((data: WorkersFreeSlots[]) => this.countFreeSlotsForWorker = data);
+        this.getWorkersInfo();
+        console.log(this.absentWorkers);
         console.log(this.countFreeSlotsForWorker);
     }
 
@@ -173,6 +181,15 @@ export class GenerateChartComponent implements OnInit {
         return worker ? worker.name : "";
     }
 
+    getWorkersInfo(): void {
+        this.dataService.getAbsentWorkers(this.selectedDate).subscribe((data: Worker[]) => this.absentWorkers = data);
+        this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe((data: WorkersFreeSlots[]) => this.countFreeSlotsForWorker = data);
+    }
+
+    clearData(): void {
+        this.countFreeSlotsForWorker = [];
+        this.absentWorkers = [];
+    }
 
 
     getDataToExport(): any {
@@ -183,21 +200,12 @@ export class GenerateChartComponent implements OnInit {
             hour.slots.forEach((s) => {
                 hourData.push(this.getWorkerName(s.workerId));
             });
-            /*chartData.hourName = hour.name;
-            chartData.workerName = [];
-            
-            hour.slots.forEach((s) => {
-                chartData.workerName.push(s.workerId.toString());
-                
-            });*/
-            
             dataToExport.push(hourData);       
         })
         return dataToExport;
     }
 
     exportGraph(): void {
-        //let jsonData = [1];
         let fileName = 'dutyChart';
         let data: ChartData[] = [];
         data = this.getDataToExport();
@@ -215,19 +223,23 @@ export class GenerateChartComponent implements OnInit {
     ngOnInit() {
         this.loadWorkers();
         this.selectedDate = this.getToday();
-        console.log(this.selectedDate);
-        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
-        this.dateChangeHandler(date);
         //this.loadHours();
         //console.log(this.selectedDateHours);
         //this.tabChangeHandler(this.isNewDay);
         //this.loadHours();
     }
 
-    ngAfterContentInit()
-    {
-        this.loadHours();
+    ngAfterContentInit() {
+        //this.selectedDate = this.getToday();
+        //console.log(this.selectedDate);
+        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
+        this.dateChangeHandler(date);
     }
+
+    //ngAfterContentInit()
+    //{
+        //this.loadHours();
+    //}
 
     saveWorker() {
         console.log(this.worker);

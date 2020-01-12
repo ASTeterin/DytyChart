@@ -12,13 +12,4 @@
         public desirableSlots?: number[],
     ) { }
 
-    getWorkerName(workers: Worker[]) {
-        let worker = workers.find(w => w.id == this.id);
-        return worker ? worker.name : "";
-    }
-
-    getWorkerColor(workers: Worker[], workerId: number) {
-        let worker = workers.find(w => w.id == workerId);
-        return worker ? worker.color : "";
-    }
 }

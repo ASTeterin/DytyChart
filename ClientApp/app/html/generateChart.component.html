@@ -56,7 +56,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="worker.isDuty" (change)="saveWorker()" [disabled]="this.isDisableSettings">
                 <label class="form-check-label" for="duty">
-                    Дежурный
+                    Сменник
                 </label>
             </div>
 
@@ -64,7 +64,7 @@
                 <input class="form-check-input" type="checkbox" value="" id="duty_wedn" [(ngModel)]="worker.isDutyOnWedn" [disabled]="this.isDisableSettings"
                        (change)="saveWorker()">
                 <label class="form-check-label" for="duty_wedn">
-                    Дежурный по средам
+                    Дежурный по планеркам
                 </label>
             </div>
 
@@ -80,7 +80,7 @@
         <div class="col-sm-9">
             <h1>График дежурств на {{day}}.{{month}} </h1>
             <p>
-                <b>Дежурный: </b>
+                <b>Сменный дежурный: </b>
                 <ng-container *ngFor="let w of workers">
                     <div class="worker_info_item" *ngIf="w?.isDuty">
                         {{w?.name}}; &nbsp;
@@ -96,11 +96,17 @@
                 </ng-container>
             </p>
             <p>
-                <b>Дежурный в среду: </b>
+                <b>Дежурный по планеркам: </b>
                 <ng-container *ngFor="let w of workers">
                     <div class="worker_info_item" *ngIf="w?.isDutyOnWedn">
                         {{w?.name}}; &nbsp;
                     </div>
+                </ng-container>
+            </p>
+            <p>
+                <b>Отсутствующие сотрудники:</b>
+                <ng-container *ngFor="let worker of absentWorkers">
+                    {{worker?.name}}; &nbsp;
                 </ng-container>
             </p>
             <p>

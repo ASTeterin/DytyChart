@@ -18,6 +18,7 @@ var DataService = /** @class */ (function () {
         this.urlFiledSlot = "/api/Slot/get-filled-slots";
         this.urlAbsentPeriods = "/api/AbsentPeriod";
         this.urlFreeSlots = "/api/Workers/get-worker-free-slots";
+        this.urlAbsentWorker = "/api/Workers/get-absent-workers";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -48,6 +49,9 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.getCountFreeSlotsForWorkers = function (date) {
         return this.http.get(this.urlFreeSlots + "?date=" + date.toISOString());
+    };
+    DataService.prototype.getAbsentWorkers = function (date) {
+        return this.http.get(this.urlAbsentWorker + "?date=" + date.toISOString());
     };
     DataService.prototype.getHours = function (date) {
         return this.http.get(this.urlHour + "?date=" + date.toISOString());

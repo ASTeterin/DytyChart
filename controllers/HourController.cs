@@ -22,15 +22,15 @@ namespace dutyChart.Controllers
         {
             List<HourDto> hoursDto = new List<HourDto>() { };
             hoursDto.Add(new HourDto { Name = "08:00", MaxCount = 2, MinCount = 2 });
-            hoursDto.Add(new HourDto { Name = "09:00", MaxCount = 2, MinCount = 2 });
-            hoursDto.Add(new HourDto { Name = "10:00", MaxCount = 3, MinCount = 3 });
-            hoursDto.Add(new HourDto { Name = "11:00", MaxCount = 4, MinCount = 4 });
-            hoursDto.Add(new HourDto { Name = "12:00", MaxCount = 5, MinCount = 5 });
+            hoursDto.Add(new HourDto { Name = "09:00", MaxCount = 4, MinCount = 4 });
+            hoursDto.Add(new HourDto { Name = "10:00", MaxCount = 5, MinCount = 5 });
+            hoursDto.Add(new HourDto { Name = "11:00", MaxCount = 6, MinCount = 6 });
+            hoursDto.Add(new HourDto { Name = "12:00", MaxCount = 6, MinCount = 6 });
             hoursDto.Add(new HourDto { Name = "13:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "14:00", MaxCount = 7, MinCount = 7 });
-            hoursDto.Add(new HourDto { Name = "15:00", MaxCount = 5, MinCount = 5 });
-            hoursDto.Add(new HourDto { Name = "16:00", MaxCount = 5, MinCount = 5 });
-            hoursDto.Add(new HourDto { Name = "17:00", MaxCount = 3, MinCount = 3 });
+            hoursDto.Add(new HourDto { Name = "14:00", MaxCount = 6, MinCount = 6 });
+            hoursDto.Add(new HourDto { Name = "15:00", MaxCount = 6, MinCount = 6 });
+            hoursDto.Add(new HourDto { Name = "16:00", MaxCount = 6, MinCount = 6 });
+            hoursDto.Add(new HourDto { Name = "17:00", MaxCount = 6, MinCount = 6 });
             hoursDto.Add(new HourDto { Name = "18:00", MaxCount = 2, MinCount = 2 });
             hoursDto.Add(new HourDto { Name = "19:00", MaxCount = 1, MinCount = 1 });
 
@@ -50,10 +50,10 @@ namespace dutyChart.Controllers
                 foreach (var h in hoursDto)
                 {
                     var hour = new Hour { Name = h.Name, MaxCount = h.MaxCount, MinCount = h.MinCount, Date = date };
-                    db.Hours.Add(hour);
+                    //db.Hours.Add(hour);
                     hours.Add(hour);
                 }
-                // db.Hours.AddRange(hours);
+                db.Hours.AddRange(hours);
                 db.SaveChanges();
             }
             return hours;
