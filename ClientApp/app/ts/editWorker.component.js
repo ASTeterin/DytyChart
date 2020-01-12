@@ -37,9 +37,6 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
-        this.fromDate.day = 14;
-        this.fromDate.month = 2;
-        this.fromDate.year = 2020;
         //this.loadAbsentPeriods();
         //this.workers.sort();
         //this.currentWorker = this.workers[0];
@@ -142,7 +139,7 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent = __decorate([
         Component({
             templateUrl: '../html/editWorker.component.html',
-            styles: [" \n            .worker_item {  margin-top: 5px;\n                            font-size: 20px; }\n    "],
+            styleUrls: ['../css/editWorker.css'],
             providers: [DataService]
         }),
         __metadata("design:paramtypes", [DataService])

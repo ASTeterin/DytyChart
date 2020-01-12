@@ -23,6 +23,7 @@
     <None Remove="ClientApp\app\tabset.module.ts" />
     <None Remove="ClientApp\app\tabset.ts" />
     <None Remove="ClientApp\app\ts\absentPeriod.ts" />
+    <None Remove="ClientApp\app\ts\chartData.ts" />
     <None Remove="ClientApp\app\ts\countFreeSlotsForWorker.ts" />
     <None Remove="ClientApp\app\ts\nav.ts" />
     <None Remove="ClientApp\app\ts\slot.ts" />

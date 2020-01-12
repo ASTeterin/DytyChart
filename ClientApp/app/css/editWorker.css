@@ -17,3 +17,7 @@
     padding-left: 24px; /* make text start to the right of the image */
     vertical-align: middle; /* align the text vertically centered */
 }
+
+.worker_settings {
+    padding: 0;
+}

@@ -1,6 +1,6 @@
 ﻿<p>Выберите дату</p>
-<form class="form-inline">
-    <div class="form-group">
+<form class="form-inline datapicker_input">
+    <div class="form-group datapicker_input">
         <div class="input-group">
             <input class="form-control" 
                    name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" (dateSelect)="getDate($event)">

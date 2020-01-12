@@ -4,20 +4,18 @@ import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { ChartData } from './chartData';
 import { WorkersFreeSlots } from './countFreeSlotsForWorker';
 import { NgbdTabset } from './tabset';
 import { NgMultiselect } from './multiselect';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdDatepicker } from './datepicker';
+import { tsXLXS } from 'ts-xlsx-export';
 
 
 @Component({
     templateUrl: '../html/generateChart.component.html',
     styleUrls: ['../css/generateChart.css'],
-    /*styles: [` 
-            .form-group {width: 100%;}
-            .worker_info_item {display: inline-block;}
-    `],*/
     providers: [DataService]
 })
 
@@ -107,7 +105,6 @@ export class GenerateChartComponent implements OnInit {
         for (var i = 1; i <= countElem; i++) {
             arr.push(i);
         }
-        //console.log(arr);
         return arr;
     }
 
@@ -136,25 +133,6 @@ export class GenerateChartComponent implements OnInit {
         if (a.name == b.name) return 0; // если равны
         if (a.name < b.name) return -1; // если первое значение меньше второго
     }
-/*
-    creareAllHoursInDay(date: Date) {
-        let hours: Hour[] = [];
-        this.timeArr.forEach((item, i, arr) => {
-            let hour: Hour = new Hour();
-            //console.log(item);
-            hour.date = date;
-            hour.name = item.time;
-            hour.maxCount = item.maxSlots;
-            hour.minCount = item.minSlots;
-            this.selectedHour = hour;
-            this.saveHour();
-            //console.log(hour);
-            //hours.push(hour);
-
-        });
-        //return hours;
-    }
-*/
 
     createSlots(): void {
         let countSlotsInDay: number = 0;
@@ -188,6 +166,43 @@ export class GenerateChartComponent implements OnInit {
         this.chartData = this.selectedDateHours;
         this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe((data: WorkersFreeSlots[]) => this.countFreeSlotsForWorker = data);
         console.log(this.countFreeSlotsForWorker);
+    }
+
+    getWorkerName(workerId: any) {
+        let worker = this.workers.find(w => w.id == workerId);
+        return worker ? worker.name : "";
+    }
+
+
+
+    getDataToExport(): any {
+        let dataToExport: string[][] = [];
+        this.selectedDateHours.forEach((hour) => {
+            let hourData: string[] = [];
+            hourData.push(hour.name);
+            hour.slots.forEach((s) => {
+                hourData.push(this.getWorkerName(s.workerId));
+            });
+            /*chartData.hourName = hour.name;
+            chartData.workerName = [];
+            
+            hour.slots.forEach((s) => {
+                chartData.workerName.push(s.workerId.toString());
+                
+            });*/
+            
+            dataToExport.push(hourData);       
+        })
+        return dataToExport;
+    }
+
+    exportGraph(): void {
+        //let jsonData = [1];
+        let fileName = 'dutyChart';
+        let data: ChartData[] = [];
+        data = this.getDataToExport();
+        console.log(data);
+        tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);   
     }
 
     getToday(): Date {

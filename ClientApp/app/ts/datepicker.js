@@ -28,7 +28,8 @@ var NgbdDatepicker = /** @class */ (function () {
     NgbdDatepicker = __decorate([
         Component({
             selector: 'ngbd-datepicker',
-            templateUrl: '../html/datepicker.html'
+            templateUrl: '../html/datepicker.html',
+            styleUrls: ['../css/datapicker.css']
         }),
         __metadata("design:paramtypes", [NgbCalendar])
     ], NgbdDatepicker);

@@ -35,7 +35,6 @@ export class DutyChart {
 
     getWorkerName(workerId: any) {
         let worker = this.workers.find(w => w.id == workerId);
-        
         return worker ? worker.name : "";
     }
 

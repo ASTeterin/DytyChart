@@ -6,6 +6,11 @@
     <WebStackScaffolding_ControllerDialogWidth>600</WebStackScaffolding_ControllerDialogWidth>
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\app\ts\chartData.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
     <TypeScriptCompile Update="ClientApp\app\ts\countFreeSlotsForWorker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

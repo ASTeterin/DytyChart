@@ -11,6 +11,15 @@ var Worker = /** @class */ (function () {
         this.unwantedSlots = unwantedSlots;
         this.desirableSlots = desirableSlots;
     }
+    Worker.prototype.getWorkerName = function (workers) {
+        var _this = this;
+        var worker = workers.find(function (w) { return w.id == _this.id; });
+        return worker ? worker.name : "";
+    };
+    Worker.prototype.getWorkerColor = function (workers, workerId) {
+        var worker = workers.find(function (w) { return w.id == workerId; });
+        return worker ? worker.color : "";
+    };
     return Worker;
 }());
 export { Worker };

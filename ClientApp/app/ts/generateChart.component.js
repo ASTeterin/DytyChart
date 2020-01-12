@@ -12,6 +12,7 @@ import { DataService } from './data.service';
 import { Worker } from './Worker';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { tsXLXS } from 'ts-xlsx-export';
 var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
@@ -75,7 +76,6 @@ var GenerateChartComponent = /** @class */ (function () {
         for (var i = 1; i <= countElem; i++) {
             arr.push(i);
         }
-        //console.log(arr);
         return arr;
     };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
@@ -105,25 +105,6 @@ var GenerateChartComponent = /** @class */ (function () {
         if (a.name < b.name)
             return -1; // если первое значение меньше второго
     };
-    /*
-        creareAllHoursInDay(date: Date) {
-            let hours: Hour[] = [];
-            this.timeArr.forEach((item, i, arr) => {
-                let hour: Hour = new Hour();
-                //console.log(item);
-                hour.date = date;
-                hour.name = item.time;
-                hour.maxCount = item.maxSlots;
-                hour.minCount = item.minSlots;
-                this.selectedHour = hour;
-                this.saveHour();
-                //console.log(hour);
-                //hours.push(hour);
-    
-            });
-            //return hours;
-        }
-    */
     GenerateChartComponent.prototype.createSlots = function () {
         var _this = this;
         var countSlotsInDay = 0;
@@ -152,6 +133,38 @@ var GenerateChartComponent = /** @class */ (function () {
         this.chartData = this.selectedDateHours;
         this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe(function (data) { return _this.countFreeSlotsForWorker = data; });
         console.log(this.countFreeSlotsForWorker);
+    };
+    GenerateChartComponent.prototype.getWorkerName = function (workerId) {
+        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        return worker ? worker.name : "";
+    };
+    GenerateChartComponent.prototype.getDataToExport = function () {
+        var _this = this;
+        var dataToExport = [];
+        this.selectedDateHours.forEach(function (hour) {
+            var hourData = [];
+            hourData.push(hour.name);
+            hour.slots.forEach(function (s) {
+                hourData.push(_this.getWorkerName(s.workerId));
+            });
+            /*chartData.hourName = hour.name;
+            chartData.workerName = [];
+            
+            hour.slots.forEach((s) => {
+                chartData.workerName.push(s.workerId.toString());
+                
+            });*/
+            dataToExport.push(hourData);
+        });
+        return dataToExport;
+    };
+    GenerateChartComponent.prototype.exportGraph = function () {
+        //let jsonData = [1];
+        var fileName = 'dutyChart';
+        var data = [];
+        data = this.getDataToExport();
+        console.log(data);
+        tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
     };
     GenerateChartComponent.prototype.getToday = function () {
         var today;
@@ -256,10 +269,6 @@ var GenerateChartComponent = /** @class */ (function () {
         Component({
             templateUrl: '../html/generateChart.component.html',
             styleUrls: ['../css/generateChart.css'],
-            /*styles: [`
-                    .form-group {width: 100%;}
-                    .worker_info_item {display: inline-block;}
-            `],*/
             providers: [DataService]
         }),
         __metadata("design:paramtypes", [DataService])
