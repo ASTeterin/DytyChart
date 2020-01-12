@@ -25,6 +25,8 @@ var GenerateChartComponent = /** @class */ (function () {
         this.isFirstHour = true;
         this.isNewDay = true;
         this.isDisableSettings = true;
+        this.isPlanningToday = false;
+        this.palanningDay = 3;
         this.timeArr = [
             { time: "08:00", minSlots: 1, maxSlots: 1 },
             { time: "09:00", minSlots: 1, maxSlots: 1 },
@@ -165,6 +167,9 @@ var GenerateChartComponent = /** @class */ (function () {
             dataToExport.push(hourData);
         });
         return dataToExport;
+    };
+    GenerateChartComponent.prototype.isPlanning = function () {
+        this.isPlanningToday = (this.selectedDate.getDay() == this.palanningDay) ? true : false;
     };
     GenerateChartComponent.prototype.exportGraph = function () {
         var fileName = 'dutyChart';

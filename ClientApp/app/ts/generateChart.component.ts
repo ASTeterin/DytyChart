@@ -42,6 +42,8 @@ export class GenerateChartComponent implements OnInit {
     isFirstHour: boolean = true;
     isNewDay: boolean = true;
     isDisableSettings: boolean = true;
+    isPlanningToday: boolean = false;
+    palanningDay = 3;
 
     timeArr: any[] = [
         { time: "08:00", minSlots: 1, maxSlots: 1 },
@@ -203,6 +205,10 @@ export class GenerateChartComponent implements OnInit {
             dataToExport.push(hourData);       
         })
         return dataToExport;
+    }
+
+    isPlanning(): void {
+        this.isPlanningToday = (this.selectedDate.getDay() == this.palanningDay) ? true : false; 
     }
 
     exportGraph(): void {

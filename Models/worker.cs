@@ -40,4 +40,11 @@ public class Worker
     public static Expression<Func<Worker, IEnumerable<AbsentPeriod>>> AbsentPeriodsProperty => (s => s._absentPeriods);
     public static Expression<Func<Worker, string>> UnwantedSlotsJsonProperty => (of => of._unwantedSlotsJson);
     public static Expression<Func<Worker, string>> DesirableSlotsJsonProperty => (of => of._desirableSlotsJson);
+
+    public int GetNumberHoursForDuty()
+    {
+        if (this.IsDuty) return 6;
+        if (this.IdGroup == 3) return 5;
+        return 1;
+    }
 }
