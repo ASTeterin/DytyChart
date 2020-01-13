@@ -21,6 +21,7 @@ var DataService = /** @class */ (function () {
         this.urlAbsentWorker = "/api/Workers/get-absent-workers";
     }
     DataService.prototype.getData = function (url) {
+        //this.http.
         return this.http.get(url);
     };
     DataService.prototype.getSlotsByHourId = function (hourId) {
@@ -54,6 +55,11 @@ var DataService = /** @class */ (function () {
         return this.http.get(this.urlAbsentWorker + "?date=" + date.toISOString());
     };
     DataService.prototype.getHours = function (date) {
+        //const promise = new Promise((resolve, reject) => {
+        //    this.http.get(`${this.urlHour}?date=${date.toISOString()}`).toPromise()
+        //        .then((res: any) => resolve(res), err => reject(err));
+        //});
+        //return promise;
         return this.http.get(this.urlHour + "?date=" + date.toISOString());
         //return this.http.get(`${this.urlHour}?date=${date}`);
     };

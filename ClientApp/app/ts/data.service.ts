@@ -20,6 +20,7 @@ export class DataService {
     }
 
     getData(url: string) {
+        //this.http.
         return this.http.get(url);
     }
 
@@ -64,6 +65,11 @@ export class DataService {
     }
 
     getHours(date: Date) {
+        //const promise = new Promise((resolve, reject) => {
+        //    this.http.get(`${this.urlHour}?date=${date.toISOString()}`).toPromise()
+        //        .then((res: any) => resolve(res), err => reject(err));
+        //});
+        //return promise;
         return this.http.get(`${this.urlHour}?date=${date.toISOString()}`);
         //return this.http.get(`${this.urlHour}?date=${date}`);
     }

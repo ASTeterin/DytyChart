@@ -19,7 +19,7 @@ export class EditWorkerComponent implements OnInit {
     periods: number[] = [];
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
     absentPeriod: AbsentPeriod = new AbsentPeriod();
-    absentPeriods: AbsentPeriod[];
+    absentPeriods: AbsentPeriod[] = [];
     fromDate: NgbDate;
     public model: any;
    
@@ -42,12 +42,7 @@ export class EditWorkerComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadWorkers();
-        //this.loadAbsentPeriods();
-        //this.workers.sort();
-        //this.currentWorker = this.workers[0];
-        //console.log(this.currentWorker);
-        
+        this.loadWorkers();        
     }
 
     loadWorkers() {
@@ -67,13 +62,18 @@ export class EditWorkerComponent implements OnInit {
         console.log(this.currentWorker);
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
-                .subscribe((data: Worker) => this.workers.push(data));
+                .subscribe((data: Worker) => {
+                    this.workers.push(data);
+                });
         } else {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(data => this.loadWorkers());
         }
-        this.saveAbsentPeriod();
-        this.loadAbsentPeriods(this.currentWorker);
+        if (this.absentPeriods.length > 0) {
+            this.saveAbsentPeriod();
+            this.loadAbsentPeriods(this.currentWorker);
+        }
+        
         //this.cancel();
         //this.periods = [];
     }
@@ -96,14 +96,15 @@ export class EditWorkerComponent implements OnInit {
     }
 
     addAbsencePeriod() {
+        console.log(this.periods);
+        console.log(this.absentPeriod);
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.absentPeriod.WorkerId = this.selectedWorkerId;
         this.absentPeriods.push(this.absentPeriod);
 
         //this.saveAbsentPeriod();
-        console.log(this.periods);
-        console.log(this.absentPeriod);
+        
         //this.absentPeriod.start = 
 
     }

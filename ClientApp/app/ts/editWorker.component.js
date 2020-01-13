@@ -37,10 +37,6 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
-        //this.loadAbsentPeriods();
-        //this.workers.sort();
-        //this.currentWorker = this.workers[0];
-        //console.log(this.currentWorker);
     };
     EditWorkerComponent.prototype.loadWorkers = function () {
         var _this = this;
@@ -59,14 +55,18 @@ var EditWorkerComponent = /** @class */ (function () {
         console.log(this.currentWorker);
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
-                .subscribe(function (data) { return _this.workers.push(data); });
+                .subscribe(function (data) {
+                _this.workers.push(data);
+            });
         }
         else {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
-        this.saveAbsentPeriod();
-        this.loadAbsentPeriods(this.currentWorker);
+        if (this.absentPeriods.length > 0) {
+            this.saveAbsentPeriod();
+            this.loadAbsentPeriods(this.currentWorker);
+        }
         //this.cancel();
         //this.periods = [];
     };
@@ -88,13 +88,13 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker.countAbsencePeriod = 0;
     };
     EditWorkerComponent.prototype.addAbsencePeriod = function () {
+        console.log(this.periods);
+        console.log(this.absentPeriod);
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.absentPeriod.WorkerId = this.selectedWorkerId;
         this.absentPeriods.push(this.absentPeriod);
         //this.saveAbsentPeriod();
-        console.log(this.periods);
-        console.log(this.absentPeriod);
         //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.deleteAbsencePeriod = function () {
