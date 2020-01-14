@@ -110,6 +110,9 @@ export class EditWorkerComponent implements OnInit {
     }
 
     deleteAbsencePeriod() {
+        this.loadAbsentPeriods(this.currentWorker);
+        //var abs = this.absentPeriods.find(x => x.start == this.)
+
         this.currentWorker.countAbsencePeriod--;
         console.log(this.periods);
         //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);

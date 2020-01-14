@@ -15,7 +15,6 @@ import { NgMultiselect } from './multiselect';
 import { NgbdTabsetModule } from './tabset.module';
 import { NgbdDatepickerRangePopup } from './rangeSelectionDatepicker';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-//import { ColorPickerModule } from 'angular2-color-picker';
 import { ColorPickerModule } from 'ngx-color-picker';
 
 

@@ -19,6 +19,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.periods = [];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
         this.absentPeriod = new AbsentPeriod();
+        this.absentPeriods = [];
     }
     EditWorkerComponent.prototype.createArray = function (countElement) {
         var arr = [];
@@ -98,6 +99,8 @@ var EditWorkerComponent = /** @class */ (function () {
         //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.deleteAbsencePeriod = function () {
+        this.loadAbsentPeriods(this.currentWorker);
+        //var abs = this.absentPeriods.find(x => x.start == this.)
         this.currentWorker.countAbsencePeriod--;
         console.log(this.periods);
         //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);

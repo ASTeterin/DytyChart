@@ -128,29 +128,10 @@ namespace dutyChart.Models
             return summ;
         }
 
-        /*private List<int> GetUniqSiq(int length, int sequenceLength)
-        {
-            List<int> data = new List<int> { };
-            List<int> sequence = new List<int> { }; 
-            int index;
-            for (int i = 0; i < length; i++)
-            {
-                data.Add(i);
-            }
 
-            Random rand = new Random();
-            while (sequence.Count < sequenceLength)
-            {
-                index = rand.Next(0, data.Count - 1);
-                sequence.Add(data[index]);
-                data.RemoveAt(index);
-            }
-            return sequence;
-        }
-        */
         private List<int> GetSlotNumbersForWorker(ref List<int> hoursInDay, int countSlotsForWorker, bool isDutyWorker, Worker worker)
         {
-            int maxCountAttempts = 300;
+            int maxCountAttempts = 1000;
             int number, temp, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
             countFreeSlots = GetSumm(hoursInDay);
