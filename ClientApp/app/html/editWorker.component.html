@@ -13,12 +13,12 @@
                 </ng-container>
             </select>
             <div class="form-group">
-                <button class="btn btn-primary" (click)="createNewWorker()">Создать пользователя</button>
+                <button class="btn btn-primary new_user_btn" (click)="createNewWorker()">Создать пользователя</button>
             </div>
             
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-sm-8 user_info">
 
             <div class="form-group">
                 <label>Имя</label>
@@ -57,12 +57,12 @@
                     </div>
                 </div>
             </div>
-
+            <label>Период отсутствия</label>
             <ng-container *ngFor="let p of absentPeriods">
-                <div class="form-group">
+                <div class="form-group col">
                     <ngbd-datepicker-range-popup (onChanged)="showDate($event)" [from]="fromDate"></ngbd-datepicker-range-popup>
                     <input type="button" class="del_period_btn" (click)="deleteAbsencePeriod()" />
-                   
+
                 </div>
             </ng-container>
 

@@ -1,0 +1,18 @@
+﻿<p>Выберите дату</p>
+<form class="form-inline datapicker_input">
+    <div class="form-group datapicker_input">
+        <div class="input-group">
+            <input class="form-control" 
+                   name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" (dateSelect)="getDate($event)">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<hr />
+<p>
+   
+</p>
+

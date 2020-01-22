@@ -6,7 +6,6 @@ using dutyChart.Dto;
 using System;
 using Microsoft.EntityFrameworkCore;
 
-//namespace dutyChart.Models
 namespace dutyChart.Controllers
 {
     [Route("api/Hours")]
@@ -39,18 +38,17 @@ namespace dutyChart.Controllers
         private List<Hour> GetHours(DateTime date)
         {
             List<Hour> hours = new List<Hour>() { };
-
+            var dateUTC = date.ToUniversalTime();
             List<HourDto> hoursParams = new List<HourDto>() { };
             hours = db.Hours
                 .Include(Hour.SlotsProperty)
-                .Where(h => h.Date == date)
+                .Where(h => h.Date == dateUTC)
                 .ToList();
             if (hours.Count == 0) {
                 var hoursDto = DefaultHourParams();
                 foreach (var h in hoursDto)
                 {
-                    var hour = new Hour { Name = h.Name, MaxCount = h.MaxCount, MinCount = h.MinCount, Date = date };
-                    //db.Hours.Add(hour);
+                    var hour = new Hour { Name = h.Name, MaxCount = h.MaxCount, MinCount = h.MinCount, Date = dateUTC };
                     hours.Add(hour);
                 }
                 db.Hours.AddRange(hours);
@@ -61,10 +59,6 @@ namespace dutyChart.Controllers
         [HttpGet]
         public IEnumerable<Hour> Get(DateTime date)
         {
-            /*var hours = db.Hours
-                .Include( Hour.SlotsProperty )
-                .Where(h => h.Date == date).ToList();*/
-            //var hours = db.
             var hours = GetHours(date);
             return hours;
         }

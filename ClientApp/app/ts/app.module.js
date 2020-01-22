@@ -14,14 +14,13 @@ import { AppComponent } from './app.component';
 import { GenerateChartComponent } from './generateChart.component';
 import { EditWorkerComponent } from './editWorker.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { NgbdDatepicker } from './datepicker';
-import { DutyChart } from './chart';
-import { NavComponent } from './nav';
-import { NgMultiselect } from './multiselect';
+import { NgbdDatepicker } from './datepicker.component';
+import { ChartComponent } from './chart.component';
+import { NavComponent } from './nav.component';
+import { NgMultiselect } from './multiselect.component';
 import { NgbdTabsetModule } from './tabset.module';
 import { NgbdDatepickerRangePopup } from './rangeSelectionDatepicker';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-//import { ColorPickerModule } from 'angular2-color-picker';
 import { ColorPickerModule } from 'ngx-color-picker';
 var appRoutes = [
     { path: '', component: GenerateChartComponent },
@@ -34,7 +33,7 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         NgModule({
             imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes), MDBBootstrapModule.forRoot(), ColorPickerModule],
-            declarations: [AppComponent, NgbdDatepicker, DutyChart, NgMultiselect, GenerateChartComponent, EditWorkerComponent, NgbdDatepickerRangePopup, NavComponent],
+            declarations: [AppComponent, NgbdDatepicker, ChartComponent, NgMultiselect, GenerateChartComponent, EditWorkerComponent, NgbdDatepickerRangePopup, NavComponent],
             bootstrap: [AppComponent]
         })
     ], AppModule);

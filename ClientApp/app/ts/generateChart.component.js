@@ -50,7 +50,7 @@ var GenerateChartComponent = /** @class */ (function () {
     }
     GenerateChartComponent.prototype.tabChangeHandler = function (event) {
         var _this = this;
-        if (this.selectedHour.name) {
+        if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
         }
         this.selectHourEvent = event;
@@ -58,7 +58,6 @@ var GenerateChartComponent = /** @class */ (function () {
             var hour = new Hour();
             if (!_this.isNewDay) {
                 hour = _this.selectedDateHours.find(function (x) { return x.name == event.nextId; });
-                console.log(_this.selectedDateHours);
             }
             else {
                 _this.isNewDay = false;
@@ -84,12 +83,11 @@ var GenerateChartComponent = /** @class */ (function () {
         this.day = date.day;
         this.month = date.month;
         this.isNewDay = true;
-        if (this.selectedHour.name) {
+        if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
         }
         ;
-        this.selectedDate = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
-        console.log(this.selectedDate);
+        this.selectedDate = new Date(Date.UTC(date.year, date.month - 1, date.day));
         this.getWorkersInfo();
         this.tabChangeHandler(this.isNewDay);
     };
@@ -103,14 +101,13 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.generateGraph = function () {
         var _this = this;
-        if (this.selectedHour.name) {
+        if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
         }
         ;
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) {
             _this.slots = data;
             _this.loadHours(function () {
-                console.log(_this.selectedDateHours);
                 _this.chartData = _this.selectedDateHours;
                 _this.getWorkersInfo();
             });
@@ -124,8 +121,6 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.dataService.getAbsentWorkers(this.selectedDate).subscribe(function (data) { return _this.absentWorkers = data; });
         this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe(function (data) { return _this.countFreeSlotsForWorker = data; });
-        console.log(this.absentWorkers);
-        console.log(this.countFreeSlotsForWorker);
     };
     GenerateChartComponent.prototype.clearData = function () {
         this.countFreeSlotsForWorker = [];
@@ -151,7 +146,6 @@ var GenerateChartComponent = /** @class */ (function () {
         var fileName = 'dutyChart';
         var data = [];
         data = this.getDataToExport();
-        console.log(data);
         tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
     };
     GenerateChartComponent.prototype.getToday = function () {
@@ -168,7 +162,6 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;
-        console.log(this.worker);
         this.dataService.updateWorker(this.worker)
             .subscribe(function (data) { return _this.loadWorkers(); });
     };
@@ -180,14 +173,14 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.saveHour = function () {
         var _this = this;
-        this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 0, 0, 0, 0));
+        this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate()));
         if (!this.selectedHour.id) {
             this.dataService.createHour(this.selectedHour)
                 .subscribe(function (data) { return _this.selectedDateHours.push(data); });
         }
         else {
             this.dataService.updateHour(this.selectedHour)
-                .subscribe(function (data) { return _this.loadHours({}); });
+                .subscribe(function (data) { return _this.loadHours(null); });
         }
         this.cancel();
     };
@@ -196,7 +189,8 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.getHours(this.selectedDate)
             .subscribe(function (data) {
             _this.selectedDateHours = data;
-            cb();
+            if (cb)
+                cb();
         });
     };
     GenerateChartComponent.prototype.cancel = function () {
@@ -212,7 +206,6 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         this.isDisableSettings = false;
-        console.log(this.worker);
     };
     GenerateChartComponent.prototype.loadWorkers = function () {
         var _this = this;
@@ -241,11 +234,9 @@ var GenerateChartComponent = /** @class */ (function () {
         console.log(selectedItems);
     };
     GenerateChartComponent.prototype.addDesirableSlots = function (slotId) {
-        //console.log("111111111");
         this.worker.desirableSlots.push(slotId);
         this.saveWorker();
         console.log(this.worker);
-        //console.log(s);
     };
     GenerateChartComponent = __decorate([
         Component({

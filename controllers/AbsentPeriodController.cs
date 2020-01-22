@@ -56,7 +56,6 @@ namespace dutyChart.controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            //Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
             var absentPeriods = Get(id);
 
             if (absentPeriods != null)

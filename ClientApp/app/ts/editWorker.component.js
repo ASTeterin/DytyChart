@@ -107,9 +107,9 @@ var EditWorkerComponent = /** @class */ (function () {
         //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.showDate = function ($event) {
-        this.absentPeriod.start = new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day, 0, 0, 0, 0);
+        this.absentPeriod.start = new Date(Date.UTC($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day, 0, 0, 0, 0));
         if ($event.todate)
-            this.absentPeriod.end = new Date($event.todate.year, $event.todate.month - 1, $event.todate.day, 0, 0, 0, 0);
+            this.absentPeriod.end = new Date(Date.UTC($event.todate.year, $event.todate.month - 1, $event.todate.day, 0, 0, 0, 0));
         console.log(this.absentPeriod);
         console.log($event);
     };

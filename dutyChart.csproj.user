@@ -26,7 +26,7 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\ts\nav.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\nav.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
@@ -56,22 +56,22 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\ts\tabset.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\tabset.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\ts\multiselect.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\multiselect.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\ts\chart.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\chart.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\app\ts\datepicker.ts">
+    <TypeScriptCompile Update="ClientApp\app\ts\datepicker.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

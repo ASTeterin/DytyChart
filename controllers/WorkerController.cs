@@ -93,7 +93,6 @@ namespace dutyChart.Controllers
                     if (countFreeSlots > 0)
                     {
                         var wDto = createWorkerDto(w, countFreeSlots);
-                        //wDto.countFreeSlots = (w.IsDuty) ? 0 : getFreeSlots(w.IdGroup, us.Count());
                         workersDto.Add(wDto);
                         break;
                     }                  
