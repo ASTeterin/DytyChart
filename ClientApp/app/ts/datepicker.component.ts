@@ -23,5 +23,4 @@ export class NgbdDatepicker {
     getDate($event: any): void {
         this.onChanged.emit(this.model);
     }
-    
 }

@@ -13,6 +13,7 @@ import { Worker } from './Worker';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { tsXLXS } from 'ts-xlsx-export';
+import * as moment from 'moment';
 var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
@@ -87,7 +88,7 @@ var GenerateChartComponent = /** @class */ (function () {
             this.saveHour();
         }
         ;
-        this.selectedDate = new Date(Date.UTC(date.year, date.month - 1, date.day));
+        this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.tabChangeHandler(this.isNewDay);
     };
@@ -140,7 +141,7 @@ var GenerateChartComponent = /** @class */ (function () {
         return dataToExport;
     };
     GenerateChartComponent.prototype.isPlanning = function () {
-        this.isPlanningToday = (this.selectedDate.getDay() == this.palanningDay) ? true : false;
+        this.isPlanningToday = (this.selectedDate.day() == this.palanningDay) ? true : false;
     };
     GenerateChartComponent.prototype.exportGraph = function () {
         var fileName = 'dutyChart';
@@ -148,16 +149,12 @@ var GenerateChartComponent = /** @class */ (function () {
         data = this.getDataToExport();
         tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
     };
-    GenerateChartComponent.prototype.getToday = function () {
-        var today;
-        today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return today;
-    };
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
-        this.selectedDate = this.getToday();
-        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
+        this.selectedDate = moment();
+        console.log(this.selectedDate);
+        var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
+        console.log(date);
         this.dateChangeHandler(date);
     };
     GenerateChartComponent.prototype.saveWorker = function () {
@@ -173,7 +170,8 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.saveHour = function () {
         var _this = this;
-        this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate()));
+        this.selectedHour.date = this.selectedDate; //moment();
+        console.log(this.selectedHour.date);
         if (!this.selectedHour.id) {
             this.dataService.createHour(this.selectedHour)
                 .subscribe(function (data) { return _this.selectedDateHours.push(data); });

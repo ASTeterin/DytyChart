@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using dutyChart.Models;
+﻿using dutyChart.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dutyChart.controllers
+namespace dutyChart.Controllers
 {
-    [Route("api/Group")]
-    public class GroupController: Controller
+    [Route( "api/Group" )]
+    public class GroupController : Controller
     {
         ApplicationContext db;
 
-        public GroupController(ApplicationContext context)
+        public GroupController( ApplicationContext context )
         {
             db = context;
         }

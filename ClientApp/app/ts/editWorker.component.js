@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './worker';
 import { AbsentPeriod } from './absentPeriod';
+import * as moment from 'moment';
 var EditWorkerComponent = /** @class */ (function () {
     function EditWorkerComponent(dataService) {
         this.dataService = dataService;
@@ -53,7 +54,6 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.saveWorker = function () {
         var _this = this;
-        console.log(this.currentWorker);
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
                 .subscribe(function (data) {
@@ -73,7 +73,6 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.saveAbsentPeriod = function () {
         var _this = this;
-        console.log(this.absentPeriod);
         if (!this.absentPeriod.id) {
             this.dataService.createAbsentPeriod(this.absentPeriod)
                 .subscribe(function (data) { return _this.absentPeriods.push(data); });
@@ -89,29 +88,23 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker.countAbsencePeriod = 0;
     };
     EditWorkerComponent.prototype.addAbsencePeriod = function () {
-        console.log(this.periods);
-        console.log(this.absentPeriod);
         this.currentWorker.countAbsencePeriod++;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.absentPeriod.WorkerId = this.selectedWorkerId;
         this.absentPeriods.push(this.absentPeriod);
         //this.saveAbsentPeriod();
-        //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.deleteAbsencePeriod = function () {
         this.loadAbsentPeriods(this.currentWorker);
         //var abs = this.absentPeriods.find(x => x.start == this.)
         this.currentWorker.countAbsencePeriod--;
-        console.log(this.periods);
         //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.showDate = function ($event) {
-        this.absentPeriod.start = new Date(Date.UTC($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day, 0, 0, 0, 0));
+        this.absentPeriod.start = moment(new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day));
         if ($event.todate)
-            this.absentPeriod.end = new Date(Date.UTC($event.todate.year, $event.todate.month - 1, $event.todate.day, 0, 0, 0, 0));
-        console.log(this.absentPeriod);
-        console.log($event);
+            this.absentPeriod.end = moment(new Date($event.todate.year, $event.todate.month - 1, $event.todate.day));
     };
     EditWorkerComponent.prototype.loadAbsentPeriods = function (worker) {
         var _this = this;
@@ -128,8 +121,6 @@ var EditWorkerComponent = /** @class */ (function () {
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.loadAbsentPeriods(this.currentWorker);
-        console.log(this.absentPeriods);
-        console.log(this.currentWorker);
     };
     EditWorkerComponent.prototype.deleteWorker = function (id) {
         var _this = this;

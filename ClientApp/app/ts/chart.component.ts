@@ -29,8 +29,7 @@ export class ChartComponent {
     getChartParam() {
         //this.maxSlotsArray = this.createArray(this.maxSlotsCount);
 
-        this.minSlotsArray = (this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
-        console.log(this.minSlotsArray);
+        this.minSlotsArray = (this.hour && this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
     }
 
     getWorkerName(workerId: any) {
@@ -45,6 +44,5 @@ export class ChartComponent {
 
     constructor() {
         //this.getChartParam();
-        
     }
 }

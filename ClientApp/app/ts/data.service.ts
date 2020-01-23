@@ -4,6 +4,7 @@ import { Worker } from './worker';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { AbsentPeriod } from './absentPeriod';
+import * as moment from 'moment';
 
 @Injectable()
 export class DataService {
@@ -20,7 +21,6 @@ export class DataService {
     }
 
     getData(url: string) {
-        //this.http.
         return this.http.get(url);
     }
 
@@ -29,7 +29,7 @@ export class DataService {
     }
 
     getSlots() {
-        return this.http.get(this.urlSlot); 
+        return this.http.get(this.urlSlot);
     }
 
     createSlot(slot: Slot) {
@@ -56,22 +56,16 @@ export class DataService {
         return this.http.delete(this.urlWorker + '/' + id);
     }
 
-    getCountFreeSlotsForWorkers(date: Date) {
-        return this.http.get(`${this.urlFreeSlots}?date=${date.toISOString()}`);
+    getCountFreeSlotsForWorkers(date: moment.Moment) {
+        return this.http.get(`${this.urlFreeSlots}?date=${date.format('YYYY-MM-DD')}`);
     }
 
-    getAbsentWorkers(date: Date) {
-        return this.http.get(`${this.urlAbsentWorker}?date=${date.toISOString()}`);
+    getAbsentWorkers(date: moment.Moment) {
+        return this.http.get(`${this.urlAbsentWorker}?date = ${date.format('YYYY-MM-DD')}`);
     }
 
-    getHours(date: Date) {
-        //const promise = new Promise((resolve, reject) => {
-        //    this.http.get(`${this.urlHour}?date=${date.toISOString()}`).toPromise()
-        //        .then((res: any) => resolve(res), err => reject(err));
-        //});
-        //return promise;
-        return this.http.get(`${this.urlHour}?date=${date.toISOString()}`);
-        //return this.http.get(`${this.urlHour}?date=${date}`);
+    getHours(date: moment.Moment) {
+        return this.http.get(`${this.urlHour}?date=${date.format('YYYY-MM-DD')}`);
     }
 
     getAllHours() {
@@ -102,9 +96,8 @@ export class DataService {
         return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
     }
 
-    getFilledSlots(date: Date)
-    {
-        return this.http.get(`${this.urlFiledSlot}?date=${date.toISOString()}`);
+    getFilledSlots(date: moment.Moment) {
+        return this.http.get(`${this.urlFiledSlot}?date=${date.format('YYYY-MM-DD')}`);
     }
 
 

@@ -39,16 +39,17 @@ namespace dutyChart.Controllers
         {
             List<Hour> hours = new List<Hour>() { };
             var dateUTC = date.ToUniversalTime();
+            var dateOnly = date.Date;
             List<HourDto> hoursParams = new List<HourDto>() { };
             hours = db.Hours
                 .Include(Hour.SlotsProperty)
-                .Where(h => h.Date == dateUTC)
+                .Where(h => h.Date == dateOnly)
                 .ToList();
             if (hours.Count == 0) {
                 var hoursDto = DefaultHourParams();
                 foreach (var h in hoursDto)
                 {
-                    var hour = new Hour { Name = h.Name, MaxCount = h.MaxCount, MinCount = h.MinCount, Date = dateUTC };
+                    var hour = new Hour { Name = h.Name, MaxCount = h.MaxCount, MinCount = h.MinCount, Date = dateOnly };
                     hours.Add(hour);
                 }
                 db.Hours.AddRange(hours);

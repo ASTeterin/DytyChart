@@ -11,6 +11,7 @@ import { NgMultiselect } from './multiselect.component';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdDatepicker } from './datepicker.component';
 import { tsXLXS } from 'ts-xlsx-export';
+import * as moment from 'moment';
 
 
 @Component({
@@ -27,11 +28,10 @@ export class GenerateChartComponent implements OnInit {
     month: number;
     worker: Worker = new Worker();
     workers: Worker[];
-    selectedWorkerId: number;   
+    selectedWorkerId: number;
     selectHourEvent: any;
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
     groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
-
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
@@ -43,21 +43,21 @@ export class GenerateChartComponent implements OnInit {
     firstHour: string = "08:00";
 
     timeArr: any[] = [
-        { time: "08:00"},
-        { time: "09:00"},
-        { time: "10:00"},
-        { time: "11:00"},
-        { time: "12:00"},
-        { time: "13:00"},
-        { time: "14:00"},
-        { time: "15:00"},
-        { time: "16:00"},
-        { time: "17:00"},
-        { time: "18:00"},
-        { time: "19:00"},
+        { time: "08:00" },
+        { time: "09:00" },
+        { time: "10:00" },
+        { time: "11:00" },
+        { time: "12:00" },
+        { time: "13:00" },
+        { time: "14:00" },
+        { time: "15:00" },
+        { time: "16:00" },
+        { time: "17:00" },
+        { time: "18:00" },
+        { time: "19:00" },
     ];
 
-    selectedDate: Date;
+    selectedDate: moment.Moment;
     selectedHour: Hour = new Hour();
     selectedDateHours: Hour[] = [];
     chartData: Hour[] = [];
@@ -68,9 +68,7 @@ export class GenerateChartComponent implements OnInit {
     countFreeSlotsForWorker: WorkersFreeSlots[] = [];
     absentWorkers: Worker[] = [];
 
-
-    constructor(private dataService: DataService)
-    {
+    constructor(private dataService: DataService) {
     }
 
     tabChangeHandler(event: any) {
@@ -82,13 +80,12 @@ export class GenerateChartComponent implements OnInit {
             let hour: Hour = new Hour();
             if (!this.isNewDay) {
                 hour = this.selectedDateHours.find(x => x.name == event.nextId);
-            }
-            else {
+            } else {
                 this.isNewDay = false;
                 hour = this.selectedDateHours.find(x => x.name == this.firstHour);
             }
             this.selectedHour = hour;
-        });        
+        });
     }
 
     minSlotChangeHandler(count: number) {
@@ -115,10 +112,9 @@ export class GenerateChartComponent implements OnInit {
             this.saveHour();
         };
 
-        this.selectedDate = new Date(Date.UTC(date.year, date.month - 1, date.day));
+        this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.tabChangeHandler(this.isNewDay)
-        
     }
 
     compare(a: Hour, b: Hour) {
@@ -165,34 +161,28 @@ export class GenerateChartComponent implements OnInit {
             hour.slots.forEach((s) => {
                 hourData.push(this.getWorkerName(s.workerId));
             });
-            dataToExport.push(hourData);       
+            dataToExport.push(hourData);
         })
         return dataToExport;
     }
 
     isPlanning(): void {
-        this.isPlanningToday = (this.selectedDate.getDay() == this.palanningDay) ? true : false; 
+        this.isPlanningToday = (this.selectedDate.day() == this.palanningDay) ? true : false;
     }
 
     exportGraph(): void {
         let fileName = 'dutyChart';
         let data: ChartData[] = [];
         data = this.getDataToExport();
-        tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);   
-    }
-
-    getToday(): Date {
-        var today: Date;
-        today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return today;
+        tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
     }
 
     ngOnInit() {
         this.loadWorkers();
-        
-        this.selectedDate = this.getToday();
-        var date = { year: this.selectedDate.getFullYear(), month: this.selectedDate.getMonth() + 1, day: this.selectedDate.getDate() };
+        this.selectedDate = moment();
+        console.log(this.selectedDate);
+        var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
+        console.log(date);
         this.dateChangeHandler(date);
     }
 
@@ -208,7 +198,8 @@ export class GenerateChartComponent implements OnInit {
     }
 
     saveHour() {
-        this.selectedHour.date = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate()));
+        this.selectedHour.date = this.selectedDate;//moment();
+        console.log(this.selectedHour.date);
         if (!this.selectedHour.id) {
             this.dataService.createHour(this.selectedHour)
                 .subscribe((data: Hour) => this.selectedDateHours.push(data));
@@ -281,4 +272,3 @@ export class GenerateChartComponent implements OnInit {
 
 
 }
-

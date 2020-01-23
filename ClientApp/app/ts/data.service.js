@@ -21,7 +21,6 @@ var DataService = /** @class */ (function () {
         this.urlAbsentWorker = "/api/Workers/get-absent-workers";
     }
     DataService.prototype.getData = function (url) {
-        //this.http.
         return this.http.get(url);
     };
     DataService.prototype.getSlotsByHourId = function (hourId) {
@@ -49,19 +48,13 @@ var DataService = /** @class */ (function () {
         return this.http.delete(this.urlWorker + '/' + id);
     };
     DataService.prototype.getCountFreeSlotsForWorkers = function (date) {
-        return this.http.get(this.urlFreeSlots + "?date=" + date.toISOString());
+        return this.http.get(this.urlFreeSlots + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.getAbsentWorkers = function (date) {
-        return this.http.get(this.urlAbsentWorker + "?date=" + date.toISOString());
+        return this.http.get(this.urlAbsentWorker + "?date = " + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.getHours = function (date) {
-        //const promise = new Promise((resolve, reject) => {
-        //    this.http.get(`${this.urlHour}?date=${date.toISOString()}`).toPromise()
-        //        .then((res: any) => resolve(res), err => reject(err));
-        //});
-        //return promise;
-        return this.http.get(this.urlHour + "?date=" + date.toISOString());
-        //return this.http.get(`${this.urlHour}?date=${date}`);
+        return this.http.get(this.urlHour + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.getAllHours = function () {
         return this.http.get("" + this.urlHour);
@@ -85,7 +78,7 @@ var DataService = /** @class */ (function () {
         return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
     };
     DataService.prototype.getFilledSlots = function (date) {
-        return this.http.get(this.urlFiledSlot + "?date=" + date.toISOString());
+        return this.http.get(this.urlFiledSlot + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService = __decorate([
         Injectable(),

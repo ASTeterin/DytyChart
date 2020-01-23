@@ -22,8 +22,7 @@ var ChartComponent = /** @class */ (function () {
     };
     ChartComponent.prototype.getChartParam = function () {
         //this.maxSlotsArray = this.createArray(this.maxSlotsCount);
-        this.minSlotsArray = (this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
-        console.log(this.minSlotsArray);
+        this.minSlotsArray = (this.hour && this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
     };
     ChartComponent.prototype.getWorkerName = function (workerId) {
         var worker = this.workers.find(function (w) { return w.id == workerId; });
