@@ -55,7 +55,7 @@ namespace dutyChart.Controllers
         public IActionResult Delete( int id )
         {
             //Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
-            var absentPeriods = Get( id );
+            /*var absentPeriods = Get( id );
 
             if ( absentPeriods != null )
             {
@@ -65,8 +65,14 @@ namespace dutyChart.Controllers
                     db.SaveChanges();
                 }
 
+            }*/
+            var absentPeriod = db.AbsentPeriods.FirstOrDefault(x => x.Id == id);
+            if (absentPeriod != null)
+            {
+                db.AbsentPeriods.Remove(absentPeriod);
+                db.SaveChanges();
             }
-            return Ok( absentPeriods );
+            return Ok( absentPeriod );
         }
     }
 }

@@ -96,6 +96,10 @@ export class DataService {
         return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
     }
 
+    deleteAbsentPeriod(id: number) {
+        return this.http.delete(this.urlAbsentPeriods + '/' + id);
+    }
+
     getFilledSlots(date: moment.Moment) {
         return this.http.get(`${this.urlFiledSlot}?date=${date.format('YYYY-MM-DD')}`);
     }

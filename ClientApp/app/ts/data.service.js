@@ -77,6 +77,9 @@ var DataService = /** @class */ (function () {
     DataService.prototype.updateAbsentPeriod = function (absentPeriod) {
         return this.http.put(this.urlAbsentPeriods + '/' + absentPeriod.id, absentPeriod);
     };
+    DataService.prototype.deleteAbsentPeriod = function (id) {
+        return this.http.delete(this.urlAbsentPeriods + '/' + id);
+    };
     DataService.prototype.getFilledSlots = function (date) {
         return this.http.get(this.urlFiledSlot + "?date=" + date.format('YYYY-MM-DD'));
     };

@@ -6,6 +6,10 @@
     font-size: 20px;
 }
 
+.absent_period_btn {
+    margin-left: 10px;
+}
+
 .del_period_btn {
     background-image: url('../img/garbage.png'); /* 16px x 16px */
     background-color: transparent; /* make the button transparent */
