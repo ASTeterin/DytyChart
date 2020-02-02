@@ -108,9 +108,7 @@ export class EditWorkerComponent implements OnInit {
         this.dataService.deleteAbsentPeriod(period.id).subscribe(data => this.loadAbsentPeriods(this.currentWorker));
         //this.loadAbsentPeriods(this.currentWorker);
         console.log(this.absentPeriods);
-        //
         this.loadAbsentPeriods(this.currentWorker);
-        //var abs = this.absentPeriods.find(x => x.start == this.)
         this.currentWorker.countAbsencePeriod--;
         //this.cancel();
         //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);

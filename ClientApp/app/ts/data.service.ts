@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Worker } from './worker';
+import { WorkerInDay } from './workerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { AbsentPeriod } from './absentPeriod';
@@ -16,6 +17,7 @@ export class DataService {
     public urlAbsentPeriods = "/api/AbsentPeriod";
     public urlFreeSlots = "/api/Workers/get-worker-free-slots"
     public urlAbsentWorker = "/api/Workers/get-absent-workers";
+    public urlWorkerInDay = "/api/WorkerInDay";
 
     constructor(private http: HttpClient) {
     }
@@ -102,6 +104,21 @@ export class DataService {
 
     getFilledSlots(date: moment.Moment) {
         return this.http.get(`${this.urlFiledSlot}?date=${date.format('YYYY-MM-DD')}`);
+    }
+
+    getWorkersInDay(date: moment.Moment) {
+        return this.http.get(`${this.urlWorkerInDay}?date=${date.format('YYYY-MM-DD')}`);
+    }
+
+    createWorkerInDay(workerInDay: WorkerInDay) {
+        return this.http.post(this.urlWorkerInDay, workerInDay);
+    }
+    updateWorkerInDay(workerInDay: WorkerInDay) {
+
+        return this.http.put(this.urlWorkerInDay + '/' + workerInDay.id, workerInDay);
+    }
+    deleteWorkerInDay(id: number) {
+        return this.http.delete(this.urlWorkerInDay + '/' + id);
     }
 
 

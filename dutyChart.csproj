@@ -27,6 +27,7 @@
     <None Remove="ClientApp\app\ts\countFreeSlotsForWorker.ts" />
     <None Remove="ClientApp\app\ts\nav.component.ts" />
     <None Remove="ClientApp\app\ts\slot.ts" />
+    <None Remove="ClientApp\app\ts\workerInDay.ts" />
     <None Remove="ClientApp\app\worker.ts" />
     <None Remove="ClientApp\main.ts" />
     <None Remove="ClientApp\polyfills.ts" />
@@ -40,6 +41,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
   </ItemGroup>
 
   <ItemGroup>

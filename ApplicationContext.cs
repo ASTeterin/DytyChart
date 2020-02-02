@@ -15,6 +15,7 @@ namespace dutyChart.Models
         public DbSet<Slot> Slots { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<AbsentPeriod> AbsentPeriods { get; set; }
+        public DbSet<WorkerInDay> WorkerInDays { get; set; }
 
         protected override void OnModelCreating( ModelBuilder modelBuilder)
         {
@@ -23,6 +24,7 @@ namespace dutyChart.Models
             modelBuilder.ApplyConfiguration(new SlotConfiguration());
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
             modelBuilder.ApplyConfiguration(new AbsentPeriodConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkerInDayConfiguration());
         }
     }
 }

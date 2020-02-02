@@ -19,6 +19,7 @@ var DataService = /** @class */ (function () {
         this.urlAbsentPeriods = "/api/AbsentPeriod";
         this.urlFreeSlots = "/api/Workers/get-worker-free-slots";
         this.urlAbsentWorker = "/api/Workers/get-absent-workers";
+        this.urlWorkerInDay = "/api/WorkerInDay";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -82,6 +83,18 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.getFilledSlots = function (date) {
         return this.http.get(this.urlFiledSlot + "?date=" + date.format('YYYY-MM-DD'));
+    };
+    DataService.prototype.getWorkersInDay = function (date) {
+        return this.http.get(this.urlWorkerInDay + "?date=" + date.format('YYYY-MM-DD'));
+    };
+    DataService.prototype.createWorkerInDay = function (workerInDay) {
+        return this.http.post(this.urlWorkerInDay, workerInDay);
+    };
+    DataService.prototype.updateWorkerInDay = function (workerInDay) {
+        return this.http.put(this.urlWorkerInDay + '/' + workerInDay.id, workerInDay);
+    };
+    DataService.prototype.deleteWorkerInDay = function (id) {
+        return this.http.delete(this.urlWorkerInDay + '/' + id);
     };
     DataService = __decorate([
         Injectable(),

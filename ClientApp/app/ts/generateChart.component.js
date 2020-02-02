@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { tsXLXS } from 'ts-xlsx-export';
@@ -18,6 +19,8 @@ var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService) {
         this.dataService = dataService;
         this.worker = new Worker();
+        this.workerInDay = new WorkerInDay();
+        this.workersInDay = [];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
         this.isFirstHour = true;
@@ -49,6 +52,15 @@ var GenerateChartComponent = /** @class */ (function () {
         this.countFreeSlotsForWorker = [];
         this.absentWorkers = [];
     }
+    GenerateChartComponent.prototype.createWorkersInDay = function (date) {
+        var _this = this;
+        this.workers.forEach(function (worker) {
+            _this.workerInDay.workerId = worker.id;
+            _this.workerInDay.date = date;
+            _this.saveWorkerInDay();
+            _this.cancelWorkerInDay();
+        });
+    };
     GenerateChartComponent.prototype.tabChangeHandler = function (event) {
         var _this = this;
         if ((this.selectedHour) && (this.selectedHour.name)) {
@@ -90,7 +102,10 @@ var GenerateChartComponent = /** @class */ (function () {
         ;
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
+        this.loadWorkerInDay();
         this.tabChangeHandler(this.isNewDay);
+        //if (this.workers)
+        //this.createWorkersInDay(this.selectedDate);
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -157,16 +172,32 @@ var GenerateChartComponent = /** @class */ (function () {
         console.log(date);
         this.dateChangeHandler(date);
     };
+    GenerateChartComponent.prototype.saveWorkerInDay = function () {
+        var _this = this;
+        if (this.workerInDay.id) {
+            this.dataService.updateWorkerInDay(this.workerInDay)
+                .subscribe(function (data) { return _this.loadWorkerInDay(); });
+        }
+        else {
+            this.dataService.createWorkerInDay(this.workerInDay)
+                .subscribe(function (data) { return _this.loadWorkerInDay(); });
+        }
+    };
+    GenerateChartComponent.prototype.loadWorkerInDay = function () {
+        var _this = this;
+        this.dataService.getWorkersInDay(this.selectedDate)
+            .subscribe(function (data) { return _this.workersInDay = data; });
+    };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;
-        this.dataService.updateWorker(this.worker)
-            .subscribe(function (data) { return _this.loadWorkers(); });
+        this.dataService.updateWorkerInDay(this.workerInDay)
+            .subscribe(function (data) { return _this.loadWorkerInDay(); });
     };
     GenerateChartComponent.prototype.saveSlot = function () {
         var _this = this;
         this.dataService.createSlot(this.slot)
             .subscribe(function (data) { return _this.slots.push(data); });
-        this.calcelSlot();
+        this.cancelSlot();
     };
     GenerateChartComponent.prototype.saveHour = function () {
         var _this = this;
@@ -194,15 +225,23 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.cancel = function () {
         this.selectedHour = new Hour();
     };
-    GenerateChartComponent.prototype.calcelSlot = function () {
+    GenerateChartComponent.prototype.cancelSlot = function () {
         this.slot = new Slot();
+    };
+    GenerateChartComponent.prototype.cancelWorkerInDay = function () {
+        this.workerInDay = new WorkerInDay();
     };
     GenerateChartComponent.prototype.isFind = function (itemId, item) {
         return itemId == item.id;
     };
     GenerateChartComponent.prototype.changeStaff = function (worker) {
         var _this = this;
-        this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
+        this.cancelWorkerInDay();
+        if (this.workers) {
+            this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
+        }
+        this.workerInDay = this.workersInDay.find(function (w) { return w.workerId = _this.selectedWorkerId; });
+        console.log(this.workerInDay);
         this.isDisableSettings = false;
     };
     GenerateChartComponent.prototype.loadWorkers = function () {

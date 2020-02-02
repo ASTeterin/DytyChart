@@ -2,6 +2,7 @@
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect'
 import { DataService } from './data.service';
 import { Worker } from './Worker';
+import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { ChartData } from './chartData';
@@ -28,6 +29,8 @@ export class GenerateChartComponent implements OnInit {
     month: number;
     worker: Worker = new Worker();
     workers: Worker[];
+    workerInDay: WorkerInDay = new WorkerInDay();
+    workersInDay: WorkerInDay[] = [];
     selectedWorkerId: number;
     selectHourEvent: any;
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
@@ -69,6 +72,15 @@ export class GenerateChartComponent implements OnInit {
     absentWorkers: Worker[] = [];
 
     constructor(private dataService: DataService) {
+    }
+
+    createWorkersInDay(date: moment.Moment) {
+        this.workers.forEach((worker) => {
+            this.workerInDay.workerId = worker.id;
+            this.workerInDay.date = date;
+            this.saveWorkerInDay();
+            this.cancelWorkerInDay();
+        });
     }
 
     tabChangeHandler(event: any) {
@@ -113,8 +125,12 @@ export class GenerateChartComponent implements OnInit {
         };
 
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
+        
         this.getWorkersInfo();
-        this.tabChangeHandler(this.isNewDay)
+        this.loadWorkerInDay();
+        this.tabChangeHandler(this.isNewDay);
+        //if (this.workers)
+            //this.createWorkersInDay(this.selectedDate);
     }
 
     compare(a: Hour, b: Hour) {
@@ -186,15 +202,32 @@ export class GenerateChartComponent implements OnInit {
         this.dateChangeHandler(date);
     }
 
+    saveWorkerInDay() {
+        if (this.workerInDay.id) {
+            this.dataService.updateWorkerInDay(this.workerInDay)
+                .subscribe(data => this.loadWorkerInDay());
+        }
+        else {
+            this.dataService.createWorkerInDay(this.workerInDay)
+                .subscribe(data => this.loadWorkerInDay());
+        }
+        
+    }
+
+    loadWorkerInDay() {
+        this.dataService.getWorkersInDay(this.selectedDate)
+            .subscribe((data: WorkerInDay[]) => this.workersInDay = data);
+    }
+
     saveWorker() {
-        this.dataService.updateWorker(this.worker)
-            .subscribe(data => this.loadWorkers());
+        this.dataService.updateWorkerInDay(this.workerInDay)
+            .subscribe(data => this.loadWorkerInDay());
     }
 
     saveSlot() {
         this.dataService.createSlot(this.slot)
             .subscribe((data: Slot) => this.slots.push(data));
-        this.calcelSlot();
+        this.cancelSlot();
     }
 
     saveHour() {
@@ -222,8 +255,12 @@ export class GenerateChartComponent implements OnInit {
         this.selectedHour = new Hour();
     }
 
-    calcelSlot() {
+    cancelSlot() {
         this.slot = new Slot();
+    }
+
+    cancelWorkerInDay() {
+        this.workerInDay = new WorkerInDay();
     }
 
     isFind(itemId: number, item: any) {
@@ -231,7 +268,12 @@ export class GenerateChartComponent implements OnInit {
     }
 
     changeStaff(worker: any) {
-        this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
+        this.cancelWorkerInDay();
+        if (this.workers) {
+            this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
+        }
+        this.workerInDay = this.workersInDay.find((w) => w.workerId == this.selectedWorkerId);
+        console.log(this.workerInDay);
         this.isDisableSettings = false;
     }
 

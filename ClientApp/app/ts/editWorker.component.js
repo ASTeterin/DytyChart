@@ -104,10 +104,9 @@ var EditWorkerComponent = /** @class */ (function () {
         this.dataService.deleteAbsentPeriod(period.id).subscribe(function (data) { return _this.loadAbsentPeriods(_this.currentWorker); });
         //this.loadAbsentPeriods(this.currentWorker);
         console.log(this.absentPeriods);
-        this.cancel();
-        //this.loadAbsentPeriods(this.currentWorker);
-        //var abs = this.absentPeriods.find(x => x.start == this.)
+        this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
+        //this.cancel();
         //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         //this.absentPeriod.start = 
     };
