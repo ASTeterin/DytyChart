@@ -54,7 +54,7 @@
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="workerInDay.isDuty" (change)="saveWorker()" [disabled]="this.isDisableSettings">
+                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="workerInDay.isDuty" (change)="saveWorker()" [disabled]="this.isDisableSettings || !this.isReplacementWorker">
                 <label class="form-check-label" for="duty">
                     Сменник
                 </label>

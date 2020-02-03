@@ -40,6 +40,7 @@ namespace dutyChart.Models
             out List<Worker> newCustomerSupport,
             out List<Worker> vipCustomerSupport,
             out List<Worker> dutyOnPlanning,
+            out List<Worker> replacementWorkers,
             DateTime date )
         {
             existingCustomerSupport = new List<Worker>() { };
@@ -47,6 +48,7 @@ namespace dutyChart.Models
             vipCustomerSupport = new List<Worker>() { };
             dutyWorkers = new List<Worker>() { };
             dutyOnPlanning = new List<Worker>() { };
+            replacementWorkers = new List<Worker>() { };
             foreach ( Worker w in workers )
             {
                 СanDuty( w, date );
@@ -68,14 +70,18 @@ namespace dutyChart.Models
                 switch ( w.IdGroup )
                 {
                     case 1:
-                        vipCustomerSupport.Add( w );
+                        vipCustomerSupport.Add(w);
                         break;
                     case 2:
-                        newCustomerSupport.Add( w );
+                        newCustomerSupport.Add(w);
                         break;
                     case 3:
-                        existingCustomerSupport.Add( w );
+                        existingCustomerSupport.Add(w);
                         break;
+                    case 4:
+                        replacementWorkers.Add(w);
+                        break;
+
                 }
             }
             existingCustomerSupport = GetRandomPermutation<Worker>( data: existingCustomerSupport );
@@ -330,7 +336,6 @@ namespace dutyChart.Models
                 {
                     notBusyWorkers.Add( w );
                 }
-
             }
         }
 
@@ -384,8 +389,9 @@ namespace dutyChart.Models
             List<Worker> dutyWorkers = new List<Worker>();
             List<Worker> notBusyWorkers = new List<Worker>();
             List<Worker> dutyOnPlanning = new List<Worker>();
+            List<Worker> replacementWorkers = new List<Worker>();
 
-            GetWorkersGroups( workers, out dutyWorkers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport, out dutyOnPlanning, date );
+            GetWorkersGroups( workers, out dutyWorkers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport, out dutyOnPlanning, out replacementWorkers, date );
 
             FillSlotsForGroup( dutyWorkers, countHoursForDuty, ref hours, ref countFreeSlots, ref notBusyWorkers );
             FillSlotsForGroup( dutyOnPlanning, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers );

@@ -18,7 +18,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker = new Worker();
         this.isDisableSettings = true;
         this.periods = [];
-        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
+        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
         this.absentPeriod = new AbsentPeriod();
         this.absentPeriods = [];
     }

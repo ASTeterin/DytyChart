@@ -167,9 +167,7 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
         this.selectedDate = moment();
-        console.log(this.selectedDate);
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
-        console.log(date);
         this.dateChangeHandler(date);
     };
     GenerateChartComponent.prototype.saveWorkerInDay = function () {
@@ -240,7 +238,7 @@ var GenerateChartComponent = /** @class */ (function () {
         if (this.workers) {
             this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         }
-        this.workerInDay = this.workersInDay.find(function (w) { return w.workerId = _this.selectedWorkerId; });
+        this.workerInDay = this.workersInDay.find(function (w) { return w.workerId == _this.selectedWorkerId; });
         console.log(this.workerInDay);
         this.isDisableSettings = false;
     };

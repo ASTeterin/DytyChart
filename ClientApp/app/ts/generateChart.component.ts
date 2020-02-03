@@ -34,13 +34,14 @@ export class GenerateChartComponent implements OnInit {
     selectedWorkerId: number;
     selectHourEvent: any;
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
-    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
+    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
     isFirstHour: boolean = true;
     isNewDay: boolean = true;
     isDisableSettings: boolean = true;
+    isReplacementWorker: boolean = false;
     isPlanningToday: boolean = false;
     palanningDay = 3;
     firstHour: string = "08:00";
@@ -196,9 +197,7 @@ export class GenerateChartComponent implements OnInit {
     ngOnInit() {
         this.loadWorkers();
         this.selectedDate = moment();
-        console.log(this.selectedDate);
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
-        console.log(date);
         this.dateChangeHandler(date);
     }
 
@@ -210,8 +209,7 @@ export class GenerateChartComponent implements OnInit {
         else {
             this.dataService.createWorkerInDay(this.workerInDay)
                 .subscribe(data => this.loadWorkerInDay());
-        }
-        
+        }   
     }
 
     loadWorkerInDay() {
@@ -273,7 +271,7 @@ export class GenerateChartComponent implements OnInit {
             this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
         }
         this.workerInDay = this.workersInDay.find((w) => w.workerId == this.selectedWorkerId);
-        console.log(this.workerInDay);
+        this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.isDisableSettings = false;
     }
 

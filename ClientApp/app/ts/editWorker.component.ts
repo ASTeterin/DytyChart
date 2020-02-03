@@ -18,7 +18,7 @@ export class EditWorkerComponent implements OnInit {
     color: string;
     isDisableSettings: boolean = true;
     periods: number[] = [];
-    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
+    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
     absentPeriod: AbsentPeriod = new AbsentPeriod();
     absentPeriods: AbsentPeriod[] = [];
     fromDate: NgbDate;
