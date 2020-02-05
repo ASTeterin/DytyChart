@@ -22,10 +22,11 @@ var GenerateChartComponent = /** @class */ (function () {
         this.workerInDay = new WorkerInDay();
         this.workersInDay = [];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
-        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }];
+        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
         this.isFirstHour = true;
         this.isNewDay = true;
         this.isDisableSettings = true;
+        this.isReplacementWorker = false;
         this.isPlanningToday = false;
         this.palanningDay = 3;
         this.firstHour = "08:00";
@@ -188,6 +189,7 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;
+        console.log(this.workerInDay);
         this.dataService.updateWorkerInDay(this.workerInDay)
             .subscribe(function (data) { return _this.loadWorkerInDay(); });
     };
@@ -239,7 +241,7 @@ var GenerateChartComponent = /** @class */ (function () {
             this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         }
         this.workerInDay = this.workersInDay.find(function (w) { return w.workerId == _this.selectedWorkerId; });
-        console.log(this.workerInDay);
+        this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.isDisableSettings = false;
     };
     GenerateChartComponent.prototype.loadWorkers = function () {

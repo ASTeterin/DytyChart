@@ -218,6 +218,7 @@ export class GenerateChartComponent implements OnInit {
     }
 
     saveWorker() {
+        console.log(this.workerInDay);
         this.dataService.updateWorkerInDay(this.workerInDay)
             .subscribe(data => this.loadWorkerInDay());
     }

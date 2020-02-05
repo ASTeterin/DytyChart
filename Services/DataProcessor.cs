@@ -34,6 +34,10 @@ namespace dutyChart.Models
             return canDuty;
         }
 
+        private WorkerInDay GetWorkerInDay(int workerId, DateTime date)
+        {
+            return _db.WorkerInDays.FirstOrDefault(x => ((x.Date == date) && (x.WorkerId == workerId)));
+        }
         private void GetWorkersGroups( List<Worker> workers,
             out List<Worker> dutyWorkers,
             out List<Worker> existingCustomerSupport,
@@ -49,20 +53,23 @@ namespace dutyChart.Models
             dutyWorkers = new List<Worker>() { };
             dutyOnPlanning = new List<Worker>() { };
             replacementWorkers = new List<Worker>() { };
+            WorkerInDay workerInDay = new WorkerInDay();
             foreach ( Worker w in workers )
             {
+                workerInDay = GetWorkerInDay(w.Id, date);
+
                 СanDuty( w, date );
-                if ( w.IsDuty )
+                if ( workerInDay.IsDuty )
                 {
                     dutyWorkers.Add( w );
                     continue;
                 }
-                if (/*(IsPlanningDay(date)) && */w.IsDutyOnWedn )
+                if (/*(IsPlanningDay(date)) && */workerInDay.IsDutyOnWedn )
                 {
                     dutyOnPlanning.Add( w );
                     continue;
                 }
-                if ( ( w.IsDutyOnLetters ) || ( !СanDuty( w, date ) ) )
+                if ( ( workerInDay.IsDutyOnLetters ) || ( !СanDuty( w, date ) ) )
                 {
                     //notDutyWorkers.Add(w);
                     continue;
@@ -150,20 +157,21 @@ namespace dutyChart.Models
             hoursInDay.Insert( index, temp );
         }
 
-        private List<int> GetSlotNumbersForWorker( ref List<int> hoursInDay, int countSlotsForWorker, Worker worker )
+        private List<int> GetSlotNumbersForWorker( ref List<int> hoursInDay, int countSlotsForWorker, Worker worker, DateTime date )
         {
-            int maxCountAttempts = 100;
+            int maxCountAttempts = 50;
             int number, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
             countFreeSlots = GetSumm( hoursInDay );
             Random rand = new Random();
             int countAttemps = 0;
             List<int> listNumbers = new List<int>();
-            if ( worker.IsDuty )
+            WorkerInDay workerInDay = GetWorkerInDay(worker.Id, date);
+            if ( workerInDay.IsDuty )
             {
                 GenerateSlotsForDutyWorker( ref listNumbers, ref countSlotsForWorker );
             }
-            if ( worker.IsDutyOnWedn )
+            if ( workerInDay.IsDutyOnWedn )
             {
                 listNumbers.Add( 1 );
                 countSlotsForWorker = worker.GetNumberHoursForDuty() - 1;
@@ -323,13 +331,14 @@ namespace dutyChart.Models
             int countSlotsForWorker,
             ref List<Hour> hours,
             ref List<int> countFreeSlots,
-            ref List<Worker> notBusyWorkers )
+            ref List<Worker> notBusyWorkers,
+            DateTime date)
         {
             foreach ( var w in workers )
             {
                 if ( GetSumm( countFreeSlots ) != 0 )
                 {
-                    List<int> slotsNumber = GetSlotNumbersForWorker( ref countFreeSlots, countSlotsForWorker, w );
+                    List<int> slotsNumber = GetSlotNumbersForWorker( ref countFreeSlots, countSlotsForWorker, w , date);
                     FillSlots( w, slotsNumber, hours );
                 }
                 else
@@ -393,11 +402,11 @@ namespace dutyChart.Models
 
             GetWorkersGroups( workers, out dutyWorkers, out existingCustomerSupport, out newCustomerSupport, out vipCustomerSupport, out dutyOnPlanning, out replacementWorkers, date );
 
-            FillSlotsForGroup( dutyWorkers, countHoursForDuty, ref hours, ref countFreeSlots, ref notBusyWorkers );
-            FillSlotsForGroup( dutyOnPlanning, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers );
-            FillSlotsForGroup( existingCustomerSupport, countHoursForExistingCustomerSupport, ref hours, ref countFreeSlots, ref notBusyWorkers );
-            FillSlotsForGroup( newCustomerSupport, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers );
-            FillSlotsForGroup( vipCustomerSupport, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers );
+            FillSlotsForGroup( dutyWorkers, countHoursForDuty, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
+            FillSlotsForGroup( dutyOnPlanning, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
+            FillSlotsForGroup( existingCustomerSupport, countHoursForExistingCustomerSupport, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
+            FillSlotsForGroup( newCustomerSupport, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
+            FillSlotsForGroup( vipCustomerSupport, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
 
             slots = GetSlotsDto( hours );
             return slots;

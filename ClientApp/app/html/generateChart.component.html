@@ -81,25 +81,25 @@
             <h1>График дежурств на {{day}}.{{month}} </h1>
             <p>
                 <b>Сменный дежурный: </b>
-                <ng-container *ngFor="let w of workers">
+                <ng-container *ngFor="let w of workersInDay">
                     <div class="worker_info_item" *ngIf="w?.isDuty">
-                        {{w?.name}}; &nbsp;
+                        {{getWorkerName(w?.workerId)}}; &nbsp;
                     </div>
                 </ng-container>
             </p>
             <p>
                 <b>Дежурные на письмах: </b>
-                <ng-container *ngFor="let w of workers">
+                <ng-container *ngFor="let w of workersInDay">
                     <div class="worker_info_item" *ngIf="w?.isDutyOnLetters">
-                        {{w?.name}}; &nbsp;
+                        {{getWorkerName(w?.workerId)}}; &nbsp;
                     </div>
                 </ng-container>
             </p>
             <p>
                 <b>Дежурный по планеркам: </b>
-                <ng-container *ngFor="let w of workers">
+                <ng-container *ngFor="let w of workersInDay">
                     <div class="worker_info_item" *ngIf="w?.isDutyOnWedn">
-                        {{w?.name}}; &nbsp;
+                        {{getWorkerName(w?.workerId)}}; &nbsp;
                     </div>
                 </ng-container>
             </p>
