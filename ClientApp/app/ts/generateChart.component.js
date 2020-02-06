@@ -14,10 +14,12 @@ import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { tsXLXS } from 'ts-xlsx-export';
+import { NgxSpinnerService } from "ngx-spinner";
 import * as moment from 'moment';
 var GenerateChartComponent = /** @class */ (function () {
-    function GenerateChartComponent(dataService) {
+    function GenerateChartComponent(dataService, spinner) {
         this.dataService = dataService;
+        this.spinner = spinner;
         this.worker = new Worker();
         this.workerInDay = new WorkerInDay();
         this.workersInDay = [];
@@ -166,6 +168,12 @@ var GenerateChartComponent = /** @class */ (function () {
         tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.spinner.show();
+        setTimeout(function () {
+            /** spinner ends after 5 seconds */
+            _this.spinner.hide();
+        }, 5000);
         this.loadWorkers();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
@@ -281,7 +289,7 @@ var GenerateChartComponent = /** @class */ (function () {
             styleUrls: ['../css/generateChart.css'],
             providers: [DataService]
         }),
-        __metadata("design:paramtypes", [DataService])
+        __metadata("design:paramtypes", [DataService, NgxSpinnerService])
     ], GenerateChartComponent);
     return GenerateChartComponent;
 }());

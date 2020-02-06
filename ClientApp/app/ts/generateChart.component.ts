@@ -12,6 +12,7 @@ import { NgMultiselect } from './multiselect.component';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdDatepicker } from './datepicker.component';
 import { tsXLXS } from 'ts-xlsx-export';
+import { NgxSpinnerService } from "ngx-spinner";
 import * as moment from 'moment';
 
 
@@ -72,7 +73,7 @@ export class GenerateChartComponent implements OnInit {
     countFreeSlotsForWorker: WorkersFreeSlots[] = [];
     absentWorkers: Worker[] = [];
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private spinner: NgxSpinnerService) {
     }
 
     createWorkersInDay(date: moment.Moment) {
@@ -145,13 +146,16 @@ export class GenerateChartComponent implements OnInit {
         if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
         };
+        this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => {
             this.slots = data;
             this.loadHours(() => {
                 this.chartData = this.selectedDateHours;
                 this.getWorkersInfo();
+                this.spinner.hide();
             });
         });
+        
     }
 
     getWorkerName(workerId: any) {
@@ -195,6 +199,12 @@ export class GenerateChartComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.spinner.show();
+
+        setTimeout(() => {
+            /** spinner ends after 5 seconds */
+            this.spinner.hide();
+        }, 5000)
         this.loadWorkers();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };

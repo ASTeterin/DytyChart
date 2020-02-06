@@ -22,6 +22,7 @@ import { NgbdTabsetModule } from './tabset.module';
 import { NgbdDatepickerRangePopup } from './rangeSelectionDatepicker';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { NgxSpinnerModule } from "ngx-spinner";
 var appRoutes = [
     { path: '', component: GenerateChartComponent },
     { path: 'editUser', component: EditWorkerComponent },
@@ -32,7 +33,7 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = __decorate([
         NgModule({
-            imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes), MDBBootstrapModule.forRoot(), ColorPickerModule],
+            imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes), MDBBootstrapModule.forRoot(), ColorPickerModule, NgxSpinnerModule],
             declarations: [AppComponent, NgbdDatepicker, ChartComponent, NgMultiselect, GenerateChartComponent, EditWorkerComponent, NgbdDatepickerRangePopup, NavComponent],
             bootstrap: [AppComponent]
         })
