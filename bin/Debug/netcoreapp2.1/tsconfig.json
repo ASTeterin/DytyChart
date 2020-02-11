@@ -1,19 +1,26 @@
 ﻿{
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "sourceMap": true,
+    "baseUrl": "./",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [ "es2015", "dom" ],
+    "module": "es2015",
+    "moduleResolution": "node",
     "noImplicitAny": true,
+    "paths": {
+      "exceljs": [
+        "node_modules/exceljs/dist/exceljs.min"
+      ]
+    },
+    "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
     "typeRoots": [
       "node_modules/@types/",
       "webpack-env"
     ]
   },
+  
   "exclude": [
     "node_modules",
     "wwwroot",

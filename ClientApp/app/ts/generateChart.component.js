@@ -13,9 +13,9 @@ import { Worker } from './Worker';
 import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
-import { tsXLXS } from 'ts-xlsx-export';
 import { NgxSpinnerService } from "ngx-spinner";
 import * as moment from 'moment';
+import { ExcelService } from './excel.service';
 var GenerateChartComponent = /** @class */ (function () {
     function GenerateChartComponent(dataService, spinner) {
         this.dataService = dataService;
@@ -124,11 +124,13 @@ var GenerateChartComponent = /** @class */ (function () {
             this.saveHour();
         }
         ;
+        this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) {
             _this.slots = data;
             _this.loadHours(function () {
                 _this.chartData = _this.selectedDateHours;
                 _this.getWorkersInfo();
+                _this.spinner.hide();
             });
         });
     };
@@ -162,18 +164,14 @@ var GenerateChartComponent = /** @class */ (function () {
         this.isPlanningToday = (this.selectedDate.day() == this.palanningDay) ? true : false;
     };
     GenerateChartComponent.prototype.exportGraph = function () {
-        var fileName = 'dutyChart';
-        var data = [];
+        /*let fileName = 'dutyChart';
+        let data: ChartData[] = [];
         data = this.getDataToExport();
         tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
+        */
+        //this.excelService.generateExcel();
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.spinner.show();
-        setTimeout(function () {
-            /** spinner ends after 5 seconds */
-            _this.spinner.hide();
-        }, 5000);
         this.loadWorkers();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
@@ -256,7 +254,10 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         //this.workers = this.dataService.getWorkers();
         this.dataService.getData(this.dataService.urlWorker)
-            .subscribe(function (data) { return _this.workers = data; });
+            .subscribe(function (data) {
+            _this.workers = data;
+            _this.workers.sort(_this.compare);
+        });
     };
     GenerateChartComponent.prototype.loadSlots = function () {
         var _this = this;
@@ -287,7 +288,7 @@ var GenerateChartComponent = /** @class */ (function () {
         Component({
             templateUrl: '../html/generateChart.component.html',
             styleUrls: ['../css/generateChart.css'],
-            providers: [DataService]
+            providers: [DataService, ExcelService]
         }),
         __metadata("design:paramtypes", [DataService, NgxSpinnerService])
     ], GenerateChartComponent);

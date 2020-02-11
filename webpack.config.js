@@ -12,7 +12,10 @@ module.exports = {
         filename: "[name].js"       // название создаваемого файла
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        alias: {
+            exceljs: path.resolve(__dirname, 'node_modules/exceljs/dist/exceljs.min')
+        }
     },
     module: {
         rules: [   //загрузчик для ts

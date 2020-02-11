@@ -14,12 +14,12 @@ import { NgbdDatepicker } from './datepicker.component';
 import { tsXLXS } from 'ts-xlsx-export';
 import { NgxSpinnerService } from "ngx-spinner";
 import * as moment from 'moment';
-
-
+import { ExcelService } from './excel.service';
+import { DatePipe } from '@angular/common';
 @Component({
     templateUrl: '../html/generateChart.component.html',
     styleUrls: ['../css/generateChart.css'],
-    providers: [DataService]
+    providers: [DataService, ExcelService, DatePipe]
 })
 
 export class GenerateChartComponent implements OnInit {
@@ -73,7 +73,7 @@ export class GenerateChartComponent implements OnInit {
     countFreeSlotsForWorker: WorkersFreeSlots[] = [];
     absentWorkers: Worker[] = [];
 
-    constructor(private dataService: DataService, private spinner: NgxSpinnerService) {
+    constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
 
     createWorkersInDay(date: moment.Moment) {
@@ -195,16 +195,12 @@ export class GenerateChartComponent implements OnInit {
         let fileName = 'dutyChart';
         let data: ChartData[] = [];
         data = this.getDataToExport();
-        tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
+        //tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
+        
+        this.excelService.generateExcel(data);
     }
 
     ngOnInit() {
-        this.spinner.show();
-
-        setTimeout(() => {
-            /** spinner ends after 5 seconds */
-            this.spinner.hide();
-        }, 5000)
         this.loadWorkers();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
@@ -289,7 +285,11 @@ export class GenerateChartComponent implements OnInit {
     loadWorkers() {
         //this.workers = this.dataService.getWorkers();
         this.dataService.getData(this.dataService.urlWorker)
-            .subscribe((data: Worker[]) => this.workers = data);
+            .subscribe((data: Worker[]) =>
+            {
+                this.workers = data;
+                this.workers.sort(this.compare);
+            })
     }
 
     loadSlots() {
