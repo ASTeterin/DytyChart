@@ -16,10 +16,12 @@ import { Slot } from './slot';
 import { NgxSpinnerService } from "ngx-spinner";
 import * as moment from 'moment';
 import { ExcelService } from './excel.service';
+import { DatePipe } from '@angular/common';
 var GenerateChartComponent = /** @class */ (function () {
-    function GenerateChartComponent(dataService, spinner) {
+    function GenerateChartComponent(dataService, spinner, excelService) {
         this.dataService = dataService;
         this.spinner = spinner;
+        this.excelService = excelService;
         this.worker = new Worker();
         this.workerInDay = new WorkerInDay();
         this.workersInDay = [];
@@ -54,6 +56,8 @@ var GenerateChartComponent = /** @class */ (function () {
         this.newHour = new Hour();
         this.countFreeSlotsForWorker = [];
         this.absentWorkers = [];
+        this.workerNameToExport = [];
+        this.workerColorToExport = [];
     }
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
         var _this = this;
@@ -138,6 +142,10 @@ var GenerateChartComponent = /** @class */ (function () {
         var worker = this.workers.find(function (w) { return w.id == workerId; });
         return worker ? worker.name : "";
     };
+    GenerateChartComponent.prototype.getWorkerColor = function (workerId) {
+        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        return worker ? worker.color : "";
+    };
     GenerateChartComponent.prototype.getWorkersInfo = function () {
         var _this = this;
         this.dataService.getAbsentWorkers(this.selectedDate).subscribe(function (data) { return _this.absentWorkers = data; });
@@ -149,27 +157,35 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.getDataToExport = function () {
         var _this = this;
-        var dataToExport = [];
+        this.workerColorToExport = [];
+        this.workerNameToExport = [];
         this.selectedDateHours.forEach(function (hour) {
-            var hourData = [];
-            hourData.push(hour.name);
+            var workersInHour = [];
+            var colors = [];
+            //let slotInfo: SlotToExport = new SlotToExport();
+            //slotInfo.name = hour.name;
+            workersInHour.push(hour.name);
+            colors.push("FF99FF99");
+            //hourData.push(slotInfo);
             hour.slots.forEach(function (s) {
-                hourData.push(_this.getWorkerName(s.workerId));
+                //slotInfo = new SlotToExport();
+                workersInHour.push(_this.getWorkerName(s.workerId));
+                colors.push(_this.getWorkerColor(s.workerId));
             });
-            dataToExport.push(hourData);
+            _this.workerColorToExport.push(colors);
+            _this.workerNameToExport.push(workersInHour);
         });
-        return dataToExport;
+        //return dataToExport;
     };
     GenerateChartComponent.prototype.isPlanning = function () {
         this.isPlanningToday = (this.selectedDate.day() == this.palanningDay) ? true : false;
     };
     GenerateChartComponent.prototype.exportGraph = function () {
-        /*let fileName = 'dutyChart';
-        let data: ChartData[] = [];
-        data = this.getDataToExport();
-        tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
-        */
-        //this.excelService.generateExcel();
+        var fileName = 'dutyChart';
+        var data = [];
+        this.getDataToExport();
+        //tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
+        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport);
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
@@ -288,9 +304,9 @@ var GenerateChartComponent = /** @class */ (function () {
         Component({
             templateUrl: '../html/generateChart.component.html',
             styleUrls: ['../css/generateChart.css'],
-            providers: [DataService, ExcelService]
+            providers: [DataService, ExcelService, DatePipe]
         }),
-        __metadata("design:paramtypes", [DataService, NgxSpinnerService])
+        __metadata("design:paramtypes", [DataService, NgxSpinnerService, ExcelService])
     ], GenerateChartComponent);
     return GenerateChartComponent;
 }());
