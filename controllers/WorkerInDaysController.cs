@@ -31,14 +31,27 @@ namespace dutyChart.controllers
                     WorkerInDay workerInDay = new WorkerInDay();
                     workerInDay.Date = date;
                     workerInDay.WorkerId = w.Id;
-                    //db.WorkerInDays.AddAsync(workerInDay);
                     workersInDay.Add(workerInDay);
                 }
                 db.WorkerInDays.AddRange(workersInDay);
                 db.SaveChangesAsync();
-                //workersInDay = db.WorkerInDays.Where(x => x.Date == date).ToList();
             }
             return workersInDay;
+        }
+
+        [HttpGet, Route("workers-by-group")]
+        public IEnumerable<WorkerInDay> GetWorkersInDayByGroup(DateTime date, int groupId)
+        {
+
+            var result = new List<WorkerInDay>();
+            var workersInDay = db.WorkerInDays.Where(x => x.Date == date).ToList();
+            var workersByGroup = db.Workers.Where(w => w.IdGroup == groupId).ToList();
+            foreach (var worker in workersByGroup)
+            {
+                var workerInDay = workersInDay.FirstOrDefault(w => w.WorkerId == worker.Id);
+                result.Add(workerInDay);
+            }
+            return result;
         }
 
         [HttpPost]
@@ -53,148 +66,46 @@ namespace dutyChart.controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]WorkerInDay workerInDay)
+        [HttpPut]
+        public IActionResult Put([FromBody]WorkerInDay[] workersInDay)
         {
             if (ModelState.IsValid)
             {
-                db.Update(workerInDay);
-                await db.SaveChangesAsync();
-                return Ok(workerInDay);
+                db.UpdateRange(workersInDay);
+                
+                db.SaveChanges();
+                return Ok(workersInDay);
             }
             return BadRequest(ModelState);
         }
 
-        /*
-        // GET: WorkerInDays
-        public async Task<IActionResult> Index()
+        [HttpPut("{id}")]
+        public  IActionResult Put(int id, [FromBody]WorkerInDay workerInDay)
         {
-            return View(await _context.WorkerInDays.ToListAsync());
-        }
-
-        // GET: WorkerInDays/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            int dutyWorkerGroup = 4;
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
-
-            var workerInDay = await _context.WorkerInDays
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (workerInDay == null)
+            
+            int workerGroup = db.Workers.FirstOrDefault(w => w.Id == workerInDay.WorkerId).IdGroup;
+            if (workerGroup == dutyWorkerGroup)
             {
-                return NotFound();
-            }
-
-            return View(workerInDay);
-        }
-
-        // GET: WorkerInDays/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: WorkerInDays/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WorkerId,IsDuty,IsDutyOnWedn,IsDutyOnLetters,Date")] WorkerInDay workerInDay)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(workerInDay);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(workerInDay);
-        }
-
-        // GET: WorkerInDays/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var workerInDay = await _context.WorkerInDays.FindAsync(id);
-            if (workerInDay == null)
-            {
-                return NotFound();
-            }
-            return View(workerInDay);
-        }
-
-        // POST: WorkerInDays/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,WorkerId,IsDuty,IsDutyOnWedn,IsDutyOnLetters,Date")] WorkerInDay workerInDay)
-        {
-            if (id != workerInDay.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                var dutyWorkers = db.Workers.Where(w => w.IdGroup == dutyWorkerGroup);
+                foreach (Worker w in dutyWorkers)
                 {
-                    _context.Update(workerInDay);
-                    await _context.SaveChangesAsync();
+                    WorkerInDay eachWorkerInDay = db.WorkerInDays.Where(x => x.WorkerId == w.Id && x.Date == workerInDay.Date).FirstOrDefault();
+                    eachWorkerInDay.IsDuty = false;
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WorkerInDayExists(workerInDay.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
             }
-            return View(workerInDay);
+            
+            WorkerInDay currentWorkerInDay = db.WorkerInDays.Where(x => x.WorkerId == workerInDay.WorkerId && x.Date == workerInDay.Date).FirstOrDefault();
+            currentWorkerInDay.IsDuty = workerInDay.IsDuty;
+            currentWorkerInDay.IsDutyOnLetters = workerInDay.IsDutyOnLetters;
+            currentWorkerInDay.IsDutyOnWedn = workerInDay.IsDutyOnWedn;
+            db.SaveChanges();
+            return Ok(ModelState);
         }
-
-        // GET: WorkerInDays/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var workerInDay = await _context.WorkerInDays
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (workerInDay == null)
-            {
-                return NotFound();
-            }
-
-            return View(workerInDay);
-        }
-
-        // POST: WorkerInDays/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var workerInDay = await _context.WorkerInDays.FindAsync(id);
-            _context.WorkerInDays.Remove(workerInDay);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool WorkerInDayExists(int id)
-        {
-            return _context.WorkerInDays.Any(e => e.Id == id);
-        }*/
     }
 }

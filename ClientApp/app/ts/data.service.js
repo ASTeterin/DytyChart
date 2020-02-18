@@ -20,6 +20,7 @@ var DataService = /** @class */ (function () {
         this.urlFreeSlots = "/api/Workers/get-worker-free-slots";
         this.urlAbsentWorker = "/api/Workers/get-absent-workers";
         this.urlWorkerInDay = "/api/WorkerInDay";
+        this.urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -87,11 +88,17 @@ var DataService = /** @class */ (function () {
     DataService.prototype.getWorkersInDay = function (date) {
         return this.http.get(this.urlWorkerInDay + "?date=" + date.format('YYYY-MM-DD'));
     };
+    DataService.prototype.getWorkersInDayByGroup = function (date, groupId) {
+        return this.http.get(this.urlWorkerInDayByGroupe + "?date=" + date.format('YYYY-MM-DD') + "&groupId=" + groupId);
+    };
     DataService.prototype.createWorkerInDay = function (workerInDay) {
         return this.http.post(this.urlWorkerInDay, workerInDay);
     };
     DataService.prototype.updateWorkerInDay = function (workerInDay) {
         return this.http.put(this.urlWorkerInDay + '/' + workerInDay.id, workerInDay);
+    };
+    DataService.prototype.updateWorkersInDay = function (workersInDay) {
+        return this.http.put(this.urlWorkerInDay, workersInDay);
     };
     DataService.prototype.deleteWorkerInDay = function (id) {
         return this.http.delete(this.urlWorkerInDay + '/' + id);

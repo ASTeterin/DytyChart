@@ -10,52 +10,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Injectable } from '@angular/core';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
-//import * as logoFile from './carlogo.js';
 import { DatePipe } from '@angular/common';
 var ExcelService = /** @class */ (function () {
     function ExcelService(datePipe) {
         this.datePipe = datePipe;
     }
     ExcelService.prototype.generateExcel = function (data, colorSettings) {
-        //Excel Title, Header, Data
-        var title = 'Car Sell Report';
         //Create workbook and worksheet
         var workbook = new Workbook();
-        var worksheet = workbook.addWorksheet('Car Data');
-        //Add Row and formatting
-        var titleRow = worksheet.addRow([title]);
-        titleRow.font = { name: 'Comic Sans MS', family: 4, size: 16, underline: 'double', bold: true };
-        worksheet.addRow([]);
-        var subTitleRow = worksheet.addRow(['Date : ' + this.datePipe.transform(new Date(), 'medium')]);
+        var worksheet = workbook.addWorksheet('chart');
         //Blank Row 
         worksheet.addRow([]);
-        //Add Header Row
-        // worksheet.addRows(data);
-        // Add Data and Conditional Formatting
-        console.log(data);
         var colorIndex = 0;
         data.forEach(function (d) {
             var row = worksheet.addRow(d);
-            //let qty = row.getCell(1);
-            var color = 'FF99FF99';
-            /*if (+qty.value < 500) {
-                color = 'FF9999'
-            }*/
-            for (var i = 0; i < d.length; i++) {
-                var slot = row.getCell(i + 1);
+            var color = "";
+            for (var i_1 = 0; i_1 < d.length; i_1++) {
+                var slot = row.getCell(i_1 + 1);
+                color = colorSettings[colorIndex][i_1].substr(1);
+                //console.log(color);
                 slot.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: colorSettings[colorIndex][i] }
+                    fgColor: { argb: color }
                 };
             }
             colorIndex++;
         });
-        worksheet.addRow([]);
+        for (var i = 1; i < 10; i++) {
+            worksheet.getColumn(i).width = 30;
+        }
         //Generate Excel File with given name
         workbook.xlsx.writeBuffer().then(function (data) {
             var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, 'CarData.xlsx');
+            fs.saveAs(blob, 'сhart.xlsx');
         });
     };
     ExcelService = __decorate([

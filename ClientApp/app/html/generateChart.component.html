@@ -55,7 +55,7 @@
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="workerInDay.isDuty" (change)="saveWorker()" [disabled]="this.isDisableSettings || !this.isReplacementWorker">
+                <input class="form-check-input" type="checkbox" value="" id="duty" [(ngModel)]="workerInDay.isDuty" (change)="saveDutyWorker()" [disabled]="this.isDisableSettings || !this.isReplacementWorker">
                 <label class="form-check-label" for="duty">
                     Сменник
                 </label>
@@ -63,7 +63,7 @@
 
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="duty_wedn" [(ngModel)]="workerInDay.isDutyOnWedn" [disabled]="this.isDisableSettings"
-                       (change)="saveWorker()">
+                       (change)="saveWorkerInDay()">
                 <label class="form-check-label" for="duty_wedn">
                     Дежурный по планеркам
                 </label>
@@ -71,7 +71,7 @@
 
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="duty_letter" [(ngModel)]="workerInDay.isDutyOnLetters" [disabled]="this.isDisableSettings"
-                       (change)="saveWorker()">
+                       (change)="saveWorkerInDay()">
                 <label class="form-check-label" for="duty_letter">
                     Дежурный по письмам
                 </label>

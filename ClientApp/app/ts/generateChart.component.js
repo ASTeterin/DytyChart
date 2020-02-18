@@ -25,6 +25,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.worker = new Worker();
         this.workerInDay = new WorkerInDay();
         this.workersInDay = [];
+        this.dutyWorkers = [];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
         this.isFirstHour = true;
@@ -111,8 +112,6 @@ var GenerateChartComponent = /** @class */ (function () {
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.tabChangeHandler(this.isNewDay);
-        //if (this.workers)
-        //this.createWorkersInDay(this.selectedDate);
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -139,7 +138,7 @@ var GenerateChartComponent = /** @class */ (function () {
         });
     };
     GenerateChartComponent.prototype.getWorkerName = function (workerId) {
-        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        var worker = this.workers ? this.workers.find(function (w) { return w.id == workerId; }) : null;
         return worker ? worker.name : "";
     };
     GenerateChartComponent.prototype.getWorkerColor = function (workerId) {
@@ -162,20 +161,15 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedDateHours.forEach(function (hour) {
             var workersInHour = [];
             var colors = [];
-            //let slotInfo: SlotToExport = new SlotToExport();
-            //slotInfo.name = hour.name;
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
-            //hourData.push(slotInfo);
             hour.slots.forEach(function (s) {
-                //slotInfo = new SlotToExport();
                 workersInHour.push(_this.getWorkerName(s.workerId));
                 colors.push(_this.getWorkerColor(s.workerId));
             });
             _this.workerColorToExport.push(colors);
             _this.workerNameToExport.push(workersInHour);
         });
-        //return dataToExport;
     };
     GenerateChartComponent.prototype.isPlanning = function () {
         this.isPlanningToday = (this.selectedDate.day() == this.palanningDay) ? true : false;
@@ -193,8 +187,25 @@ var GenerateChartComponent = /** @class */ (function () {
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);
     };
+    GenerateChartComponent.prototype.saveDutyWorker = function () {
+        /*if (this.workerInDay.isDuty) {
+            this.dataService.getWorkersInDayByGroup(this.selectedDate, 4).subscribe((data: WorkerInDay[]) => this.dutyWorkers = data);
+            this.dutyWorkers.forEach((w) => {
+                w.isDuty = false;
+                
+            });
+            this.saveWorkersInDay();
+        }*/
+        this.saveWorkerInDay();
+    };
+    GenerateChartComponent.prototype.saveWorkersInDay = function () {
+        var _this = this;
+        this.dataService.updateWorkersInDay(this.dutyWorkers)
+            .subscribe(function (data) { return _this.loadWorkerInDay(); });
+    };
     GenerateChartComponent.prototype.saveWorkerInDay = function () {
         var _this = this;
+        //console.log(t);
         if (this.workerInDay.id) {
             this.dataService.updateWorkerInDay(this.workerInDay)
                 .subscribe(function (data) { return _this.loadWorkerInDay(); });

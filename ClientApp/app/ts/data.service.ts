@@ -18,6 +18,7 @@ export class DataService {
     public urlFreeSlots = "/api/Workers/get-worker-free-slots"
     public urlAbsentWorker = "/api/Workers/get-absent-workers";
     public urlWorkerInDay = "/api/WorkerInDay";
+    public urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
 
     constructor(private http: HttpClient) {
     }
@@ -110,6 +111,10 @@ export class DataService {
         return this.http.get(`${this.urlWorkerInDay}?date=${date.format('YYYY-MM-DD')}`);
     }
 
+    getWorkersInDayByGroup(date: moment.Moment, groupId: number) {
+        return this.http.get(`${this.urlWorkerInDayByGroupe}?date=${date.format('YYYY-MM-DD')}&groupId=${groupId}`);
+    }
+
     createWorkerInDay(workerInDay: WorkerInDay) {
         return this.http.post(this.urlWorkerInDay, workerInDay);
     }
@@ -117,6 +122,11 @@ export class DataService {
 
         return this.http.put(this.urlWorkerInDay + '/' + workerInDay.id, workerInDay);
     }
+
+    updateWorkersInDay(workersInDay: WorkerInDay[]) {
+        return this.http.put(this.urlWorkerInDay, workersInDay);
+    }
+
     deleteWorkerInDay(id: number) {
         return this.http.delete(this.urlWorkerInDay + '/' + id);
     }

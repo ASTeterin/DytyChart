@@ -34,6 +34,7 @@ export class GenerateChartComponent implements OnInit {
     workers: Worker[];
     workerInDay: WorkerInDay = new WorkerInDay();
     workersInDay: WorkerInDay[] = [];
+    dutyWorkers: WorkerInDay[] = [];
     selectedWorkerId: number;
     selectHourEvent: any;
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
@@ -136,8 +137,6 @@ export class GenerateChartComponent implements OnInit {
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.tabChangeHandler(this.isNewDay);
-        //if (this.workers)
-            //this.createWorkersInDay(this.selectedDate);
     }
 
     compare(a: Hour, b: Hour) {
@@ -164,7 +163,7 @@ export class GenerateChartComponent implements OnInit {
     }
 
     getWorkerName(workerId: any): string {
-        let worker = this.workers.find(w => w.id == workerId);
+        let worker = this.workers ? this.workers.find(w => w.id == workerId) : null;
         return worker ? worker.name : "";
     }
 
@@ -190,20 +189,17 @@ export class GenerateChartComponent implements OnInit {
         this.selectedDateHours.forEach((hour) => {
             let workersInHour: string[] = [];
             let colors: string[] = [];
-            //let slotInfo: SlotToExport = new SlotToExport();
-            //slotInfo.name = hour.name;
+
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
-            //hourData.push(slotInfo);
+
             hour.slots.forEach((s) => {
-                //slotInfo = new SlotToExport();
                 workersInHour.push(this.getWorkerName(s.workerId));
                 colors.push(this.getWorkerColor(s.workerId));
             });
             this.workerColorToExport.push(colors);
             this.workerNameToExport.push(workersInHour);
         })
-        //return dataToExport;
     }
 
     isPlanning(): void {
@@ -226,7 +222,26 @@ export class GenerateChartComponent implements OnInit {
         this.dateChangeHandler(date);
     }
 
+    saveDutyWorker() {
+        /*if (this.workerInDay.isDuty) {
+            this.dataService.getWorkersInDayByGroup(this.selectedDate, 4).subscribe((data: WorkerInDay[]) => this.dutyWorkers = data);
+            this.dutyWorkers.forEach((w) => {
+                w.isDuty = false;
+                
+            });
+            this.saveWorkersInDay();
+        }*/
+        this.saveWorkerInDay();
+    }
+
+    saveWorkersInDay() {
+        this.dataService.updateWorkersInDay(this.dutyWorkers)
+            .subscribe(data => this.loadWorkerInDay());
+    }
+
     saveWorkerInDay() {
+        
+        //console.log(t);
         if (this.workerInDay.id) {
             this.dataService.updateWorkerInDay(this.workerInDay)
                 .subscribe(data => this.loadWorkerInDay());
