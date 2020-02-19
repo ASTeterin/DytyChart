@@ -37,8 +37,8 @@ var ExcelService = /** @class */ (function () {
             }
             colorIndex++;
         });
-        for (var i = 1; i < 10; i++) {
-            worksheet.getColumn(i).width = 30;
+        for (var i = 2; i < 10; i++) {
+            worksheet.getColumn(i).width = 20;
         }
         //Generate Excel File with given name
         workbook.xlsx.writeBuffer().then(function (data) {

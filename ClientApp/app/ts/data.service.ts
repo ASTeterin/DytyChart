@@ -64,7 +64,7 @@ export class DataService {
     }
 
     getAbsentWorkers(date: moment.Moment) {
-        return this.http.get(`${this.urlAbsentWorker}?date = ${date.format('YYYY-MM-DD')}`);
+        return this.http.get(`${this.urlAbsentWorker}?date=${date.format('YYYY-MM-DD')}`);
     }
 
     getHours(date: moment.Moment) {
