@@ -33,21 +33,21 @@ export class ChartComponent {
     }
 
     getWorkerName(workerId: any) {
-        if (this.workers.length == 0) {
+        if (!this.workers) {
             return "";
         }
         let worker = this.workers.find(w => w.id == workerId);
-        //return worker ? worker.name : "";
-        return worker.name;
+        return worker ? worker.name : "";
+        //return worker.name;
     }
 
     getWorkerColor(workerId: any) {
-        if (this.workers.length == 0) {
+        if (!this.workers) {
             return "";
         }
         let worker = this.workers.find(w => w.id == workerId);
-        //return worker ? worker.color : "";
-        return worker.color;
+        return worker ? worker.color : "";
+        //return worker.color;
     }
 
     constructor() {

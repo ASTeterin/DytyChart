@@ -57,6 +57,8 @@ namespace dutyChart.Models
             foreach ( Worker w in workers )
             {
                 workerInDay = GetWorkerInDay(w.Id, date);
+                if (workerInDay == null)
+                    continue;
 
                 СanDuty( w, date );
                 if ( workerInDay.IsDuty )

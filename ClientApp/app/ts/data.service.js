@@ -53,7 +53,7 @@ var DataService = /** @class */ (function () {
         return this.http.get(this.urlFreeSlots + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.getAbsentWorkers = function (date) {
-        return this.http.get(this.urlAbsentWorker + "?date = " + date.format('YYYY-MM-DD'));
+        return this.http.get(this.urlAbsentWorker + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.getHours = function (date) {
         return this.http.get(this.urlHour + "?date=" + date.format('YYYY-MM-DD'));
