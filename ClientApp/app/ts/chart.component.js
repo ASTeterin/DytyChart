@@ -11,26 +11,13 @@ import { Input, Component } from '@angular/core';
 import { Hour } from "./hour";
 var ChartComponent = /** @class */ (function () {
     function ChartComponent() {
-        //this.getChartParam();
     }
-    ChartComponent.prototype.createArray = function (countElement) {
-        var arr;
-        for (var j = 1; j <= countElement; j++) {
-            arr.push(j);
-        }
-        return arr;
-    };
-    ChartComponent.prototype.getChartParam = function () {
-        //this.maxSlotsArray = this.createArray(this.maxSlotsCount);
-        this.minSlotsArray = (this.hour && this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
-    };
     ChartComponent.prototype.getWorkerName = function (workerId) {
         if (!this.workers) {
             return "";
         }
         var worker = this.workers.find(function (w) { return w.id == workerId; });
         return worker ? worker.name : "";
-        //return worker.name;
     };
     ChartComponent.prototype.getWorkerColor = function (workerId) {
         if (!this.workers) {
@@ -38,7 +25,6 @@ var ChartComponent = /** @class */ (function () {
         }
         var worker = this.workers.find(function (w) { return w.id == workerId; });
         return worker ? worker.color : "";
-        //return worker.color;
     };
     __decorate([
         Input(),

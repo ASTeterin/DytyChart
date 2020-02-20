@@ -31,9 +31,15 @@ namespace dutyChart.Controllers
         {
             if ( ModelState.IsValid )
             {
-                db.AbsentPeriods.Add( absentPeriod );
-                db.SaveChanges();
-                return Ok( absentPeriod );
+                var foundAbsentPeriod = db.AbsentPeriods.FirstOrDefault(period => period.WorkerId == absentPeriod.WorkerId
+                    && period.Start == absentPeriod.Start
+                    && period.End == absentPeriod.End);
+                if (foundAbsentPeriod == null)
+                {
+                    db.AbsentPeriods.Add(absentPeriod);
+                    db.SaveChanges();
+                    return Ok(absentPeriod);
+                }
             }
             return BadRequest( ModelState );
         }

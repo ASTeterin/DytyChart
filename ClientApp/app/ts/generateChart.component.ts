@@ -210,7 +210,6 @@ export class GenerateChartComponent implements OnInit {
         let fileName = 'dutyChart';
         let data: ChartData[] = [];
         this.getDataToExport();
-        //tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
 
         this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport);
     }

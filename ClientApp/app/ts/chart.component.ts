@@ -17,28 +17,12 @@ export class ChartComponent {
     //@Input() maxSlotsCount: number;
     @Input() hour: Hour;
 
-
-    createArray(countElement: number): number[] {
-        var arr: number[];
-        for (var j = 1; j <= countElement; j++) {
-            arr.push(j);
-        }
-        return arr;
-    }
-
-    getChartParam() {
-        //this.maxSlotsArray = this.createArray(this.maxSlotsCount);
-
-        this.minSlotsArray = (this.hour && this.hour.minCount) ? this.createArray(this.hour.minCount) : [1, 2, 3];
-    }
-
     getWorkerName(workerId: any) {
         if (!this.workers) {
             return "";
         }
         let worker = this.workers.find(w => w.id == workerId);
         return worker ? worker.name : "";
-        //return worker.name;
     }
 
     getWorkerColor(workerId: any) {
@@ -47,10 +31,8 @@ export class ChartComponent {
         }
         let worker = this.workers.find(w => w.id == workerId);
         return worker ? worker.color : "";
-        //return worker.color;
     }
 
     constructor() {
-        //this.getChartParam();
     }
 }

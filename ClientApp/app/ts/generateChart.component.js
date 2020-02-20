@@ -178,7 +178,6 @@ var GenerateChartComponent = /** @class */ (function () {
         var fileName = 'dutyChart';
         var data = [];
         this.getDataToExport();
-        //tsXLXS().exportAsExcelFile(data).saveAsExcelFile(fileName);
         this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport);
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
