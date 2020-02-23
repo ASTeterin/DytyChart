@@ -15,10 +15,13 @@ var ExcelService = /** @class */ (function () {
     function ExcelService(datePipe) {
         this.datePipe = datePipe;
     }
-    ExcelService.prototype.generateExcel = function (data, colorSettings) {
+    ExcelService.prototype.generateExcel = function (data, colorSettings, info) {
         //Create workbook and worksheet
         var workbook = new Workbook();
         var worksheet = workbook.addWorksheet('chart');
+        info.forEach(function (workersInfo) {
+            var row = worksheet.addRow(workersInfo);
+        });
         //Blank Row 
         worksheet.addRow([]);
         var colorIndex = 0;

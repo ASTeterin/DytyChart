@@ -78,6 +78,7 @@ export class GenerateChartComponent implements OnInit {
     slotToExport: SlotToExport;
     workerNameToExport: string[][] = [];
     workerColorToExport: string[][] = [];
+    workersInfoToExport: string[][] = [];
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
@@ -186,6 +187,26 @@ export class GenerateChartComponent implements OnInit {
     getDataToExport(): void {
         this.workerColorToExport = [];
         this.workerNameToExport = [];
+        let dutyWorkers: any[] | string[] = ["Сменник:"];
+        let dutyOnPlanning: any[] | string[] = ["Дежурный по планерке:"];
+        let dutyOnLetters: any[] | string[] = ["Дежурный на письмах:"];
+
+        this.workersInDay.forEach((w) => {
+            if (w.isDuty) {
+                dutyWorkers.push(this.getWorkerName(w.workerId));
+            }
+            if (w.isDutyOnWedn) {
+                dutyOnPlanning.push(this.getWorkerName(w.workerId));
+            }
+            if (w.isDutyOnLetters) {
+                dutyOnLetters.push(this.getWorkerName(w.workerId));
+            }
+        });
+
+        this.workersInfoToExport.push(dutyWorkers);
+        this.workersInfoToExport.push(dutyOnPlanning);
+        this.workersInfoToExport.push(dutyOnLetters);
+
         this.selectedDateHours.forEach((hour) => {
             let workersInHour: string[] = [];
             let colors: string[] = [];
@@ -211,7 +232,7 @@ export class GenerateChartComponent implements OnInit {
         let data: ChartData[] = [];
         this.getDataToExport();
 
-        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport);
+        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport);
     }
 
     ngOnInit() {

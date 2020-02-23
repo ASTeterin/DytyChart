@@ -8,11 +8,15 @@ import { DatePipe } from '@angular/common';
 export class ExcelService {
     constructor(private datePipe: DatePipe) {
     }
-    generateExcel(data: any[], colorSettings: any[]) {
+    generateExcel(data: any[], colorSettings: any[], info: any[]) {
         
         //Create workbook and worksheet
         let workbook = new Workbook();
         let worksheet = workbook.addWorksheet('chart');
+
+        info.forEach((workersInfo) => {
+            let row = worksheet.addRow(workersInfo);
+        });
        
         //Blank Row 
         worksheet.addRow([]);

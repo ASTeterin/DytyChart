@@ -59,6 +59,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.absentWorkers = [];
         this.workerNameToExport = [];
         this.workerColorToExport = [];
+        this.workersInfoToExport = [];
     }
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
         var _this = this;
@@ -158,6 +159,23 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.workerColorToExport = [];
         this.workerNameToExport = [];
+        var dutyWorkers = [];
+        var dutyOnPlanning = [];
+        var dutyOnLetters = [];
+        this.workersInDay.forEach(function (w) {
+            if (w.isDuty) {
+                dutyWorkers.push(_this.getWorkerName(w.workerId));
+            }
+            if (w.isDutyOnWedn) {
+                dutyOnPlanning.push(_this.getWorkerName(w.workerId));
+            }
+            if (w.isDutyOnLetters) {
+                dutyOnLetters.push(_this.getWorkerName(w.workerId));
+            }
+        });
+        this.workersInfoToExport.push(dutyWorkers);
+        this.workersInfoToExport.push(dutyOnPlanning);
+        this.workersInfoToExport.push(dutyOnLetters);
         this.selectedDateHours.forEach(function (hour) {
             var workersInHour = [];
             var colors = [];
@@ -178,7 +196,7 @@ var GenerateChartComponent = /** @class */ (function () {
         var fileName = 'dutyChart';
         var data = [];
         this.getDataToExport();
-        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport);
+        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport);
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
