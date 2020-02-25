@@ -15,6 +15,7 @@ var DataService = /** @class */ (function () {
         this.urlWorker = "/api/Workers";
         this.urlHour = "/api/Hours";
         this.urlSlot = "/api/Slot";
+        this.urlGroup = "/api/Groups";
         this.urlFiledSlot = "/api/Slot/get-filled-slots";
         this.urlAbsentPeriods = "/api/AbsentPeriod";
         this.urlFreeSlots = "/api/Workers/get-worker-free-slots";
@@ -48,6 +49,18 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.deleteWorker = function (id) {
         return this.http.delete(this.urlWorker + '/' + id);
+    };
+    DataService.prototype.getGroups = function () {
+        return this.http.get(this.urlGroup);
+    };
+    DataService.prototype.createGroup = function (group) {
+        return this.http.post(this.urlGroup, group);
+    };
+    DataService.prototype.updateGroup = function (group) {
+        return this.http.put(this.urlGroup + '/' + group.id, group);
+    };
+    DataService.prototype.deleteGroup = function (id) {
+        return this.http.delete(this.urlGroup + '/' + id);
     };
     DataService.prototype.getCountFreeSlotsForWorkers = function (date) {
         return this.http.get(this.urlFreeSlots + "?date=" + date.format('YYYY-MM-DD'));

@@ -159,9 +159,9 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.workerColorToExport = [];
         this.workerNameToExport = [];
-        var dutyWorkers = [];
-        var dutyOnPlanning = [];
-        var dutyOnLetters = [];
+        var dutyWorkers = ["Сменник:"];
+        var dutyOnPlanning = ["Дежурный по планерке:"];
+        var dutyOnLetters = ["Дежурный на письмах:"];
         this.workersInDay.forEach(function (w) {
             if (w.isDuty) {
                 dutyWorkers.push(_this.getWorkerName(w.workerId));

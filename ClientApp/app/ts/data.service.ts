@@ -4,6 +4,7 @@ import { Worker } from './worker';
 import { WorkerInDay } from './workerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { Group } from './group';
 import { AbsentPeriod } from './absentPeriod';
 import * as moment from 'moment';
 
@@ -13,6 +14,7 @@ export class DataService {
     public urlWorker = "/api/Workers";
     public urlHour = "/api/Hours";
     public urlSlot = "/api/Slot";
+    public urlGroup = "/api/Group";
     public urlFiledSlot = "/api/Slot/get-filled-slots";
     public urlAbsentPeriods = "/api/AbsentPeriod";
     public urlFreeSlots = "/api/Workers/get-worker-free-slots"
@@ -57,6 +59,21 @@ export class DataService {
     }
     deleteWorker(id: number) {
         return this.http.delete(this.urlWorker + '/' + id);
+    }
+
+    getGroups() {
+        return this.http.get(this.urlGroup);
+    }
+
+    createGroup(group: Group) {
+        return this.http.post(this.urlGroup, group);
+    }
+    updateGroup(group: Worker) {
+
+        return this.http.put(this.urlGroup + '/' + group.id, group);
+    }
+    deleteGroup(id: number) {
+        return this.http.delete(this.urlGroup + '/' + id);
     }
 
     getCountFreeSlotsForWorkers(date: moment.Moment) {

@@ -9,6 +9,6 @@ namespace dutyChart.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int numberDutyHours{ get; set; }
+        public int NumberDutyHours{ get; set; }
     }
 }
