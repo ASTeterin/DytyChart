@@ -18,7 +18,8 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker = new Worker();
         this.isDisableSettings = true;
         this.periods = [];
-        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
+        this.groups = [];
+        //groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
         this.absentPeriod = new AbsentPeriod();
         this.absentPeriods = [];
     }
@@ -38,7 +39,11 @@ var EditWorkerComponent = /** @class */ (function () {
             return -1; // если первое значение меньше второго
     };
     EditWorkerComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.loadWorkers();
+        this.dataService.getGroups().subscribe(function (data) {
+            return _this.groups = data;
+        });
     };
     EditWorkerComponent.prototype.loadWorkers = function () {
         var _this = this;

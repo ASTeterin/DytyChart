@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './worker';
+import { Group } from './group';
 import { AbsentPeriod } from './absentPeriod';
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
@@ -18,7 +19,8 @@ export class EditWorkerComponent implements OnInit {
     color: string;
     isDisableSettings: boolean = true;
     periods: number[] = [];
-    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
+    groups: Group[] = [];
+    //groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
     absentPeriod: AbsentPeriod = new AbsentPeriod();
     absentPeriods: AbsentPeriod[] = [];
     fromDate: NgbDate;
@@ -42,6 +44,8 @@ export class EditWorkerComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
+        this.dataService.getGroups().subscribe((data: Group[]) =>
+            this.groups = data);
     }
 
     loadWorkers() {

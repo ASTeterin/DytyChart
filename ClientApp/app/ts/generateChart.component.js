@@ -27,7 +27,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.workersInDay = [];
         this.dutyWorkers = [];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
-        this.groups = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
+        this.groups = [];
         this.isFirstHour = true;
         this.isNewDay = true;
         this.isDisableSettings = true;
@@ -200,6 +200,7 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
+        this.loadGroups();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);
@@ -236,6 +237,12 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.dataService.getWorkersInDay(this.selectedDate)
             .subscribe(function (data) { return _this.workersInDay = data; });
+    };
+    GenerateChartComponent.prototype.loadGroups = function () {
+        var _this = this;
+        this.dataService.getGroups().subscribe(function (data) {
+            return _this.groups = data;
+        });
     };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;

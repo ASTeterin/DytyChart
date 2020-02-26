@@ -28,6 +28,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 var appRoutes = [
     { path: '', component: GenerateChartComponent },
     { path: 'editUser', component: EditWorkerComponent },
+    { path: 'editGroup', component: EditGroupComponent },
     { path: '**', redirectTo: '/' }
 ];
 var AppModule = /** @class */ (function () {

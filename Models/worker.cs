@@ -41,10 +41,13 @@ public class Worker
     public static Expression<Func<Worker, string>> UnwantedSlotsJsonProperty => (of => of._unwantedSlotsJson);
     public static Expression<Func<Worker, string>> DesirableSlotsJsonProperty => (of => of._desirableSlotsJson);
 
-    public int GetNumberHoursForDuty()
+    public int GetNumberHoursForDuty(List<Group> groups)
     {
-        if (this.IsDuty) return 6;
-        if (this.IdGroup == 3) return 5;
+        
+        if (this.IsDuty) return groups.FirstOrDefault(x => x.Name == "Сменники").NumberDutyHours;
+        if (this.IdGroup == 3) return groups.FirstOrDefault(x => x.Name == "Группа поддержки").NumberDutyHours;
+        if (this.IdGroup == 2) return groups.FirstOrDefault(x => x.Name == "Группа запуска").NumberDutyHours;
+        if (this.IdGroup == 1) return groups.FirstOrDefault(x => x.Name == "Группа поддержки VIP").NumberDutyHours;
         return 1;
     }
 }

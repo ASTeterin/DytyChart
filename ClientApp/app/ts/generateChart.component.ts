@@ -5,6 +5,7 @@ import { Worker } from './Worker';
 import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { Group } from './group';
 import { ChartData } from './chartData';
 import { WorkersFreeSlots } from './countFreeSlotsForWorker';
 import { NgbdTabset } from './tabset.component';
@@ -38,7 +39,8 @@ export class GenerateChartComponent implements OnInit {
     selectedWorkerId: number;
     selectHourEvent: any;
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
-    groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
+    groups: Group[] = [];
+    //groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
     currenStaffIsDutyCheck: boolean;
     desiredTimeId: number[];
     unwantedTimeId: number[];
@@ -237,6 +239,7 @@ export class GenerateChartComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
+        this.loadGroups();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);
@@ -275,6 +278,11 @@ export class GenerateChartComponent implements OnInit {
     loadWorkerInDay() {
         this.dataService.getWorkersInDay(this.selectedDate)
             .subscribe((data: WorkerInDay[]) => this.workersInDay = data);
+    }
+
+    loadGroups() {
+        this.dataService.getGroups().subscribe((data: Group[]) =>
+            this.groups = data);
     }
 
     saveWorker() {

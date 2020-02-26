@@ -15,6 +15,7 @@ var EditGroupComponent = /** @class */ (function () {
         this.dataService = dataService;
         this.groups = [];
         this.selectedGroup = new Group();
+        this.isDisableSettings = true;
     }
     EditGroupComponent.prototype.ngOnInit = function () {
         this.loadGroups();
@@ -26,6 +27,28 @@ var EditGroupComponent = /** @class */ (function () {
             //this.workers.sort(this.compare);
             console.log(_this.groups);
         });
+    };
+    EditGroupComponent.prototype.cancel = function () {
+        this.selectedGroup = new Group();
+    };
+    EditGroupComponent.prototype.saveGroup = function () {
+        var _this = this;
+        if (!this.selectedGroup.id) {
+            this.dataService.createGroup(this.selectedGroup)
+                .subscribe(function (data) {
+                _this.groups.push(data);
+            });
+        }
+        else {
+            this.dataService.updateGroup(this.selectedGroup)
+                .subscribe(function (data) { return _this.loadGroups(); });
+        }
+    };
+    EditGroupComponent.prototype.changeGroup = function () {
+        var _this = this;
+        this.cancel();
+        this.selectedGroup = this.groups.find(function (x) { return x.id == _this.selectedGroupId; });
+        this.isDisableSettings = false;
     };
     EditGroupComponent = __decorate([
         Component({

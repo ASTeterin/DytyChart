@@ -54,6 +54,7 @@ namespace dutyChart.Models
             dutyOnPlanning = new List<Worker>() { };
             replacementWorkers = new List<Worker>() { };
             WorkerInDay workerInDay = new WorkerInDay();
+            List<Group> groups = _db.Groups.ToList();
             foreach ( Worker w in workers )
             {
                 workerInDay = GetWorkerInDay(w.Id, date);
@@ -147,7 +148,7 @@ namespace dutyChart.Models
             listNumbers.Add( 0 );
             listNumbers.Add( 10 );
             listNumbers.Add( 11 );
-            countSlotsForWorker = 3;
+            countSlotsForWorker -= 3;
         }
 
         private void ReduceCountFreeSlotsInHour( ref int countFreeSlots, ref List<int> hoursInDay, int index )
@@ -169,6 +170,7 @@ namespace dutyChart.Models
             int countAttemps = 0;
             List<int> listNumbers = new List<int>();
             WorkerInDay workerInDay = GetWorkerInDay(worker.Id, date);
+            List<Group> groups = _db.Groups.ToList();
             if ( workerInDay.IsDuty )
             {
                 GenerateSlotsForDutyWorker( ref listNumbers, ref countSlotsForWorker );
@@ -176,7 +178,7 @@ namespace dutyChart.Models
             if ( workerInDay.IsDutyOnWedn )
             {
                 listNumbers.Add( 1 );
-                countSlotsForWorker = worker.GetNumberHoursForDuty() - 1;
+                countSlotsForWorker = worker.GetNumberHoursForDuty(groups) - 1;
             }
             for ( int i = 0; i < countSlotsForWorker; i++ )
             {
@@ -385,9 +387,9 @@ namespace dutyChart.Models
             var hours = new List<Hour>();
             var workers = new List<Worker>();
             var countFreeSlots = new List<int>();
-            int countHoursForDuty = 6;
-            int countHoursForExistingCustomerSupport = 5;
-            int countHoursForDefaultGroup = 1;
+            int countHoursForDuty = _db.Groups.FirstOrDefault(g => g.Name == "Сменники").NumberDutyHours;
+            int countHoursForExistingCustomerSupport = _db.Groups.FirstOrDefault(g => g.Name == "Группа поддержки").NumberDutyHours;
+            int countHoursForDefaultGroup = _db.Groups.FirstOrDefault(g => g.Name == "Группа поддержки VIP").NumberDutyHours; ;
             var dateUTC = date.ToUniversalTime();
 
             GetData( date, ref hours, ref workers, ref countFreeSlots );
