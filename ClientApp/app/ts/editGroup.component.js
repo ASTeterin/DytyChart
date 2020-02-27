@@ -31,7 +31,14 @@ var EditGroupComponent = /** @class */ (function () {
     EditGroupComponent.prototype.cancel = function () {
         this.selectedGroup = new Group();
     };
+    EditGroupComponent.prototype.isAllInfoEntered = function () {
+        return ((!this.selectedGroup.name) || (!this.selectedGroup.numberDutyHours)) ? false : true;
+    };
     EditGroupComponent.prototype.saveGroup = function () {
+        if (this.isAllInfoEntered())
+            this.saveChanges();
+    };
+    EditGroupComponent.prototype.saveChanges = function () {
         var _this = this;
         if (!this.selectedGroup.id) {
             this.dataService.createGroup(this.selectedGroup)
@@ -52,6 +59,11 @@ var EditGroupComponent = /** @class */ (function () {
     };
     EditGroupComponent.prototype.createNewGroup = function () {
         this.isDisableSettings = false;
+        this.cancel();
+    };
+    EditGroupComponent.prototype.deleteGroup = function () {
+        var _this = this;
+        this.dataService.deleteGroup(this.selectedGroup.id).subscribe(function (data) { return _this.loadGroups(); });
         this.cancel();
     };
     EditGroupComponent = __decorate([

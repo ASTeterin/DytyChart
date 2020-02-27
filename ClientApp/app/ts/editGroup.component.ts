@@ -34,7 +34,19 @@ export class EditGroupComponent implements OnInit {
         this.selectedGroup = new Group();
     }
 
+    isAllInfoEntered() {
+        return ((!this.selectedGroup.name) || (!this.selectedGroup.numberDutyHours)) ? false : true;
+    }
+
     saveGroup() {
+        if (this.isAllInfoEntered())
+            this.saveChanges()
+        else
+            alert('Заполните все поля');
+    }
+
+    saveChanges() {
+
         if (!this.selectedGroup.id) {
             this.dataService.createGroup(this.selectedGroup)
                 .subscribe((data: Group) => {

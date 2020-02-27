@@ -61,7 +61,16 @@ export class EditWorkerComponent implements OnInit {
         this.periods = [];
     }
 
+    isAllInfoEntered() {
+        return ((!this.currentWorker.color) || (!this.currentWorker.idGroup) || (!this.currentWorker.name)) ? false : true;
+
+    }
+
     saveWorker() {
+        if (!this.isAllInfoEntered()) {
+            alert("Заполните все поля");
+            return;
+        }
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
                 .subscribe((data: Worker) => {
