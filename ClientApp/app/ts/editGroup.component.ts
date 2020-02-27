@@ -52,4 +52,14 @@ export class EditGroupComponent implements OnInit {
         this.isDisableSettings = false;
     }
 
+    createNewGroup() {
+        this.isDisableSettings = false;
+        this.cancel();
+    }
+
+    deleteGroup() {
+        this.dataService.deleteGroup(this.selectedGroup.id).subscribe(data => this.loadGroups());
+        this.cancel();
+    }
+
 }

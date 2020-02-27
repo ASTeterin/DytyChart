@@ -50,6 +50,10 @@ var EditGroupComponent = /** @class */ (function () {
         this.selectedGroup = this.groups.find(function (x) { return x.id == _this.selectedGroupId; });
         this.isDisableSettings = false;
     };
+    EditGroupComponent.prototype.createNewGroup = function () {
+        this.isDisableSettings = false;
+        this.cancel();
+    };
     EditGroupComponent = __decorate([
         Component({
             templateUrl: '../html/editGroup.component.html',
