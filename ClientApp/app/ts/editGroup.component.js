@@ -37,6 +37,8 @@ var EditGroupComponent = /** @class */ (function () {
     EditGroupComponent.prototype.saveGroup = function () {
         if (this.isAllInfoEntered())
             this.saveChanges();
+        else
+            alert('Заполните все поля');
     };
     EditGroupComponent.prototype.saveChanges = function () {
         var _this = this;

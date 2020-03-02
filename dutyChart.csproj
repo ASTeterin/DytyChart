@@ -28,6 +28,8 @@
     <None Remove="ClientApp\app\ts\editGroup.component.ts" />
     <None Remove="ClientApp\app\ts\excel.service.ts" />
     <None Remove="ClientApp\app\ts\group.ts" />
+    <None Remove="ClientApp\app\ts\modalWindow.component.ts" />
+    <None Remove="ClientApp\app\ts\modalWindow.module.ts" />
     <None Remove="ClientApp\app\ts\nav.component.ts" />
     <None Remove="ClientApp\app\ts\slot.ts" />
     <None Remove="ClientApp\app\ts\slotToExport.ts" />

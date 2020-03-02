@@ -57,8 +57,15 @@ var EditWorkerComponent = /** @class */ (function () {
         this.currentWorker = new Worker();
         this.periods = [];
     };
+    EditWorkerComponent.prototype.isAllInfoEntered = function () {
+        return ((!this.currentWorker.color) || (!this.currentWorker.idGroup) || (!this.currentWorker.name)) ? false : true;
+    };
     EditWorkerComponent.prototype.saveWorker = function () {
         var _this = this;
+        if (!this.isAllInfoEntered()) {
+            alert("Заполните все поля");
+            return;
+        }
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
                 .subscribe(function (data) {

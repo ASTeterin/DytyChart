@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group col">
                         <label for="color">Цвет</label>
-                        <input class="form-control" [disabled]="this.isDisableSettings" id="color" [(ngModel)]="currentWorker.color" [style.background]="currentWorker.color" [(colorPicker)]="currentWorker.color" (colorPickerChange)="onColorPickerSelected($event)" required/>
+                        <input class="form-control" [disabled]="this.isDisableSettings" id="color" [(ngModel)]="currentWorker.color" [style.background]="currentWorker.color" [(colorPicker)]="currentWorker.color" (colorPickerChange)="onColorPickerSelected($event)" required />
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                                 <input type="button" class="del_period_btn" (click)="deleteAbsencePeriod(period)" />
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </ng-container>
 
@@ -86,6 +86,7 @@
                 <button class="btn btn-success first_btn_in_line" (click)="saveWorker()" [disabled]="this.isDisableSettings">Сохранить</button>
                 <button class="btn btn-danger" (click)="deleteWorker(this.currentWorker.id)" [disabled]="this.isDisableSettings">Удалить</button>
             </div>
+            <ngbd-modal-stacked></ngbd-modal-stacked>
         </div>
     </div>
 

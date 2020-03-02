@@ -25,6 +25,7 @@ import { NgbdDatepickerRangePopup } from './rangeSelectionDatepicker';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NgbdModalStackedModule } from './modalWindow.module';
 var appRoutes = [
     { path: '', component: GenerateChartComponent },
     { path: 'editUser', component: EditWorkerComponent },
@@ -36,7 +37,7 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = __decorate([
         NgModule({
-            imports: [BrowserModule, BrowserAnimationsModule, FormsModule, HttpClientModule, NgbModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes), MDBBootstrapModule.forRoot(), ColorPickerModule, NgxSpinnerModule],
+            imports: [BrowserModule, BrowserAnimationsModule, FormsModule, HttpClientModule, NgbModule, NgbdModalStackedModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes), MDBBootstrapModule.forRoot(), ColorPickerModule, NgxSpinnerModule],
             declarations: [AppComponent, NgbdDatepicker, ChartComponent, NgMultiselect, GenerateChartComponent, EditWorkerComponent, EditGroupComponent, NgbdDatepickerRangePopup, NavComponent],
             bootstrap: [AppComponent]
         })
