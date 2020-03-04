@@ -11,10 +11,13 @@ import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './worker';
 import { AbsentPeriod } from './absentPeriod';
+//import { NgbdModalStacked } from './modalWindow.component'
 import * as moment from 'moment';
+import { NgbdModalStacked } from './modalWindow.component';
 var EditWorkerComponent = /** @class */ (function () {
-    function EditWorkerComponent(dataService) {
+    function EditWorkerComponent(dataService, modal) {
         this.dataService = dataService;
+        this.modal = modal;
         this.currentWorker = new Worker();
         this.isDisableSettings = true;
         this.periods = [];
@@ -63,7 +66,8 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent.prototype.saveWorker = function () {
         var _this = this;
         if (!this.isAllInfoEntered()) {
-            alert("Заполните все поля");
+            this.modal.open(true);
+            //alert("Заполните все поля");
             return;
         }
         if (!this.currentWorker.id) {
@@ -155,9 +159,9 @@ var EditWorkerComponent = /** @class */ (function () {
         Component({
             templateUrl: '../html/editWorker.component.html',
             styleUrls: ['../css/editWorker.css'],
-            providers: [DataService]
+            providers: [DataService, NgbdModalStacked]
         }),
-        __metadata("design:paramtypes", [DataService])
+        __metadata("design:paramtypes", [DataService, NgbdModalStacked])
     ], EditWorkerComponent);
     return EditWorkerComponent;
 }());

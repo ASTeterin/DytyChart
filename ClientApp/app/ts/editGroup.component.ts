@@ -1,13 +1,14 @@
 ﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from './data.service';
 import { Group } from './group';
+import { NgbdModalStacked } from './modalWindow.component';
 
 
 
 @Component({
     templateUrl: '../html/editGroup.component.html',
     styleUrls: ['../css/editWorker.css'],
-    providers: [DataService]
+    providers: [DataService, NgbdModalStacked]
 })
 export class EditGroupComponent implements OnInit {
 
@@ -16,7 +17,7 @@ export class EditGroupComponent implements OnInit {
     selectedGroupId: number;
     isDisableSettings: boolean = true;
 
-    constructor(private dataService: DataService) { }
+    constructor(private dataService: DataService, private modal: NgbdModalStacked) { }
 
     ngOnInit() {
         this.loadGroups();
@@ -39,10 +40,14 @@ export class EditGroupComponent implements OnInit {
     }
 
     saveGroup() {
-        if (this.isAllInfoEntered())
-            this.saveChanges()
-        else
-            alert('Заполните все поля');
+        var isErrorWhenSaving: boolean = false;
+        if (this.isAllInfoEntered()) {
+            this.saveChanges();
+        }
+        else {
+            isErrorWhenSaving = true;
+        }
+        this.modal.open(isErrorWhenSaving);  
     }
 
     saveChanges() {

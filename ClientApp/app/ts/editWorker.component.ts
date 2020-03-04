@@ -4,12 +4,14 @@ import { Worker } from './worker';
 import { Group } from './group';
 import { AbsentPeriod } from './absentPeriod';
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+//import { NgbdModalStacked } from './modalWindow.component'
 import * as moment from 'moment';
+import { NgbdModalStacked } from './modalWindow.component';
 
 @Component({
     templateUrl: '../html/editWorker.component.html',
     styleUrls: ['../css/editWorker.css'],
-    providers: [DataService]
+    providers: [DataService, NgbdModalStacked]
 })
 export class EditWorkerComponent implements OnInit {
 
@@ -26,7 +28,7 @@ export class EditWorkerComponent implements OnInit {
     fromDate: NgbDate;
     public model: any;
 
-    constructor(private dataService: DataService) { }
+    constructor(private dataService: DataService, private modal: NgbdModalStacked) { }
 
     createArray(countElement: number): number[] {
         var arr: number[] = [];
@@ -67,10 +69,13 @@ export class EditWorkerComponent implements OnInit {
     }
 
     saveWorker() {
+        var isErrorWhenSaving: boolean = true;
         if (!this.isAllInfoEntered()) {
-            alert("Заполните все поля");
+            this.modal.open(isErrorWhenSaving);
+            //alert("Заполните все поля");
             return;
         }
+        isErrorWhenSaving = false;
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
                 .subscribe((data: Worker) => {
@@ -84,6 +89,8 @@ export class EditWorkerComponent implements OnInit {
             this.saveAbsentPeriod();
             this.loadAbsentPeriods(this.currentWorker);
         }
+        this.modal.open(isErrorWhenSaving);
+
         //this.cancel();
         //this.periods = [];
     }

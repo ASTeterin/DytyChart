@@ -1,17 +1,16 @@
-﻿import { Component } from '@angular/core';
+﻿import { Input, Component } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     template: `
     <div class="modal-header">
-      <h4 class="modal-title">Hi there!</h4>
+      <h4 class="modal-title">Внимание</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>Hello, World!</p>
-      <p><button class="btn btn-lg btn-outline-primary" (click)="open()">Launch demo modal</button></p>
+      <p>Заполните все обязательные поля</p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
@@ -19,6 +18,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   `
 })
 export class NgbdModal1Content {
+    
     constructor(private modalService: NgbModal, public activeModal: NgbActiveModal) { }
 
     open() {
@@ -31,13 +31,13 @@ export class NgbdModal1Content {
 @Component({
     template: `
     <div class="modal-header">
-      <h4 class="modal-title">Hi there!</h4>
+      <h4 class="modal-title">Внимание</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>Hello, World!</p>
+      <p>Данные сохранены</p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
@@ -50,13 +50,21 @@ export class NgbdModal2Content {
 
 @Component({
     selector: 'ngbd-modal-stacked',
-    template: `<button class="btn btn-lg btn-outline-primary" (click)="open()">Launch demo modal</button>`,
+    template: ``,
     //templateUrl: './modal-stacked.html'
 })
 export class NgbdModalStacked {
     constructor(private modalService: NgbModal) { }
+    @Input() message: string;
+    @Input() message_type: boolean;
 
-    open() {
-        this.modalService.open(NgbdModal1Content);
+    open(is_error: boolean) {
+        console.log(is_error);
+        if (is_error) {
+            this.modalService.open(NgbdModal1Content);
+        } else {
+            this.modalService.open(NgbdModal2Content);
+        }
+        
     }
 }
