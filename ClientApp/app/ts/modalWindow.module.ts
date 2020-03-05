@@ -3,16 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
-    NgbdModal1Content,
-    NgbdModal2Content,
+    NgbdModalSuccess,
+    NgbdModalError,
     NgbdModalStacked
 } from './modalWindow.component';
 
 @NgModule({
     imports: [BrowserModule, NgbModule],
-    declarations: [NgbdModalStacked, NgbdModal1Content, NgbdModal2Content],
+    declarations: [NgbdModalStacked, NgbdModalSuccess, NgbdModalError],
     exports: [NgbdModalStacked],
     bootstrap: [NgbdModalStacked],
-    entryComponents: [NgbdModal1Content, NgbdModal2Content]
+    entryComponents: [NgbdModalSuccess, NgbdModalError]
 })
 export class NgbdModalStackedModule { }

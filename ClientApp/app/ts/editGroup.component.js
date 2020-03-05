@@ -10,9 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Group } from './group';
+import { NgbdModalStacked } from './modalWindow.component';
 var EditGroupComponent = /** @class */ (function () {
-    function EditGroupComponent(dataService) {
+    function EditGroupComponent(dataService, modal) {
         this.dataService = dataService;
+        this.modal = modal;
         this.groups = [];
         this.selectedGroup = new Group();
         this.isDisableSettings = true;
@@ -35,10 +37,14 @@ var EditGroupComponent = /** @class */ (function () {
         return ((!this.selectedGroup.name) || (!this.selectedGroup.numberDutyHours)) ? false : true;
     };
     EditGroupComponent.prototype.saveGroup = function () {
-        if (this.isAllInfoEntered())
+        var isErrorWhenSaving = false;
+        if (this.isAllInfoEntered()) {
             this.saveChanges();
-        else
-            alert('Заполните все поля');
+        }
+        else {
+            isErrorWhenSaving = true;
+        }
+        this.modal.open(isErrorWhenSaving);
     };
     EditGroupComponent.prototype.saveChanges = function () {
         var _this = this;
@@ -72,9 +78,9 @@ var EditGroupComponent = /** @class */ (function () {
         Component({
             templateUrl: '../html/editGroup.component.html',
             styleUrls: ['../css/editWorker.css'],
-            providers: [DataService]
+            providers: [DataService, NgbdModalStacked]
         }),
-        __metadata("design:paramtypes", [DataService])
+        __metadata("design:paramtypes", [DataService, NgbdModalStacked])
     ], EditGroupComponent);
     return EditGroupComponent;
 }());

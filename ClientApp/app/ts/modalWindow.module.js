@@ -7,17 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModal1Content, NgbdModal2Content, NgbdModalStacked } from './modalWindow.component';
+import { NgbdModalSuccess, NgbdModalError, NgbdModalStacked } from './modalWindow.component';
 var NgbdModalStackedModule = /** @class */ (function () {
     function NgbdModalStackedModule() {
     }
     NgbdModalStackedModule = __decorate([
         NgModule({
             imports: [BrowserModule, NgbModule],
-            declarations: [NgbdModalStacked, NgbdModal1Content, NgbdModal2Content],
+            declarations: [NgbdModalStacked, NgbdModalSuccess, NgbdModalError],
             exports: [NgbdModalStacked],
             bootstrap: [NgbdModalStacked],
-            entryComponents: [NgbdModal1Content, NgbdModal2Content]
+            entryComponents: [NgbdModalSuccess, NgbdModalError]
         })
     ], NgbdModalStackedModule);
     return NgbdModalStackedModule;

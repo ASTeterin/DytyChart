@@ -17,12 +17,12 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     </div>
   `
 })
-export class NgbdModal1Content {
+export class NgbdModalError {
     
     constructor(private modalService: NgbModal, public activeModal: NgbActiveModal) { }
 
     open() {
-        this.modalService.open(NgbdModal2Content, {
+        this.modalService.open(NgbdModalSuccess, {
             size: 'lg'
         });
     }
@@ -37,14 +37,14 @@ export class NgbdModal1Content {
       </button>
     </div>
     <div class="modal-body">
-      <p>Данные сохранены</p>
+      <p>Данные успешно сохранены</p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
     </div>
   `
 })
-export class NgbdModal2Content {
+export class NgbdModalSuccess {
     constructor(public activeModal: NgbActiveModal) { }
 }
 
@@ -61,9 +61,9 @@ export class NgbdModalStacked {
     open(is_error: boolean) {
         console.log(is_error);
         if (is_error) {
-            this.modalService.open(NgbdModal1Content);
+            this.modalService.open(NgbdModalError);
         } else {
-            this.modalService.open(NgbdModal2Content);
+            this.modalService.open(NgbdModalSuccess);
         }
         
     }

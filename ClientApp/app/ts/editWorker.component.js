@@ -65,11 +65,13 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.saveWorker = function () {
         var _this = this;
+        var isErrorWhenSaving = true;
         if (!this.isAllInfoEntered()) {
-            this.modal.open(true);
+            this.modal.open(isErrorWhenSaving);
             //alert("Заполните все поля");
             return;
         }
+        isErrorWhenSaving = false;
         if (!this.currentWorker.id) {
             this.dataService.createWorker(this.currentWorker)
                 .subscribe(function (data) {
@@ -84,6 +86,7 @@ var EditWorkerComponent = /** @class */ (function () {
             this.saveAbsentPeriod();
             this.loadAbsentPeriods(this.currentWorker);
         }
+        this.modal.open(isErrorWhenSaving);
         //this.cancel();
         //this.periods = [];
     };
