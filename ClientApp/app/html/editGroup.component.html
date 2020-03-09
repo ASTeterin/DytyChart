@@ -30,6 +30,11 @@
             </div>
 
             <div class="form-group">
+                <label>Приоритет</label>
+                <input class="form-control" [(ngModel)]="selectedGroup.priority" [disabled]="this.isDisableSettings" required />
+            </div>
+
+            <div class="form-group">
                 <button class="btn btn-success first_btn_in_line" (click)="saveGroup()" [disabled]="this.isDisableSettings">Сохранить</button>
                 <button class="btn btn-danger" (click)="deleteGroup()" [disabled]="this.isDisableSettings">Удалить</button>
             </div>
