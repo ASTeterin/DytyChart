@@ -38,6 +38,36 @@ namespace dutyChart.Models
         {
             return _db.WorkerInDays.FirstOrDefault(x => ((x.Date == date) && (x.WorkerId == workerId)));
         }
+        private List<List<Worker>> GetGroups(List<Worker> workers, DateTime date)
+        {
+            List<List<Worker>> workersInGroupByPriority = new List<List<Worker>> { };
+            WorkerInDay workerInDay = new WorkerInDay();
+            List<Worker> dutyGroup = new List<Worker> { };
+            List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
+            foreach (Group g in groups)
+            {
+                workersInGroupByPriority.Add(new List<Worker>());
+            }
+            foreach (Worker w in workers)
+            {
+                workerInDay = GetWorkerInDay(w.Id, date);
+                if (workerInDay == null)
+                    continue;
+
+                //СanDuty(w, date);
+                if (workerInDay.IsDuty)
+                {
+                    dutyGroup.Add(w);
+                    continue;
+                }
+                var groupIndex = groups.FindIndex(g => g.Id == w.IdGroup);
+                //workersInGroupByPriority[1].Add(w);
+                workersInGroupByPriority[groupIndex].Add(w);
+                
+            }
+            workersInGroupByPriority.Insert(0, dutyGroup);
+            return workersInGroupByPriority;
+        }
         private void GetWorkersGroups( List<Worker> workers,
             out List<Worker> dutyWorkers,
             out List<Worker> existingCustomerSupport,
@@ -54,7 +84,7 @@ namespace dutyChart.Models
             dutyOnPlanning = new List<Worker>() { };
             replacementWorkers = new List<Worker>() { };
             WorkerInDay workerInDay = new WorkerInDay();
-            List<Group> groups = _db.Groups.ToList();
+            List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();//_db.Groups.ToList();
             foreach ( Worker w in workers )
             {
                 workerInDay = GetWorkerInDay(w.Id, date);
@@ -395,12 +425,26 @@ namespace dutyChart.Models
             GetData( date, ref hours, ref workers, ref countFreeSlots );
             ChekingExistenceOfSlots( hours );
 
+            List<List<Worker>> workersInGroupByPriority = new List<List<Worker>> { };
+            List<Worker> notBusyWorkers = new List<Worker>();
+            List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
+            var dutyGroup = new Group();
+            dutyGroup.NumberDutyHours = 6;
+            groups.Insert(0, dutyGroup);
+            workersInGroupByPriority = GetGroups(workers, date);
+            var i = 0;
+            foreach (List<Worker> group in workersInGroupByPriority)
+            {
+                FillSlotsForGroup(group, groups[i++].NumberDutyHours, ref hours, ref countFreeSlots, ref notBusyWorkers, date);
+            }
+
+            /*
             List<Worker> existingCustomerSupport = new List<Worker>();
             List<Worker> newCustomerSupport = new List<Worker>();
             List<Worker> vipCustomerSupport = new List<Worker>();
             List<Worker> notDutyWorkers = new List<Worker>();
             List<Worker> dutyWorkers = new List<Worker>();
-            List<Worker> notBusyWorkers = new List<Worker>();
+            
             List<Worker> dutyOnPlanning = new List<Worker>();
             List<Worker> replacementWorkers = new List<Worker>();
 
@@ -411,7 +455,7 @@ namespace dutyChart.Models
             FillSlotsForGroup( existingCustomerSupport, countHoursForExistingCustomerSupport, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
             FillSlotsForGroup( newCustomerSupport, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
             FillSlotsForGroup( vipCustomerSupport, countHoursForDefaultGroup, ref hours, ref countFreeSlots, ref notBusyWorkers, date );
-
+            */
             slots = GetSlotsDto( hours );
             return slots;
         }
