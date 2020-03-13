@@ -38,12 +38,32 @@ namespace dutyChart.Models
         {
             return _db.WorkerInDays.FirstOrDefault(x => ((x.Date == date) && (x.WorkerId == workerId)));
         }
+
+        private int GetDutyWorkerGroupId(List<Worker> workers, DateTime date)
+        {
+            var id = 0;
+            foreach (Worker w in workers)
+            {
+                WorkerInDay workerInDay = GetWorkerInDay(w.Id, date);
+                if (workerInDay.IsDuty) 
+                {
+                    id = w.IdGroup;
+                    break;
+                }
+            }
+            return id;
+        }
+
         private List<List<Worker>> GetGroups(List<Worker> workers, DateTime date)
         {
             List<List<Worker>> workersInGroupByPriority = new List<List<Worker>> { };
             WorkerInDay workerInDay = new WorkerInDay();
+            var idDutyWorkerGroup = GetDutyWorkerGroupId(workers, date);
             List<Worker> dutyGroup = new List<Worker> { };
+            List<Worker> dutyOnLettersGroup = new List<Worker> { };
+            List<Worker> dutyOnPlanningGroup = new List<Worker> { };
             List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
+
             foreach (Group g in groups)
             {
                 workersInGroupByPriority.Add(new List<Worker>());
@@ -54,18 +74,34 @@ namespace dutyChart.Models
                 if (workerInDay == null)
                     continue;
 
-                //СanDuty(w, date);
                 if (workerInDay.IsDuty)
                 {
                     dutyGroup.Add(w);
+                    idDutyWorkerGroup = w.IdGroup;
+                    continue;
+                }
+                if (workerInDay.IsDutyOnLetters)
+                {
+                    dutyOnLettersGroup.Add(w);
+                    continue;
+                }
+                if (workerInDay.IsDutyOnWedn)
+                {
+                    dutyOnPlanningGroup.Add(w);
+                    continue;
+                }
+                if ((workerInDay.IsDutyOnLetters) || (!СanDuty(w, date)) || (w.IdGroup == idDutyWorkerGroup))
+                {
+                    //notDutyWorkers.Add(w);
                     continue;
                 }
                 var groupIndex = groups.FindIndex(g => g.Id == w.IdGroup);
-                //workersInGroupByPriority[1].Add(w);
                 workersInGroupByPriority[groupIndex].Add(w);
                 
             }
+            workersInGroupByPriority.Insert(0, dutyOnPlanningGroup);
             workersInGroupByPriority.Insert(0, dutyGroup);
+            //workersInGroupByPriority.Add();
             return workersInGroupByPriority;
         }
         private void GetWorkersGroups( List<Worker> workers,
@@ -192,7 +228,7 @@ namespace dutyChart.Models
 
         private List<int> GetSlotNumbersForWorker( ref List<int> hoursInDay, int countSlotsForWorker, Worker worker, DateTime date )
         {
-            int maxCountAttempts = 50;
+            int maxCountAttempts = 100;
             int number, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
             countFreeSlots = GetSumm( hoursInDay );
@@ -311,9 +347,6 @@ namespace dutyChart.Models
                 List<Slot> slotsInHour = new List<Slot> { };
                 for ( var i = 0; i < h.MinCount; i++ )
                 {
-                    /*var slot = new Slot();
-                    slot.Index = slotIndex++;
-                    slot.HourId = h.Id;*/
                     slotsInHour.Add( GetNewSlot( slotIndex++, h.Id ) );
                 }
                 _db.Slots.AddRange( slotsInHour );
@@ -428,6 +461,11 @@ namespace dutyChart.Models
             List<List<Worker>> workersInGroupByPriority = new List<List<Worker>> { };
             List<Worker> notBusyWorkers = new List<Worker>();
             List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
+
+            var dutyOnLettersGroup = new Group();
+            dutyOnLettersGroup.NumberDutyHours = 5;
+            groups.Insert(0, dutyOnLettersGroup);
+
             var dutyGroup = new Group();
             dutyGroup.NumberDutyHours = 6;
             groups.Insert(0, dutyGroup);
