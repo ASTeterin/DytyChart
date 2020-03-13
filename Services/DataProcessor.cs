@@ -228,7 +228,7 @@ namespace dutyChart.Models
 
         private List<int> GetSlotNumbersForWorker( ref List<int> hoursInDay, int countSlotsForWorker, Worker worker, DateTime date )
         {
-            int maxCountAttempts = 100;
+            int maxCountAttempts = 5000;
             int number, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
             countFreeSlots = GetSumm( hoursInDay );

@@ -24,8 +24,10 @@ namespace dutyChart.Controllers
 
         private int getFreeSlots( int groupId, int countUsedSlots )
         {
-            var countFreeSlots = 0;
-            switch ( groupId )
+            //var countFreeSlots = 0;
+            var group = db.Groups.FirstOrDefault(g => g.Id == groupId);
+            var countFreeSlots = group.NumberDutyHours - countUsedSlots;
+            /*switch ( groupId )
             {
                 case 1:
                     countFreeSlots = 1 - countUsedSlots;
@@ -36,7 +38,7 @@ namespace dutyChart.Controllers
                 case 3:
                     countFreeSlots = 5 - countUsedSlots;
                     break;
-            }
+            }*/
             return countFreeSlots;
         }
 
@@ -60,6 +62,21 @@ namespace dutyChart.Controllers
             return workersId;
         }
 
+        private int GetDutyWorkerGroupId(List<Worker> workers, DateTime date)
+        {
+            int id = 0;
+            foreach (Worker w in workers)
+            {
+                var workerInDay = db.WorkerInDays.FirstOrDefault(wInDay => wInDay.WorkerId == w.Id && wInDay.Date == date);
+                if (workerInDay.IsDuty) 
+                {
+                    id = w.IdGroup;
+                    break;
+                }
+            }
+            return id;
+        }
+
         [HttpGet, Route( "get-worker-free-slots" )]
         public IEnumerable<WorkerDto> GetWorkerDtoInDay( DateTime date )
         {
@@ -74,11 +91,18 @@ namespace dutyChart.Controllers
                 .ToList();
             var workersId = getWorkersIdInDay( countUsedSlots );
             var absentWorkers = GetAbsentWorkers( date );
+            var dutyWorkerGroupId = GetDutyWorkerGroupId(workers, date);
+
 
             foreach ( var w in workers )
             {
-                if ( absentWorkers.Contains( w ) )
+                var workerInDay = db.WorkerInDays.FirstOrDefault(wInDay => wInDay.WorkerId == w.Id && wInDay.Date == date);
+                if ((absentWorkers.Contains( w )) || (w.IdGroup == dutyWorkerGroupId) || (workerInDay.IsDutyOnLetters))
+                {
                     continue;
+                }
+                    
+                //if (db.WorkerInDays.Where(wID => wID.IsDutyOnLetters))
                 foreach ( var us in countUsedSlots )
                 {
                     if ( workersId.Contains( w.Id ) && ( us.Key != w.Id ) )
