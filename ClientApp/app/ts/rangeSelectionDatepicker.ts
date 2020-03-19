@@ -45,7 +45,7 @@ export class NgbdDatepickerRangePopup {
 
     constructor(private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) {
         this.fromDate = calendar.getToday();
-        this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+        this.toDate = calendar.getNext(calendar.getToday(), 'd', 1);
     }
 
     onDateSelection(date: NgbDate) {

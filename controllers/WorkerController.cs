@@ -68,7 +68,7 @@ namespace dutyChart.Controllers
             foreach (Worker w in workers)
             {
                 var workerInDay = db.WorkerInDays.FirstOrDefault(wInDay => wInDay.WorkerId == w.Id && wInDay.Date == date);
-                if (workerInDay.IsDuty) 
+                if ((workerInDay != null) && (workerInDay.IsDuty)) 
                 {
                     id = w.IdGroup;
                     break;
@@ -97,7 +97,7 @@ namespace dutyChart.Controllers
             foreach ( var w in workers )
             {
                 var workerInDay = db.WorkerInDays.FirstOrDefault(wInDay => wInDay.WorkerId == w.Id && wInDay.Date == date);
-                if ((absentWorkers.Contains( w )) || (w.IdGroup == dutyWorkerGroupId) || (workerInDay.IsDutyOnLetters))
+                if ((workerInDay == null) || (absentWorkers.Contains( w )) || (w.IdGroup == dutyWorkerGroupId) || (workerInDay.IsDutyOnLetters))
                 {
                     continue;
                 }
