@@ -41,7 +41,7 @@ public class Worker
     public static Expression<Func<Worker, string>> UnwantedSlotsJsonProperty => (of => of._unwantedSlotsJson);
     public static Expression<Func<Worker, string>> DesirableSlotsJsonProperty => (of => of._desirableSlotsJson);
 
-    public int GetNumberHoursForDuty(List<Group> groups)
+    /*public int GetNumberHoursForDuty(List<Group> groups)
     {
         
         if (this.IsDuty) return groups.FirstOrDefault(x => x.Name == "Сменники").NumberDutyHours;
@@ -49,5 +49,5 @@ public class Worker
         if (this.IdGroup == 2) return groups.FirstOrDefault(x => x.Name == "Группа запуска").NumberDutyHours;
         if (this.IdGroup == 1) return groups.FirstOrDefault(x => x.Name == "Группа поддержки VIP").NumberDutyHours;
         return 1;
-    }
+    }*/
 }

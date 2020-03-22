@@ -104,66 +104,6 @@ namespace dutyChart.Models
             //workersInGroupByPriority.Add();
             return workersInGroupByPriority;
         }
-        private void GetWorkersGroups( List<Worker> workers,
-            out List<Worker> dutyWorkers,
-            out List<Worker> existingCustomerSupport,
-            out List<Worker> newCustomerSupport,
-            out List<Worker> vipCustomerSupport,
-            out List<Worker> dutyOnPlanning,
-            out List<Worker> replacementWorkers,
-            DateTime date )
-        {
-            existingCustomerSupport = new List<Worker>() { };
-            newCustomerSupport = new List<Worker>() { };
-            vipCustomerSupport = new List<Worker>() { };
-            dutyWorkers = new List<Worker>() { };
-            dutyOnPlanning = new List<Worker>() { };
-            replacementWorkers = new List<Worker>() { };
-            WorkerInDay workerInDay = new WorkerInDay();
-            List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();//_db.Groups.ToList();
-            foreach ( Worker w in workers )
-            {
-                workerInDay = GetWorkerInDay(w.Id, date);
-                if (workerInDay == null)
-                    continue;
-
-                СanDuty( w, date );
-                if ( workerInDay.IsDuty )
-                {
-                    dutyWorkers.Add( w );
-                    continue;
-                }
-                if (/*(IsPlanningDay(date)) && */workerInDay.IsDutyOnWedn )
-                {
-                    dutyOnPlanning.Add( w );
-                    continue;
-                }
-                if ( ( workerInDay.IsDutyOnLetters ) || ( !СanDuty( w, date ) ) )
-                {
-                    //notDutyWorkers.Add(w);
-                    continue;
-                }
-                switch ( w.IdGroup )
-                {
-                    case 1:
-                        vipCustomerSupport.Add(w);
-                        break;
-                    case 2:
-                        newCustomerSupport.Add(w);
-                        break;
-                    case 3:
-                        existingCustomerSupport.Add(w);
-                        break;
-                    case 4:
-                        replacementWorkers.Add(w);
-                        break;
-
-                }
-            }
-            existingCustomerSupport = GetRandomPermutation<Worker>( data: existingCustomerSupport );
-            newCustomerSupport = GetRandomPermutation<Worker>( data: newCustomerSupport );
-            vipCustomerSupport = GetRandomPermutation<Worker>( data: vipCustomerSupport );
-        }
 
         private List<int> GetArrayOfZeroesAndOnes( int countHours, List<int> numbersOfHours )
         {
@@ -247,8 +187,9 @@ namespace dutyChart.Models
             if ( workerInDay.IsDutyOnWedn )
             {
                 listNumbers.Add( 1 );
-                //countSlotsForWorker -=   корректно вычислять 
-                countSlotsForWorker = worker.GetNumberHoursForDuty(groups) - 1;
+                ReduceCountFreeSlotsInHour(ref countFreeSlots, ref hoursInDay, 1);
+                countSlotsForWorker = _db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours - 1;
+                //countSlotsForWorker = worker.GetNumberHoursForDuty(groups) - 1;
             }
             for ( int i = 0; i < countSlotsForWorker; i++ )
             {
@@ -266,11 +207,8 @@ namespace dutyChart.Models
 
                 if ((countFreeSlots == 0) || (countAttemps == maxCountAttempts) )
                     break;
-                //if (!listNumbers.Contains(number))
-                //{
-                    listNumbers.Add(number);
-                //}
-                
+
+                listNumbers.Add(number);
                 //проверка на подряд идущие часы
                 List<int> arrOfZeroesAndOnes = GetArrayOfZeroesAndOnes( countHoursInDay, listNumbers );
                 if (IsTwoHoursConsistently(arrOfZeroesAndOnes))
