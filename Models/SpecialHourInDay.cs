@@ -11,7 +11,6 @@ namespace dutyChart.Models
         public bool Type { get; set; }
         public int? WorkerId { get; set; }
         public int HourNumber { get; set; }
-
         public DateTime Date { get; set; }
     }
 }

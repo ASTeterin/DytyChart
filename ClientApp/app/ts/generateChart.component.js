@@ -13,6 +13,7 @@ import { Worker } from './Worker';
 import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
+import { SpecialHourInDay } from './specialHourInDay';
 import { NgxSpinnerService } from "ngx-spinner";
 import * as moment from 'moment';
 import { ExcelService } from './excel.service';
@@ -60,6 +61,8 @@ var GenerateChartComponent = /** @class */ (function () {
         this.workerNameToExport = [];
         this.workerColorToExport = [];
         this.workersInfoToExport = [];
+        this.specialHourInDay = new SpecialHourInDay();
+        this.specialHoursInDay = [];
     }
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
         var _this = this;
@@ -328,7 +331,14 @@ var GenerateChartComponent = /** @class */ (function () {
     //    //console.log(s);
     //}
     GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedItems) {
-        console.log(selectedItems);
+        var _this = this;
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = true;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedItems;
+        this.dataService.createSpecialHourInDay(this.specialHourInDay)
+            .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
+        console.log(this.specialHourInDay);
     };
     GenerateChartComponent.prototype.addDesirableSlots = function (slotId) {
         this.worker.desirableSlots.push(slotId);

@@ -7,6 +7,7 @@ import { Slot } from './slot';
 import { Group } from './group';
 import { AbsentPeriod } from './absentPeriod';
 import * as moment from 'moment';
+import { SpecialHourInDay } from './specialHourInDay';
 
 @Injectable()
 export class DataService {
@@ -21,6 +22,7 @@ export class DataService {
     public urlAbsentWorker = "/api/Workers/get-absent-workers";
     public urlWorkerInDay = "/api/WorkerInDay";
     public urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
+    public urlSpecialHourInDay = "/api/SpecialHourInDay";
 
     constructor(private http: HttpClient) {
     }
@@ -146,6 +148,10 @@ export class DataService {
 
     deleteWorkerInDay(id: number) {
         return this.http.delete(this.urlWorkerInDay + '/' + id);
+    }
+
+    createSpecialHourInDay(specialHourInDay: SpecialHourInDay) {
+        return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
     }
 
 

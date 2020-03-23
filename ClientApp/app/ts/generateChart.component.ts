@@ -6,6 +6,7 @@ import { WorkerInDay } from './WorkerInDay';
 import { Hour } from './hour';
 import { Slot } from './slot';
 import { Group } from './group';
+import { SpecialHourInDay } from './specialHourInDay';
 import { ChartData } from './chartData';
 import { WorkersFreeSlots } from './countFreeSlotsForWorker';
 import { NgbdTabset } from './tabset.component';
@@ -81,6 +82,8 @@ export class GenerateChartComponent implements OnInit {
     workerNameToExport: string[][] = [];
     workerColorToExport: string[][] = [];
     workersInfoToExport: string[][] = [];
+    specialHourInDay: SpecialHourInDay = new SpecialHourInDay();
+    specialHoursInDay: SpecialHourInDay[] = [];
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
@@ -373,7 +376,13 @@ export class GenerateChartComponent implements OnInit {
     //}
 
     updateUnwantedSlots(selectedItems: any) {
-        console.log(selectedItems);
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = true;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedItems;
+        this.dataService.createSpecialHourInDay(this.specialHourInDay)
+            .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
+        console.log(this.specialHourInDay);
     }
 
     addDesirableSlots(slotId: number) {

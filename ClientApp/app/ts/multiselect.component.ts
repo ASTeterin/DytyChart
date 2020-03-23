@@ -48,10 +48,10 @@ export class NgMultiselect {
     }
 
     onItemSelect(item: any): void {
-        this.selectedItems.push(item.item_id);
-        this.selectedIds.push(item.item_id);
+        //this.selectedItems.push(item.item_id);
+        //this.selectedIds.push(item.item_id);
         //this.timeChange.emit(this.selectedItems);
-        this.onChanged.emit(this.selectedIds);
+        this.onChanged.emit(item.item_id);
         //console.log(this.selectedItems);
 
     }
