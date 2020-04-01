@@ -18,11 +18,16 @@ namespace dutyChart.controllers
             db = context;
 
         }
+
+
         [HttpGet]
-        public IEnumerable<SpecialHourInDay> Get()
+
+        public IEnumerable<SpecialHourInDay> GetSpecialHourInDay(DateTime date, Boolean type, int workerId)
         {
-            return db.SpecialHoursInDay.ToList();
+            var specialHourInDay = db.SpecialHoursInDay.Where(x => x.Date == date && x.Type == type && x.WorkerId == workerId).ToList();
+            return specialHourInDay;
         }
+
         [HttpPost]
         public IActionResult Post([FromBody]SpecialHourInDay specialHourInDay)
         {

@@ -154,6 +154,8 @@ export class DataService {
         return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
     }
 
-
+    getSpecialHourInDay(date: moment.Moment, type: boolean, workerId: number) {
+        return this.http.get(`${this.urlSpecialHourInDay}?date=${date.format('YYYY-MM-DD')}&type=${type}&workerId=${workerId}`);
+    }
 
 }

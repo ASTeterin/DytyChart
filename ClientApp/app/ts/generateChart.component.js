@@ -63,6 +63,25 @@ var GenerateChartComponent = /** @class */ (function () {
         this.workersInfoToExport = [];
         this.specialHourInDay = new SpecialHourInDay();
         this.specialHoursInDay = [];
+        this.unwantedSlots = [];
+        this.desirableSlots = [];
+        this.selectedDesirableSlots = [];
+        this.dropdownList = [
+            { item_id: 0, item_text: '08:00' },
+            { item_id: 1, item_text: '09:00' },
+            { item_id: 2, item_text: '10:00' },
+            { item_id: 3, item_text: '11:00' },
+            { item_id: 4, item_text: '12:00' },
+            { item_id: 5, item_text: '13:00' },
+            { item_id: 6, item_text: '14:00' },
+            { item_id: 7, item_text: '15:00' },
+            { item_id: 8, item_text: '16:00' },
+            { item_id: 9, item_text: '17:00' },
+            { item_id: 10, item_text: '18:00' },
+            { item_id: 11, item_text: '19:00' }
+        ];
+        this.selectedHoursTest = [{ item_id: 3, item_text: '11:00' },
+            { item_id: 4, item_text: '12:00' }];
     }
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
         var _this = this;
@@ -301,6 +320,7 @@ var GenerateChartComponent = /** @class */ (function () {
             this.worker = this.workers.find(function (x) { return x.id == _this.selectedWorkerId; });
         }
         this.workerInDay = this.workersInDay.find(function (w) { return w.workerId == _this.selectedWorkerId; });
+        this.loadSpecialHourInDay(this.selectedDate, this.worker);
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.isDisableSettings = false;
     };
@@ -318,6 +338,19 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.getSlots()
             .subscribe(function (data) { return _this.slots = data; });
     };
+    GenerateChartComponent.prototype.loadSpecialHourInDay = function (date, worker) {
+        var _this = this;
+        var isUnwantedSlot = true;
+        this.dataService.getSpecialHourInDay(date, isUnwantedSlot, worker.id)
+            .subscribe(function (data) {
+            console.log(data);
+            _this.desirableSlots = data;
+        });
+        this.desirableSlots.forEach(function (slot) {
+            _this.selectedDesirableSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
+        });
+        console.log(this.selectedDesirableSlots);
+    };
     GenerateChartComponent.prototype.deleteSlots = function (id) {
         var _this = this;
         this.dataService.deleteSlotsInHour(id)
@@ -330,7 +363,7 @@ var GenerateChartComponent = /** @class */ (function () {
     //    console.log(this.worker);
     //    //console.log(s);
     //}
-    GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedItems) {
+    GenerateChartComponent.prototype.updateDesirableSlots = function (selectedItems) {
         var _this = this;
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;

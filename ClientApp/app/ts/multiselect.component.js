@@ -10,24 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Input, Component, Output, EventEmitter } from '@angular/core';
 var NgMultiselect = /** @class */ (function () {
     function NgMultiselect() {
+        //dropdownList: any[];
         this.selectedItems = [];
         this.selectedIds = [];
         this.dropdownSettings = {};
         this.onChanged = new EventEmitter();
-        this.dropdownList = [
-            { item_id: 0, item_text: '08:00' },
-            { item_id: 1, item_text: '09:00' },
-            { item_id: 2, item_text: '10:00' },
-            { item_id: 3, item_text: '11:00' },
-            { item_id: 4, item_text: '12:00' },
-            { item_id: 5, item_text: '13:00' },
-            { item_id: 6, item_text: '14:00' },
-            { item_id: 7, item_text: '15:00' },
-            { item_id: 8, item_text: '16:00' },
-            { item_id: 9, item_text: '17:00' },
-            { item_id: 10, item_text: '18:00' },
-            { item_id: 11, item_text: '19:00' }
-        ];
+        console.log(this.dropdownList);
         this.dropdownSettings = {
             singleSelection: false,
             idField: 'item_id',
@@ -37,6 +25,8 @@ var NgMultiselect = /** @class */ (function () {
             itemsShowLimit: 2,
             allowSearchFilter: false
         };
+        console.log(this.selectedHours);
+        console.log(this.selectedItems);
     }
     NgMultiselect.prototype.onSelect = function (event) {
         console.log(event);
@@ -72,6 +62,14 @@ var NgMultiselect = /** @class */ (function () {
         Input(),
         __metadata("design:type", Boolean)
     ], NgMultiselect.prototype, "isDisable", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], NgMultiselect.prototype, "selectedHours", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], NgMultiselect.prototype, "dropdownList", void 0);
     __decorate([
         Input(),
         __metadata("design:type", String)

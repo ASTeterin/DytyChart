@@ -8,26 +8,16 @@
 export class NgMultiselect {
     @Input() placeholder: string;
     @Input() isDisable: boolean;
-    dropdownList: any[];
+    @Input() selectedHours: any[];
+    @Input() dropdownList: any[];
+    //dropdownList: any[];
     selectedItems: any[] = [];
     selectedIds: number[] = [];
     dropdownSettings = {};
 
     constructor() {
-        this.dropdownList = [
-            { item_id: 0, item_text: '08:00' },
-            { item_id: 1, item_text: '09:00' },
-            { item_id: 2, item_text: '10:00' },
-            { item_id: 3, item_text: '11:00' },
-            { item_id: 4, item_text: '12:00' },
-            { item_id: 5, item_text: '13:00' },
-            { item_id: 6, item_text: '14:00' },
-            { item_id: 7, item_text: '15:00' },
-            { item_id: 8, item_text: '16:00' },
-            { item_id: 9, item_text: '17:00' },
-            { item_id: 10, item_text: '18:00' },
-            { item_id: 11, item_text: '19:00' }
-        ];
+
+        console.log(this.dropdownList);
         this.dropdownSettings = {
             singleSelection: false,
             idField: 'item_id',
@@ -37,6 +27,10 @@ export class NgMultiselect {
             itemsShowLimit: 2,
             allowSearchFilter: false
         };
+
+        console.log(this.selectedHours);
+        console.log(this.selectedItems);
+        
         
     }
     

@@ -84,6 +84,25 @@ export class GenerateChartComponent implements OnInit {
     workersInfoToExport: string[][] = [];
     specialHourInDay: SpecialHourInDay = new SpecialHourInDay();
     specialHoursInDay: SpecialHourInDay[] = [];
+    unwantedSlots: SpecialHourInDay[] = [];
+    desirableSlots: SpecialHourInDay[] = [];
+    selectedDesirableSlots: any[] = [];
+    dropdownList = [
+    { item_id: 0, item_text: '08:00' },
+    { item_id: 1, item_text: '09:00' },
+    { item_id: 2, item_text: '10:00' },
+    { item_id: 3, item_text: '11:00' },
+    { item_id: 4, item_text: '12:00' },
+    { item_id: 5, item_text: '13:00' },
+    { item_id: 6, item_text: '14:00' },
+    { item_id: 7, item_text: '15:00' },
+    { item_id: 8, item_text: '16:00' },
+    { item_id: 9, item_text: '17:00' },
+    { item_id: 10, item_text: '18:00' },
+    { item_id: 11, item_text: '19:00' }
+];
+    selectedHoursTest = [{ item_id: 3, item_text: '11:00' },
+        { item_id: 4, item_text: '12:00' }];
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
@@ -339,10 +358,12 @@ export class GenerateChartComponent implements OnInit {
 
     changeStaff(worker: any) {
         this.cancelWorkerInDay();
+
         if (this.workers) {
             this.worker = this.workers.find(x => x.id == this.selectedWorkerId);
         }
         this.workerInDay = this.workersInDay.find((w) => w.workerId == this.selectedWorkerId);
+        this.loadSpecialHourInDay(this.selectedDate, this.worker);
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.isDisableSettings = false;
     }
@@ -362,6 +383,23 @@ export class GenerateChartComponent implements OnInit {
             .subscribe((data: Slot[]) => this.slots = data);
     }
 
+    loadSpecialHourInDay(date: moment.Moment, worker: Worker) {
+        var isUnwantedSlot = true;
+        this.selectedDesirableSlots = [];
+        this.dataService.getSpecialHourInDay(date, isUnwantedSlot, worker.id)
+            .subscribe((data: SpecialHourInDay[]) => {
+                console.log(data);
+                this.desirableSlots = data;
+            });
+        this.desirableSlots.forEach((slot) => {
+            //console.log(slot);
+            this.selectedDesirableSlots.push(
+                this.dropdownList.find((s) => s.item_id == slot.hourNumber));
+               
+        });
+        console.log(this.selectedDesirableSlots);
+    }
+
     deleteSlots(id: number) {
         this.dataService.deleteSlotsInHour(id)
             .subscribe(data => { console.log(data); this.loadSlots() });
@@ -375,7 +413,7 @@ export class GenerateChartComponent implements OnInit {
     //    //console.log(s);
     //}
 
-    updateUnwantedSlots(selectedItems: any) {
+    updateDesirableSlots(selectedItems: any) {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;

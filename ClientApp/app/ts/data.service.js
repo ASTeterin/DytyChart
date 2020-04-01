@@ -120,6 +120,9 @@ var DataService = /** @class */ (function () {
     DataService.prototype.createSpecialHourInDay = function (specialHourInDay) {
         return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
     };
+    DataService.prototype.getSpecialHourInDay = function (date, type, workerId) {
+        return this.http.get(this.urlSpecialHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&type=" + type + "&workerId=" + workerId);
+    };
     DataService = __decorate([
         Injectable(),
         __metadata("design:paramtypes", [HttpClient])
