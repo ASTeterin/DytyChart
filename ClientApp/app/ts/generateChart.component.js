@@ -66,6 +66,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.unwantedSlots = [];
         this.desirableSlots = [];
         this.selectedDesirableSlots = [];
+        this.selectedUnwantedSlots = [];
         this.dropdownList = [
             { item_id: 0, item_text: '08:00' },
             { item_id: 1, item_text: '09:00' },
@@ -340,33 +341,49 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.loadSpecialHourInDay = function (date, worker) {
         var _this = this;
-        var isUnwantedSlot = true;
-        this.dataService.getSpecialHourInDay(date, isUnwantedSlot, worker.id)
+        var isDerisableSlot = true;
+        this.selectedDesirableSlots = [];
+        this.selectedUnwantedSlots = [];
+        this.dataService.getSpecialHourInDay(date, isDerisableSlot, worker.id)
             .subscribe(function (data) {
             console.log(data);
             _this.desirableSlots = data;
         });
+        this.dataService.getSpecialHourInDay(date, !isDerisableSlot, worker.id)
+            .subscribe(function (data) {
+            console.log(data);
+            _this.unwantedSlots = data;
+        });
         this.desirableSlots.forEach(function (slot) {
+            //console.log(slot);
             _this.selectedDesirableSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
         });
+        this.unwantedSlots.forEach(function (slot) {
+            //console.log(slot);
+            _this.selectedUnwantedSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
+        });
         console.log(this.selectedDesirableSlots);
+        console.log(this.selectedUnwantedSlots);
     };
     GenerateChartComponent.prototype.deleteSlots = function (id) {
         var _this = this;
         this.dataService.deleteSlotsInHour(id)
             .subscribe(function (data) { console.log(data); _this.loadSlots(); });
     };
-    //addUnwantedSlots(slotId: number) {
-    //    //console.log("111111111");
-    //    this.worker.unwantedSlots.push(slotId);
-    //    this.saveWorker();
-    //    console.log(this.worker);
-    //    //console.log(s);
-    //}
     GenerateChartComponent.prototype.updateDesirableSlots = function (selectedItems) {
         var _this = this;
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedItems;
+        this.dataService.createSpecialHourInDay(this.specialHourInDay)
+            .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
+        console.log(this.specialHourInDay);
+    };
+    GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedItems) {
+        var _this = this;
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;
         this.specialHourInDay.hourNumber = selectedItems;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)

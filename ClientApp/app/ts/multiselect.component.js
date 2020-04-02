@@ -42,17 +42,10 @@ var NgMultiselect = /** @class */ (function () {
         //splice indexOf
         this.selectedItems.push(item.item_id);
         this.selectedIds.push(item.item_id);
-        //this.timeChange.emit(this.selectedItems);
         this.onChanged.emit(this.selectedIds);
-        //console.log(this.selectedItems);
     };
     NgMultiselect.prototype.onSelectAll = function (items) {
         console.log(items);
-    };
-    NgMultiselect.prototype.onTimeChange = function ($event) {
-        //this.userName = model;
-        //this.selectedItems.push($event.id);
-        //this.timeChange.emit($event);
     };
     __decorate([
         Input(),

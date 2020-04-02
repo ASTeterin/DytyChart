@@ -87,6 +87,7 @@ export class GenerateChartComponent implements OnInit {
     unwantedSlots: SpecialHourInDay[] = [];
     desirableSlots: SpecialHourInDay[] = [];
     selectedDesirableSlots: any[] = [];
+    selectedUnwantedSlots: any[] = [];
     dropdownList = [
     { item_id: 0, item_text: '08:00' },
     { item_id: 1, item_text: '09:00' },
@@ -384,20 +385,32 @@ export class GenerateChartComponent implements OnInit {
     }
 
     loadSpecialHourInDay(date: moment.Moment, worker: Worker) {
-        var isUnwantedSlot = true;
+        var isDerisableSlot = true;
         this.selectedDesirableSlots = [];
-        this.dataService.getSpecialHourInDay(date, isUnwantedSlot, worker.id)
+        this.selectedUnwantedSlots = [];
+        this.dataService.getSpecialHourInDay(date, isDerisableSlot, worker.id)
             .subscribe((data: SpecialHourInDay[]) => {
                 console.log(data);
                 this.desirableSlots = data;
             });
+        this.dataService.getSpecialHourInDay(date, !isDerisableSlot, worker.id)
+            .subscribe((data: SpecialHourInDay[]) => {
+                console.log(data);
+                this.unwantedSlots = data;
+            });
         this.desirableSlots.forEach((slot) => {
             //console.log(slot);
             this.selectedDesirableSlots.push(
+                this.dropdownList.find((s) => s.item_id == slot.hourNumber));      
+        });
+
+        this.unwantedSlots.forEach((slot) => {
+            //console.log(slot);
+            this.selectedUnwantedSlots.push(
                 this.dropdownList.find((s) => s.item_id == slot.hourNumber));
-               
         });
         console.log(this.selectedDesirableSlots);
+        console.log(this.selectedUnwantedSlots);
     }
 
     deleteSlots(id: number) {
@@ -405,17 +418,19 @@ export class GenerateChartComponent implements OnInit {
             .subscribe(data => { console.log(data); this.loadSlots() });
     }
 
-    //addUnwantedSlots(slotId: number) {
-    //    //console.log("111111111");
-    //    this.worker.unwantedSlots.push(slotId);
-    //    this.saveWorker();
-    //    console.log(this.worker);
-    //    //console.log(s);
-    //}
-
     updateDesirableSlots(selectedItems: any) {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedItems;
+        this.dataService.createSpecialHourInDay(this.specialHourInDay)
+            .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
+        console.log(this.specialHourInDay);
+    }
+
+    updateUnwantedSlots(selectedItems: any) {
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;
         this.specialHourInDay.hourNumber = selectedItems;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)

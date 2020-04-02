@@ -62,6 +62,7 @@ namespace dutyChart.Models
             List<Worker> dutyGroup = new List<Worker> { };
             List<Worker> dutyOnLettersGroup = new List<Worker> { };
             List<Worker> dutyOnPlanningGroup = new List<Worker> { };
+            //List<Worker> groupWithSpecialHours = new List<Worker> { };
             List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
 
             foreach (Group g in groups)
@@ -177,6 +178,9 @@ namespace dutyChart.Models
             List<int> listNumbers = new List<int>();
             WorkerInDay workerInDay = GetWorkerInDay(worker.Id, date);
             List<Group> groups = _db.Groups.ToList();
+            List<int> desirableSlots = new List<int>();
+            desirableSlots = _db.SpecialHoursInDay.Where(slot => slot.WorkerId == worker.Id && slot.Date == date).Select(h => h.HourNumber).ToList();
+
             if ( workerInDay.IsDuty )
             {
                 GenerateSlotsForDutyWorker( ref listNumbers, ref countSlotsForWorker );
@@ -188,17 +192,32 @@ namespace dutyChart.Models
             {
                 listNumbers.Add( 1 );
                 ReduceCountFreeSlotsInHour(ref countFreeSlots, ref hoursInDay, 1);
-                countSlotsForWorker = _db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours - 1;
-                //countSlotsForWorker = worker.GetNumberHoursForDuty(groups) - 1;
+                countSlotsForWorker -= 1;//_db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours - 1;
             }
             for ( int i = 0; i < countSlotsForWorker; i++ )
             {
-                
                 countAttemps = 0;
-                number = rand.Next( 0, countHoursInDay - 1 );
+                if (desirableSlots.Count == 0)
+                {
+                    number = rand.Next(0, countHoursInDay - 1);
+                }
+                else {
+                    number = desirableSlots[0];
+                    desirableSlots.RemoveAt(0);
+                    
+                    //countSlotsForWorker -= 1;//_db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours - 1;
+                    if ((hoursInDay[number] > 0))
+                    {
+                        listNumbers.Add(number);
+                        ReduceCountFreeSlotsInHour(ref countFreeSlots, ref hoursInDay, number);
+                    }                        
+                    continue;
+                }
+
                 while (listNumbers.Contains(number) || (hoursInDay[number] <= 0))
                 {
                     countAttemps++;
+
                     number = rand.Next( 0, countHoursInDay - 1 );
                     if ( countAttemps == maxCountAttempts )
                         break;

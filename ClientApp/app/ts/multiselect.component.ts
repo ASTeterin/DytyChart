@@ -54,21 +54,12 @@ export class NgMultiselect {
         //splice indexOf
         this.selectedItems.push(item.item_id);
         this.selectedIds.push(item.item_id);
-        //this.timeChange.emit(this.selectedItems);
         this.onChanged.emit(this.selectedIds);
-        //console.log(this.selectedItems);
 
     }
 
     onSelectAll(items: any) {
         console.log(items);
-    }
-
-    onTimeChange($event: any) {
-
-        //this.userName = model;
-        //this.selectedItems.push($event.id);
-        //this.timeChange.emit($event);
     }
     
 }

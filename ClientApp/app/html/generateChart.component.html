@@ -42,14 +42,27 @@
             <div class="row">
                 <div class="form-group">
                     <label for="desirable_slots">Желаемые часы</label>
-                    <multiselect [placeholder]="'Желательные часы'" [dropdownList]="dropdownList" [selectedHours]="selectedDesirableSlots" [isDisable]="isDisableSettings" (onChanged)="updateDesirableSlots($event)"></multiselect>
+                    <multiselect 
+                                 [placeholder]="'Желательные часы'" 
+                                 [dropdownList]="dropdownList" 
+                                 [selectedHours]="selectedDesirableSlots" 
+                                 [isDisable]="isDisableSettings" 
+                                 (onChanged)="updateDesirableSlots($event)">
+
+                    </multiselect>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
                     <label for="unwanted_slots">Нежелательные часы</label>
-                    <multiselect [placeholder]="'Нежелательные часы'" [isDisable]="isDisableSettings" (onChanged)="addUnwantedSlots($event)"></multiselect>
+                    <multiselect [placeholder]="'Нежелательные часы'" 
+                                 [dropdownList]="dropdownList" 
+                                 [selectedHours]="selectedUnwantedSlots" 
+                                 [isDisable]="isDisableSettings" 
+                                 (onChanged)="updateUnwantedSlots($event)">
+
+                    </multiselect>
 
                 </div>
             </div>
