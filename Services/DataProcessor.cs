@@ -54,6 +54,11 @@ namespace dutyChart.Models
             return id;
         }
 
+        private bool IsWorkerWithDesirableHours(Worker worker, DateTime date)
+        {
+            return (_db.SpecialHoursInDay.FirstOrDefault(s => s.WorkerId == worker.Id && s.Date == date && s.Type == true) == null) ? false : true;
+        }
+
         private List<List<Worker>> GetGroups(List<Worker> workers, DateTime date)
         {
             List<List<Worker>> workersInGroupByPriority = new List<List<Worker>> { };
@@ -62,7 +67,7 @@ namespace dutyChart.Models
             List<Worker> dutyGroup = new List<Worker> { };
             List<Worker> dutyOnLettersGroup = new List<Worker> { };
             List<Worker> dutyOnPlanningGroup = new List<Worker> { };
-            //List<Worker> groupWithSpecialHours = new List<Worker> { };
+            List<Worker> groupWithSpecialHours = new List<Worker> { };
             List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
 
             foreach (Group g in groups)
@@ -74,7 +79,11 @@ namespace dutyChart.Models
                 workerInDay = GetWorkerInDay(w.Id, date);
                 if (workerInDay == null)
                     continue;
-
+                if (IsWorkerWithDesirableHours(w, date)) 
+                {
+                    groupWithSpecialHours.Add(w);
+                    continue;
+                }
                 if (workerInDay.IsDuty)
                 {
                     dutyGroup.Add(w);
@@ -101,6 +110,7 @@ namespace dutyChart.Models
                 
             }
             workersInGroupByPriority.Insert(0, dutyOnPlanningGroup);
+            workersInGroupByPriority.Insert(0, groupWithSpecialHours);
             workersInGroupByPriority.Insert(0, dutyGroup);
             //workersInGroupByPriority.Add();
             return workersInGroupByPriority;
@@ -129,9 +139,7 @@ namespace dutyChart.Models
                 {
                     count++;
                     if ( count > 2 )
-                    {
                         return true;
-                    }
                 }
                 else
                 {
@@ -167,7 +175,7 @@ namespace dutyChart.Models
             hoursInDay.Insert( index, temp );
         }
 
-        private List<int> GetSlotNumbersForWorker( ref List<int> hoursInDay, ref int countSlotsForWorker, Worker worker, DateTime date )
+        private List<int> GetSlotNumbersForWorker( ref List<int> hoursInDay, /*ref int countSlotsForWorker,*/ Worker worker, DateTime date )
         {
             int maxCountAttempts = 50;
             int number, countFreeSlots;
@@ -180,9 +188,10 @@ namespace dutyChart.Models
             List<Group> groups = _db.Groups.ToList();
             List<int> desirableSlots = new List<int>();
             desirableSlots = _db.SpecialHoursInDay.Where(slot => slot.WorkerId == worker.Id && slot.Date == date).Select(h => h.HourNumber).ToList();
-
+            var countSlotsForWorker = _db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours; 
             if ( workerInDay.IsDuty )
             {
+                countSlotsForWorker = 6;
                 GenerateSlotsForDutyWorker( ref listNumbers, ref countSlotsForWorker );
                 ReduceCountFreeSlotsInHour(ref countFreeSlots, ref hoursInDay, 0);
                 ReduceCountFreeSlotsInHour(ref countFreeSlots, ref hoursInDay, 10);
@@ -373,7 +382,7 @@ namespace dutyChart.Models
             {
                 if ( GetSumm( countFreeSlots ) != 0 )
                 {
-                    List<int> slotsNumber = GetSlotNumbersForWorker( ref countFreeSlots, ref countSlotsForWorker, w , date);
+                    List<int> slotsNumber = GetSlotNumbersForWorker( ref countFreeSlots, /*ref countSlotsForWorker,*/ w , date);
                     FillSlots( w, slotsNumber, hours );
                 }
                 else
@@ -430,6 +439,7 @@ namespace dutyChart.Models
             List<Worker> notBusyWorkers = new List<Worker>();
             List<Group> groups = _db.Groups.OrderBy(g => g.Priority).ToList();
 
+            groups.Insert(0, new Group());
             var dutyOnLettersGroup = new Group();
             dutyOnLettersGroup.NumberDutyHours = 5;
             groups.Insert(0, dutyOnLettersGroup);
