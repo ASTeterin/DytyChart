@@ -33,6 +33,7 @@
     <None Remove="ClientApp\app\ts\nav.component.ts" />
     <None Remove="ClientApp\app\ts\slot.ts" />
     <None Remove="ClientApp\app\ts\slotToExport.ts" />
+    <None Remove="ClientApp\app\ts\specialHour.ts" />
     <None Remove="ClientApp\app\ts\specialHourInDay.ts" />
     <None Remove="ClientApp\app\ts\workerInDay.ts" />
     <None Remove="ClientApp\app\worker.ts" />

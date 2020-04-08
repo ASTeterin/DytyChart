@@ -43,12 +43,11 @@
                 <div class="form-group">
                     <label for="desirable_slots">Желаемые часы</label>
                     <multiselect 
-                                 [placeholder]="'Желательные часы'" 
-                                 [dropdownList]="dropdownList" 
-                                 [selectedHours]="selectedDesirableSlots" 
-                                 [isDisable]="isDisableSettings" 
-                                 (onChanged)="updateDesirableSlots($event)">
-
+                        [placeholder]="'Желательные часы'" 
+                        [dropdownList]="dropdownList" 
+                        [selectedHours]="selectedDesirableSlots" 
+                        [isDisable]="isDisableSettings" 
+                        (onChanged)="updateDesirableSlots($event)">
                     </multiselect>
                 </div>
             </div>

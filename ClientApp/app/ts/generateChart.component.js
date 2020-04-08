@@ -81,8 +81,6 @@ var GenerateChartComponent = /** @class */ (function () {
             { item_id: 10, item_text: '18:00' },
             { item_id: 11, item_text: '19:00' }
         ];
-        this.selectedHoursTest = [{ item_id: 3, item_text: '11:00' },
-            { item_id: 4, item_text: '12:00' }];
     }
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
         var _this = this;
@@ -246,7 +244,6 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.saveWorkerInDay = function () {
         var _this = this;
-        //console.log(t);
         if (this.workerInDay.id) {
             this.dataService.updateWorkerInDay(this.workerInDay)
                 .subscribe(function (data) { return _this.loadWorkerInDay(); });
@@ -355,11 +352,9 @@ var GenerateChartComponent = /** @class */ (function () {
             _this.unwantedSlots = data;
         });
         this.desirableSlots.forEach(function (slot) {
-            //console.log(slot);
             _this.selectedDesirableSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
         });
         this.unwantedSlots.forEach(function (slot) {
-            //console.log(slot);
             _this.selectedUnwantedSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
         });
         console.log(this.selectedDesirableSlots);

@@ -89,21 +89,19 @@ export class GenerateChartComponent implements OnInit {
     selectedDesirableSlots: any[] = [];
     selectedUnwantedSlots: any[] = [];
     dropdownList = [
-    { item_id: 0, item_text: '08:00' },
-    { item_id: 1, item_text: '09:00' },
-    { item_id: 2, item_text: '10:00' },
-    { item_id: 3, item_text: '11:00' },
-    { item_id: 4, item_text: '12:00' },
-    { item_id: 5, item_text: '13:00' },
-    { item_id: 6, item_text: '14:00' },
-    { item_id: 7, item_text: '15:00' },
-    { item_id: 8, item_text: '16:00' },
-    { item_id: 9, item_text: '17:00' },
-    { item_id: 10, item_text: '18:00' },
-    { item_id: 11, item_text: '19:00' }
-];
-    selectedHoursTest = [{ item_id: 3, item_text: '11:00' },
-        { item_id: 4, item_text: '12:00' }];
+        { item_id: 0, item_text: '08:00' },
+        { item_id: 1, item_text: '09:00' },
+        { item_id: 2, item_text: '10:00' },
+        { item_id: 3, item_text: '11:00' },
+        { item_id: 4, item_text: '12:00' },
+        { item_id: 5, item_text: '13:00' },
+        { item_id: 6, item_text: '14:00' },
+        { item_id: 7, item_text: '15:00' },
+        { item_id: 8, item_text: '16:00' },
+        { item_id: 9, item_text: '17:00' },
+        { item_id: 10, item_text: '18:00' },
+        { item_id: 11, item_text: '19:00' }
+    ];
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
@@ -286,8 +284,6 @@ export class GenerateChartComponent implements OnInit {
     }
 
     saveWorkerInDay() {
-        
-        //console.log(t);
         if (this.workerInDay.id) {
             this.dataService.updateWorkerInDay(this.workerInDay)
                 .subscribe(data => this.loadWorkerInDay());
@@ -399,13 +395,11 @@ export class GenerateChartComponent implements OnInit {
                 this.unwantedSlots = data;
             });
         this.desirableSlots.forEach((slot) => {
-            //console.log(slot);
             this.selectedDesirableSlots.push(
                 this.dropdownList.find((s) => s.item_id == slot.hourNumber));      
         });
 
         this.unwantedSlots.forEach((slot) => {
-            //console.log(slot);
             this.selectedUnwantedSlots.push(
                 this.dropdownList.find((s) => s.item_id == slot.hourNumber));
         });

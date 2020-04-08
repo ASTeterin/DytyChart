@@ -35,14 +35,14 @@ var NgMultiselect = /** @class */ (function () {
         //this.selectedItems.push(item.item_id);
         //this.selectedIds.push(item.item_id);
         //this.timeChange.emit(this.selectedItems);
-        this.onChanged.emit(item.item_id);
+        this.onChanged.emit({ x: "select", data: item.item_id });
         //console.log(this.selectedItems);
     };
     NgMultiselect.prototype.onItemDeSelect = function (item) {
         //splice indexOf
-        this.selectedItems.push(item.item_id);
-        this.selectedIds.push(item.item_id);
-        this.onChanged.emit(this.selectedIds);
+        //this.selectedItems.push(item.item_id);
+        //this.selectedIds.push(item.item_id);
+        this.onChanged.emit({ x: "unSelect", data: item.item_id });
     };
     NgMultiselect.prototype.onSelectAll = function (items) {
         console.log(items);

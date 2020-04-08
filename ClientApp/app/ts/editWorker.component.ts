@@ -3,6 +3,7 @@ import { DataService } from './data.service';
 import { Worker } from './worker';
 import { Group } from './group';
 import { AbsentPeriod } from './absentPeriod';
+import { SpecialHour} from './specialHour'
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 //import { NgbdModalStacked } from './modalWindow.component'
 import * as moment from 'moment';
@@ -26,7 +27,25 @@ export class EditWorkerComponent implements OnInit {
     absentPeriod: AbsentPeriod = new AbsentPeriod();
     absentPeriods: AbsentPeriod[] = [];
     fromDate: NgbDate;
+    dropdownList = [
+        { item_id: 0, item_text: '08:00' },
+        { item_id: 1, item_text: '09:00' },
+        { item_id: 2, item_text: '10:00' },
+        { item_id: 3, item_text: '11:00' },
+        { item_id: 4, item_text: '12:00' },
+        { item_id: 5, item_text: '13:00' },
+        { item_id: 6, item_text: '14:00' },
+        { item_id: 7, item_text: '15:00' },
+        { item_id: 8, item_text: '16:00' },
+        { item_id: 9, item_text: '17:00' },
+        { item_id: 10, item_text: '18:00' },
+        { item_id: 11, item_text: '19:00' }
+    ];
     public model: any;
+    selectedDesirableSlots: any[] = [];
+    selectedUnwantedSlots: any[] = [];
+    specialHour: SpecialHour = new SpecialHour();
+    specialHours: SpecialHour[] = [];
 
     constructor(private dataService: DataService, private modal: NgbdModalStacked) { }
 
@@ -65,14 +84,12 @@ export class EditWorkerComponent implements OnInit {
 
     isAllInfoEntered() {
         return ((!this.currentWorker.color) || (!this.currentWorker.idGroup) || (!this.currentWorker.name)) ? false : true;
-
     }
 
     saveWorker() {
         var isErrorWhenSaving: boolean = true;
         if (!this.isAllInfoEntered()) {
             this.modal.open(isErrorWhenSaving);
-            //alert("Заполните все поля");
             return;
         }
         isErrorWhenSaving = false;
@@ -124,16 +141,10 @@ export class EditWorkerComponent implements OnInit {
     }
 
     deleteAbsencePeriod(period: AbsentPeriod) {
-        //Worker worker =  
         this.dataService.deleteAbsentPeriod(period.id).subscribe(data => this.loadAbsentPeriods(this.currentWorker));
-        //this.loadAbsentPeriods(this.currentWorker);
         console.log(this.absentPeriods);
         this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
-        //this.cancel();
-        //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
-        //this.absentPeriod.start = 
-
     }
     showDate($event: any) {
         this.absentPeriod.start = moment(new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day));
@@ -165,4 +176,23 @@ export class EditWorkerComponent implements OnInit {
     onColorPickerSelected(event: any) {
         console.log(event);
     }
+
+    updateDesirableSlots(selectedData: any) {
+        console.log(selectedData);
+        switch(selectedData.x) {
+            case "select": {
+                this.specialHour.type = true;
+                this.specialHour.workerId = this.selectedWorkerId;
+                this.specialHour.hourNumber = selectedData.data;
+                this.dataService.createSpecialHour(this.specialHour)
+                    .subscribe((data: SpecialHour) => this.specialHours.push(data));   
+                break;
+            }
+            case "unSelect": {
+                this.dataService.deleteSpecialHour(selectedData.data.id).subscribe(data => console.log(data));   
+            }
+        }
+     
+    }
+
 }

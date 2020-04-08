@@ -8,6 +8,7 @@ import { Group } from './group';
 import { AbsentPeriod } from './absentPeriod';
 import * as moment from 'moment';
 import { SpecialHourInDay } from './specialHourInDay';
+import { SpecialHour } from './specialHour';
 
 @Injectable()
 export class DataService {
@@ -23,6 +24,7 @@ export class DataService {
     public urlWorkerInDay = "/api/WorkerInDay";
     public urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
     public urlSpecialHourInDay = "/api/SpecialHourInDay";
+    public urlSpecialHour = "/api/SpecialHour";
 
     constructor(private http: HttpClient) {
     }
@@ -156,6 +158,18 @@ export class DataService {
 
     getSpecialHourInDay(date: moment.Moment, type: boolean, workerId: number) {
         return this.http.get(`${this.urlSpecialHourInDay}?date=${date.format('YYYY-MM-DD')}&type=${type}&workerId=${workerId}`);
+    }
+
+    createSpecialHour(specialHour: SpecialHour) {
+        return this.http.post(this.urlSpecialHour, specialHour);
+    }
+
+    getSpecialHour(type: boolean, workerId: number) {
+        return this.http.get(`${this.urlSpecialHour}?type=${type}&workerId=${workerId}`);
+    }
+
+    deleteSpecialHour(id: number) {
+        return this.http.delete(this.urlSpecialHour + '/' + id);
     }
 
 }

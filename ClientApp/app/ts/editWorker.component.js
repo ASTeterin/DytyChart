@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { Worker } from './worker';
 import { AbsentPeriod } from './absentPeriod';
+import { SpecialHour } from './specialHour';
 //import { NgbdModalStacked } from './modalWindow.component'
 import * as moment from 'moment';
 import { NgbdModalStacked } from './modalWindow.component';
@@ -25,6 +26,24 @@ var EditWorkerComponent = /** @class */ (function () {
         //groups: any[] = [{ id: 1, name: "Группа поддержки VIP" }, { id: 2, name: "Группа запуска" }, { id: 3, name: "Группа поддержки" }, { id: 4, name: "Сменники" }];
         this.absentPeriod = new AbsentPeriod();
         this.absentPeriods = [];
+        this.dropdownList = [
+            { item_id: 0, item_text: '08:00' },
+            { item_id: 1, item_text: '09:00' },
+            { item_id: 2, item_text: '10:00' },
+            { item_id: 3, item_text: '11:00' },
+            { item_id: 4, item_text: '12:00' },
+            { item_id: 5, item_text: '13:00' },
+            { item_id: 6, item_text: '14:00' },
+            { item_id: 7, item_text: '15:00' },
+            { item_id: 8, item_text: '16:00' },
+            { item_id: 9, item_text: '17:00' },
+            { item_id: 10, item_text: '18:00' },
+            { item_id: 11, item_text: '19:00' }
+        ];
+        this.selectedDesirableSlots = [];
+        this.selectedUnwantedSlots = [];
+        this.specialHour = new SpecialHour();
+        this.specialHours = [];
     }
     EditWorkerComponent.prototype.createArray = function (countElement) {
         var arr = [];
@@ -68,7 +87,6 @@ var EditWorkerComponent = /** @class */ (function () {
         var isErrorWhenSaving = true;
         if (!this.isAllInfoEntered()) {
             this.modal.open(isErrorWhenSaving);
-            //alert("Заполните все поля");
             return;
         }
         isErrorWhenSaving = false;
@@ -119,15 +137,10 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.deleteAbsencePeriod = function (period) {
         var _this = this;
-        //Worker worker =  
         this.dataService.deleteAbsentPeriod(period.id).subscribe(function (data) { return _this.loadAbsentPeriods(_this.currentWorker); });
-        //this.loadAbsentPeriods(this.currentWorker);
         console.log(this.absentPeriods);
         this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
-        //this.cancel();
-        //this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
-        //this.absentPeriod.start = 
     };
     EditWorkerComponent.prototype.showDate = function ($event) {
         this.absentPeriod.start = moment(new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day));
@@ -157,6 +170,23 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.onColorPickerSelected = function (event) {
         console.log(event);
+    };
+    EditWorkerComponent.prototype.updateDesirableSlots = function (selectedData) {
+        var _this = this;
+        console.log(selectedData);
+        switch (selectedData.x) {
+            case "select": {
+                this.specialHour.type = true;
+                this.specialHour.workerId = this.selectedWorkerId;
+                this.specialHour.hourNumber = selectedData.data;
+                this.dataService.createSpecialHour(this.specialHour)
+                    .subscribe(function (data) { return _this.specialHours.push(data); });
+                break;
+            }
+            case "unSelect": {
+                this.dataService.deleteSpecialHour(selectedData.data.id).subscribe(function (data) { return console.log(data); });
+            }
+        }
     };
     EditWorkerComponent = __decorate([
         Component({
