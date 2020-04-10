@@ -35,6 +35,7 @@
     <None Remove="ClientApp\app\ts\slotToExport.ts" />
     <None Remove="ClientApp\app\ts\specialHour.ts" />
     <None Remove="ClientApp\app\ts\specialHourInDay.ts" />
+    <None Remove="ClientApp\app\ts\tabset.module.ts" />
     <None Remove="ClientApp\app\ts\workerInDay.ts" />
     <None Remove="ClientApp\app\worker.ts" />
     <None Remove="ClientApp\main.ts" />
@@ -55,6 +56,12 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\main.ts" />
     <TypeScriptCompile Include="ClientApp\polyfills.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\app\ts\tabset.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
 
 </Project>

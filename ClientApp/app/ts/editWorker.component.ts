@@ -45,6 +45,7 @@ export class EditWorkerComponent implements OnInit {
     selectedDesirableSlots: any[] = [];
     selectedUnwantedSlots: any[] = [];
     specialHour: SpecialHour = new SpecialHour();
+    selectedHour: SpecialHour = new SpecialHour();
     specialHours: SpecialHour[] = [];
 
     constructor(private dataService: DataService, private modal: NgbdModalStacked) { }
@@ -177,19 +178,43 @@ export class EditWorkerComponent implements OnInit {
         console.log(event);
     }
 
+    loadSpecialHours(worker: Worker) {
+        var isDerisableSlot = true;
+        this.selectedDesirableSlots = [];
+        this.selectedUnwantedSlots = [];
+        this.dataService.getSpecialHours(isDerisableSlot, worker.id)
+            .subscribe((data: SpecialHour[]) => {
+                console.log(data);
+                //this.desirableSlots = data;
+            });
+        this.dataService.getSpecialHours(!isDerisableSlot, worker.id)
+            .subscribe((data: SpecialHour[]) => {
+                console.log(data);
+                //this.unwantedSlots = data;
+            });
+    }
+
+
     updateDesirableSlots(selectedData: any) {
         console.log(selectedData);
+        //this.selectedHour = new SpecialHour();
+        this.specialHour.type = true;
+        this.specialHour.workerId = this.selectedWorkerId;
+        this.specialHour.hourNumber = selectedData.data;    
         switch(selectedData.x) {
             case "select": {
-                this.specialHour.type = true;
-                this.specialHour.workerId = this.selectedWorkerId;
-                this.specialHour.hourNumber = selectedData.data;
+                
                 this.dataService.createSpecialHour(this.specialHour)
-                    .subscribe((data: SpecialHour) => this.specialHours.push(data));   
+                    .subscribe((data: SpecialHour) => this.specialHours.push(data));
+                console.log(this.specialHours);
                 break;
             }
             case "unSelect": {
-                this.dataService.deleteSpecialHour(selectedData.data.id).subscribe(data => console.log(data));   
+                this.dataService.getSpecialHour(true, this.selectedWorkerId, selectedData.data).subscribe((data: SpecialHour) => {
+                this.selectedHour = data; console.log(this.selectedHour);
+                    this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));}); 
+                //console.log(this.selectedHour);
+                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
      

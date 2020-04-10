@@ -24,6 +24,7 @@ var DataService = /** @class */ (function () {
         this.urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
         this.urlSpecialHourInDay = "/api/SpecialHourInDay";
         this.urlSpecialHour = "/api/SpecialHour";
+        this.urlSpecialHours = "/api/SpecialHour/get-all-hours";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -127,8 +128,11 @@ var DataService = /** @class */ (function () {
     DataService.prototype.createSpecialHour = function (specialHour) {
         return this.http.post(this.urlSpecialHour, specialHour);
     };
-    DataService.prototype.getSpecialHour = function (type, workerId) {
-        return this.http.get(this.urlSpecialHour + "?type=" + type + "&workerId=" + workerId);
+    DataService.prototype.getSpecialHour = function (type, workerId, hourNumber) {
+        return this.http.get(this.urlSpecialHour + "?type=" + type + "&workerId=" + workerId + "&hourNumber=" + hourNumber);
+    };
+    DataService.prototype.getSpecialHours = function (type, workerId) {
+        return this.http.get(this.urlSpecialHours + "?type=" + type + "&workerId=" + workerId);
     };
     DataService.prototype.deleteSpecialHour = function (id) {
         return this.http.delete(this.urlSpecialHour + '/' + id);

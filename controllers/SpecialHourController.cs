@@ -21,12 +21,21 @@ namespace dutyChart.controllers
 
 
         [HttpGet]
+        public SpecialHour GetSpecialHour(Boolean type, int workerId, int hourNumber)
+        {
+            var specialHour = db.SpecialHours.FirstOrDefault(x => x.Type == type && x.WorkerId == workerId && x.HourNumber == hourNumber);
+            return specialHour;
+        }
 
-        public IEnumerable<SpecialHour> GetSpecialHour(DateTime date, Boolean type, int workerId)
+
+        [HttpGet, Route( "get-all-hours" )]
+
+        public IEnumerable<SpecialHour> GetSpecialHours(Boolean type, int workerId)
         {
             var specialHour = db.SpecialHours.Where(x => x.Type == type && x.WorkerId == workerId).ToList();
             return specialHour;
         }
+        
 
         [HttpPost]
         public IActionResult Post([FromBody]SpecialHour specialHour)

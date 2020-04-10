@@ -25,6 +25,7 @@ export class DataService {
     public urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
     public urlSpecialHourInDay = "/api/SpecialHourInDay";
     public urlSpecialHour = "/api/SpecialHour";
+    public urlSpecialHours = "/api/SpecialHour/get-all-hours";
 
     constructor(private http: HttpClient) {
     }
@@ -164,8 +165,12 @@ export class DataService {
         return this.http.post(this.urlSpecialHour, specialHour);
     }
 
-    getSpecialHour(type: boolean, workerId: number) {
-        return this.http.get(`${this.urlSpecialHour}?type=${type}&workerId=${workerId}`);
+    getSpecialHour(type: boolean, workerId: number, hourNumber: number) {
+        return this.http.get(`${this.urlSpecialHour}?type=${type}&workerId=${workerId}&hourNumber=${hourNumber}`);
+    }
+
+    getSpecialHours(type: boolean, workerId: number) {
+        return this.http.get(`${this.urlSpecialHours}?type=${type}&workerId=${workerId}`);
     }
 
     deleteSpecialHour(id: number) {
