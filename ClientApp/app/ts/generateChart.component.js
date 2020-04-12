@@ -133,6 +133,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.loadWorkerInDay();
+        this.loadAllSpecialHoursInDay();
         this.tabChangeHandler(this.isNewDay);
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
@@ -258,6 +259,10 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.getWorkersInDay(this.selectedDate)
             .subscribe(function (data) { return _this.workersInDay = data; });
     };
+    GenerateChartComponent.prototype.loadAllSpecialHoursInDay = function () {
+        this.dataService.getAllSpecialHoursInDay(this.selectedDate)
+            .subscribe(function (data) { return console.log(data); });
+    };
     GenerateChartComponent.prototype.loadGroups = function () {
         var _this = this;
         this.dataService.getGroups().subscribe(function (data) {
@@ -319,6 +324,7 @@ var GenerateChartComponent = /** @class */ (function () {
         }
         this.workerInDay = this.workersInDay.find(function (w) { return w.workerId == _this.selectedWorkerId; });
         this.loadSpecialHourInDay(this.selectedDate, this.worker);
+        this.getSelectedHours(this.desirableSlots);
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.isDisableSettings = false;
     };
@@ -341,24 +347,35 @@ var GenerateChartComponent = /** @class */ (function () {
         var isDerisableSlot = true;
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
-        this.dataService.getSpecialHourInDay(date, isDerisableSlot, worker.id)
+        this.dataService.getDesirableHourInDay(date, worker.id)
             .subscribe(function (data) {
             console.log(data);
             _this.desirableSlots = data;
+            /*this.desirableSlots.forEach((slot) => {
+                this.selectedDesirableSlots.push(
+                    this.dropdownList.find((s) => s.item_id == slot.hourNumber));
+            });
+            console.log(this.selectedDesirableSlots);*/
         });
-        this.dataService.getSpecialHourInDay(date, !isDerisableSlot, worker.id)
-            .subscribe(function (data) {
-            console.log(data);
-            _this.unwantedSlots = data;
-        });
-        this.desirableSlots.forEach(function (slot) {
+        /*this.dataService.getUnwantedHourInDay(date, !isDerisableSlot, worker.id)
+            .subscribe((data: SpecialHourInDay[]) => {
+                console.log(data);
+                this.unwantedSlots = data;
+            });
+       */
+        /*this.unwantedSlots.forEach((slot) => {
+            this.selectedUnwantedSlots.push(
+                this.dropdownList.find((s) => s.item_id == slot.hourNumber));
+        });*/
+        //console.log(this.selectedDesirableSlots);
+        //console.log(this.selectedUnwantedSlots);
+    };
+    GenerateChartComponent.prototype.getSelectedHours = function (selectedSlots) {
+        var _this = this;
+        console.log(selectedSlots);
+        selectedSlots.forEach(function (slot) {
             _this.selectedDesirableSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
         });
-        this.unwantedSlots.forEach(function (slot) {
-            _this.selectedUnwantedSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
-        });
-        console.log(this.selectedDesirableSlots);
-        console.log(this.selectedUnwantedSlots);
     };
     GenerateChartComponent.prototype.deleteSlots = function (id) {
         var _this = this;
@@ -370,7 +387,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
-        this.specialHourInDay.hourNumber = selectedItems;
+        this.specialHourInDay.hourNumber = selectedItems.data;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
             .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
         console.log(this.specialHourInDay);
@@ -380,7 +397,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;
-        this.specialHourInDay.hourNumber = selectedItems;
+        this.specialHourInDay.hourNumber = selectedItems.data;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
             .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
         console.log(this.specialHourInDay);

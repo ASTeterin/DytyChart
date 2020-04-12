@@ -23,9 +23,12 @@ export class DataService {
     public urlAbsentWorker = "/api/Workers/get-absent-workers";
     public urlWorkerInDay = "/api/WorkerInDay";
     public urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
-    public urlSpecialHourInDay = "/api/SpecialHourInDay";
+    public urlSpecialHourInDay = "/api/SpecialHoursInDay";
+    public urlDesirableHourInDay = "/api/SpecialHoursInDay/desirable-hours";
+    public urlUnwantedHourInDay = "/api/SpecialHoursInDay/unwanted-hours";
     public urlSpecialHour = "/api/SpecialHour";
     public urlSpecialHours = "/api/SpecialHour/get-all-hours";
+    public urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
 
     constructor(private http: HttpClient) {
     }
@@ -157,8 +160,16 @@ export class DataService {
         return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
     }
 
-    getSpecialHourInDay(date: moment.Moment, type: boolean, workerId: number) {
-        return this.http.get(`${this.urlSpecialHourInDay}?date=${date.format('YYYY-MM-DD')}&type=${type}&workerId=${workerId}`);
+    getDesirableHourInDay(date: moment.Moment, workerId: number) {
+        return this.http.get(`${this.urlDesirableHourInDay}?date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
+    }
+
+    getUnwantedHourInDay(date: moment.Moment, type: boolean, workerId: number) {
+        return this.http.get(`${this.urlUnwantedHourInDay}?date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
+    }
+
+    getAllSpecialHoursInDay(date: moment.Moment) {
+        return this.http.get(`${this.urlAllSpecialHoursInDay}?date=${date.format('YYYY-MM-DD')}`);
     }
 
     createSpecialHour(specialHour: SpecialHour) {

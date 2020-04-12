@@ -163,6 +163,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.loadAbsentPeriods(this.currentWorker);
+        this.loadSpecialHours(this.currentWorker);
     };
     EditWorkerComponent.prototype.deleteWorker = function (id) {
         var _this = this;

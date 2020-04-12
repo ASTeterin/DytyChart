@@ -167,6 +167,7 @@ export class EditWorkerComponent implements OnInit {
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.loadAbsentPeriods(this.currentWorker);
+        this.loadSpecialHours(this.currentWorker);
     }
 
     deleteWorker(id: number) {
@@ -193,6 +194,8 @@ export class EditWorkerComponent implements OnInit {
                 //this.unwantedSlots = data;
             });
     }
+
+
 
 
     updateDesirableSlots(selectedData: any) {

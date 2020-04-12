@@ -22,9 +22,12 @@ var DataService = /** @class */ (function () {
         this.urlAbsentWorker = "/api/Workers/get-absent-workers";
         this.urlWorkerInDay = "/api/WorkerInDay";
         this.urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
-        this.urlSpecialHourInDay = "/api/SpecialHourInDay";
+        this.urlSpecialHourInDay = "/api/SpecialHoursInDay";
+        this.urlDesirableHourInDay = "/api/SpecialHoursInDay/desirable-hours";
+        this.urlUnwantedHourInDay = "/api/SpecialHoursInDay/unwanted-hours";
         this.urlSpecialHour = "/api/SpecialHour";
         this.urlSpecialHours = "/api/SpecialHour/get-all-hours";
+        this.urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -122,8 +125,14 @@ var DataService = /** @class */ (function () {
     DataService.prototype.createSpecialHourInDay = function (specialHourInDay) {
         return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
     };
-    DataService.prototype.getSpecialHourInDay = function (date, type, workerId) {
-        return this.http.get(this.urlSpecialHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&type=" + type + "&workerId=" + workerId);
+    DataService.prototype.getDesirableHourInDay = function (date, workerId) {
+        return this.http.get(this.urlDesirableHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
+    };
+    DataService.prototype.getUnwantedHourInDay = function (date, type, workerId) {
+        return this.http.get(this.urlUnwantedHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
+    };
+    DataService.prototype.getAllSpecialHoursInDay = function (date) {
+        return this.http.get(this.urlAllSpecialHoursInDay + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.createSpecialHour = function (specialHour) {
         return this.http.post(this.urlSpecialHour, specialHour);

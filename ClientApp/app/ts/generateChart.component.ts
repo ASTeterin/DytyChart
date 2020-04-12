@@ -160,6 +160,7 @@ export class GenerateChartComponent implements OnInit {
         
         this.getWorkersInfo();
         this.loadWorkerInDay();
+        this.loadAllSpecialHoursInDay();
         this.tabChangeHandler(this.isNewDay);
     }
 
@@ -299,6 +300,11 @@ export class GenerateChartComponent implements OnInit {
             .subscribe((data: WorkerInDay[]) => this.workersInDay = data);
     }
 
+    loadAllSpecialHoursInDay() {
+        this.dataService.getAllSpecialHoursInDay(this.selectedDate)
+            .subscribe((data: SpecialHourInDay[]) => console.log(data));
+    }
+
     loadGroups() {
         this.dataService.getGroups().subscribe((data: Group[]) =>
             this.groups = data);
@@ -361,6 +367,7 @@ export class GenerateChartComponent implements OnInit {
         }
         this.workerInDay = this.workersInDay.find((w) => w.workerId == this.selectedWorkerId);
         this.loadSpecialHourInDay(this.selectedDate, this.worker);
+        this.getSelectedHours(this.desirableSlots);
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.isDisableSettings = false;
     }
@@ -384,28 +391,40 @@ export class GenerateChartComponent implements OnInit {
         var isDerisableSlot = true;
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
-        this.dataService.getSpecialHourInDay(date, isDerisableSlot, worker.id)
+        this.dataService.getDesirableHourInDay(date, worker.id)
             .subscribe((data: SpecialHourInDay[]) => {
                 console.log(data);
                 this.desirableSlots = data;
+                /*this.desirableSlots.forEach((slot) => {
+                    this.selectedDesirableSlots.push(
+                        this.dropdownList.find((s) => s.item_id == slot.hourNumber));
+                });
+                console.log(this.selectedDesirableSlots);*/
             });
-        this.dataService.getSpecialHourInDay(date, !isDerisableSlot, worker.id)
+        /*this.dataService.getUnwantedHourInDay(date, !isDerisableSlot, worker.id)
             .subscribe((data: SpecialHourInDay[]) => {
                 console.log(data);
                 this.unwantedSlots = data;
             });
-        this.desirableSlots.forEach((slot) => {
-            this.selectedDesirableSlots.push(
-                this.dropdownList.find((s) => s.item_id == slot.hourNumber));      
-        });
-
-        this.unwantedSlots.forEach((slot) => {
+       */
+        
+        /*this.unwantedSlots.forEach((slot) => {
             this.selectedUnwantedSlots.push(
                 this.dropdownList.find((s) => s.item_id == slot.hourNumber));
-        });
-        console.log(this.selectedDesirableSlots);
-        console.log(this.selectedUnwantedSlots);
+        });*/
+        //console.log(this.selectedDesirableSlots);
+        //console.log(this.selectedUnwantedSlots);
     }
+
+    getSelectedHours(selectedSlots: SpecialHourInDay[]) {
+        console.log(selectedSlots);
+        selectedSlots.forEach((slot) => {
+            this.selectedDesirableSlots.push(
+                this.dropdownList.find((s) => s.item_id == slot.hourNumber));
+        });
+    }
+
+
 
     deleteSlots(id: number) {
         this.dataService.deleteSlotsInHour(id)
@@ -416,7 +435,7 @@ export class GenerateChartComponent implements OnInit {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
-        this.specialHourInDay.hourNumber = selectedItems;
+        this.specialHourInDay.hourNumber = selectedItems.data;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
             .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
         console.log(this.specialHourInDay);
@@ -426,7 +445,7 @@ export class GenerateChartComponent implements OnInit {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;
-        this.specialHourInDay.hourNumber = selectedItems;
+        this.specialHourInDay.hourNumber = selectedItems.data;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
             .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
         console.log(this.specialHourInDay);

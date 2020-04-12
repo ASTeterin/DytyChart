@@ -24,7 +24,7 @@ namespace dutyChart.controllers
         public SpecialHour GetSpecialHour(Boolean type, int workerId, int hourNumber)
         {
             var specialHour = db.SpecialHours.FirstOrDefault(x => x.Type == type && x.WorkerId == workerId && x.HourNumber == hourNumber);
-            return specialHour;
+                return specialHour;
         }
 
 
