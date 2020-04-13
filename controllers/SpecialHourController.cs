@@ -30,9 +30,9 @@ namespace dutyChart.controllers
 
         [HttpGet, Route( "get-all-hours" )]
 
-        public IEnumerable<SpecialHour> GetSpecialHours(Boolean type, int workerId)
+        public IEnumerable<SpecialHour> GetSpecialHours(int workerId)
         {
-            var specialHour = db.SpecialHours.Where(x => x.Type == type && x.WorkerId == workerId).ToList();
+            var specialHour = db.SpecialHours.Where(x => x.WorkerId == workerId).ToList();
             return specialHour;
         }
         

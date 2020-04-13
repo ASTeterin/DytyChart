@@ -179,22 +179,33 @@ export class EditWorkerComponent implements OnInit {
         console.log(event);
     }
 
+    splitSpecialHours(specialHours: SpecialHour[]) {
+        specialHours.forEach(x => {
+            switch (x.type) {
+                case true: {
+                    this.selectedDesirableSlots.push(x);
+                    break;
+                }
+                case false: {
+                    this.selectedUnwantedSlots.push(x);
+                    break;
+                }
+            }
+        }); 
+    }
+
     loadSpecialHours(worker: Worker) {
         var isDerisableSlot = true;
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
-        this.dataService.getSpecialHours(isDerisableSlot, worker.id)
+        this.dataService.getSpecialHours(worker.id)
             .subscribe((data: SpecialHour[]) => {
                 console.log(data);
-                //this.desirableSlots = data;
-            });
-        this.dataService.getSpecialHours(!isDerisableSlot, worker.id)
-            .subscribe((data: SpecialHour[]) => {
-                console.log(data);
-                //this.unwantedSlots = data;
+                this.specialHours = data;
+                this.splitSpecialHours(this.specialHours);
+
             });
     }
-
 
 
 

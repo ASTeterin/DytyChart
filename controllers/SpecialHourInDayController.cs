@@ -41,7 +41,7 @@ namespace dutyChart.controllers
                     specialHourInDay.Date = date;
                     specialHourInDay.HourNumber = specialHour.HourNumber;
                     specialHourInDay.Type = specialHour.Type;
-                    specialHour.WorkerId = specialHour.WorkerId;
+                    specialHourInDay.WorkerId = specialHour.WorkerId;
                     allSpecialHoursInDay.Add(specialHourInDay);
                 }
                 db.SpecialHoursInDay.AddRange(allSpecialHoursInDay);

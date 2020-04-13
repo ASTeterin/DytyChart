@@ -173,19 +173,31 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent.prototype.onColorPickerSelected = function (event) {
         console.log(event);
     };
+    EditWorkerComponent.prototype.splitSpecialHours = function (specialHours) {
+        var _this = this;
+        specialHours.forEach(function (x) {
+            switch (x.type) {
+                case true: {
+                    _this.selectedDesirableSlots.push(x);
+                    break;
+                }
+                case false: {
+                    _this.selectedUnwantedSlots.push(x);
+                    break;
+                }
+            }
+        });
+    };
     EditWorkerComponent.prototype.loadSpecialHours = function (worker) {
+        var _this = this;
         var isDerisableSlot = true;
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
-        this.dataService.getSpecialHours(isDerisableSlot, worker.id)
+        this.dataService.getSpecialHours(worker.id)
             .subscribe(function (data) {
             console.log(data);
-            //this.desirableSlots = data;
-        });
-        this.dataService.getSpecialHours(!isDerisableSlot, worker.id)
-            .subscribe(function (data) {
-            console.log(data);
-            //this.unwantedSlots = data;
+            _this.specialHours = data;
+            _this.splitSpecialHours(_this.specialHours);
         });
     };
     EditWorkerComponent.prototype.updateDesirableSlots = function (selectedData) {

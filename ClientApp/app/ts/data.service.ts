@@ -180,8 +180,8 @@ export class DataService {
         return this.http.get(`${this.urlSpecialHour}?type=${type}&workerId=${workerId}&hourNumber=${hourNumber}`);
     }
 
-    getSpecialHours(type: boolean, workerId: number) {
-        return this.http.get(`${this.urlSpecialHours}?type=${type}&workerId=${workerId}`);
+    getSpecialHours(workerId: number) {
+        return this.http.get(`${this.urlSpecialHours}workerId=${workerId}`);
     }
 
     deleteSpecialHour(id: number) {
