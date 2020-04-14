@@ -181,7 +181,7 @@ export class DataService {
     }
 
     getSpecialHours(workerId: number) {
-        return this.http.get(`${this.urlSpecialHours}workerId=${workerId}`);
+        return this.http.get(`${this.urlSpecialHours}?workerId=${workerId}`);
     }
 
     deleteSpecialHour(id: number) {

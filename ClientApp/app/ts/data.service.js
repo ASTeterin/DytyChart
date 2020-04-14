@@ -141,7 +141,7 @@ var DataService = /** @class */ (function () {
         return this.http.get(this.urlSpecialHour + "?type=" + type + "&workerId=" + workerId + "&hourNumber=" + hourNumber);
     };
     DataService.prototype.getSpecialHours = function (workerId) {
-        return this.http.get(this.urlSpecialHours + "workerId=" + workerId);
+        return this.http.get(this.urlSpecialHours + "?workerId=" + workerId);
     };
     DataService.prototype.deleteSpecialHour = function (id) {
         return this.http.delete(this.urlSpecialHour + '/' + id);

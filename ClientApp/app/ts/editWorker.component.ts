@@ -42,8 +42,13 @@ export class EditWorkerComponent implements OnInit {
         { item_id: 11, item_text: '19:00' }
     ];
     public model: any;
+    test = [
+        { item_id: 0, item_text: '08:00' },
+        { item_id: 1, item_text: '09:00' }];
     selectedDesirableSlots: any[] = [];
     selectedUnwantedSlots: any[] = [];
+    unwantedSlots: SpecialHour[] = [];
+    desirableSlots: SpecialHour[] = [];
     specialHour: SpecialHour = new SpecialHour();
     selectedHour: SpecialHour = new SpecialHour();
     specialHours: SpecialHour[] = [];
@@ -80,6 +85,9 @@ export class EditWorkerComponent implements OnInit {
 
     cancel() {
         this.currentWorker = new Worker();
+        this.selectedDesirableSlots = [];
+        this.desirableSlots = [];
+        //this.unwantedSlots = [];
         this.periods = [];
     }
 
@@ -168,6 +176,9 @@ export class EditWorkerComponent implements OnInit {
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.loadAbsentPeriods(this.currentWorker);
         this.loadSpecialHours(this.currentWorker);
+        this.splitSpecialHours(this.specialHours);
+        this.getSelectedHours(this.desirableSlots);
+       
     }
 
     deleteWorker(id: number) {
@@ -183,11 +194,11 @@ export class EditWorkerComponent implements OnInit {
         specialHours.forEach(x => {
             switch (x.type) {
                 case true: {
-                    this.selectedDesirableSlots.push(x);
+                    this.desirableSlots.push(x);
                     break;
                 }
                 case false: {
-                    this.selectedUnwantedSlots.push(x);
+                    this.unwantedSlots.push(x);
                     break;
                 }
             }
@@ -196,18 +207,24 @@ export class EditWorkerComponent implements OnInit {
 
     loadSpecialHours(worker: Worker) {
         var isDerisableSlot = true;
-        this.selectedDesirableSlots = [];
-        this.selectedUnwantedSlots = [];
+        //this.selectedDesirableSlots = [];
+        //this.selectedUnwantedSlots = [];
         this.dataService.getSpecialHours(worker.id)
             .subscribe((data: SpecialHour[]) => {
                 console.log(data);
                 this.specialHours = data;
-                this.splitSpecialHours(this.specialHours);
-
             });
     }
 
-
+    getSelectedHours(selectedSlots: SpecialHour[]) {
+        console.log(selectedSlots);
+        selectedSlots.forEach((slot) => {
+            this.selectedDesirableSlots.push(
+                this.dropdownList.find((s) => s.item_id == slot.hourNumber));
+        });
+        //this.selectedDesirableSlots = [{ item_id: 11, item_text: '19:00' }];
+        console.log(this.selectedDesirableSlots);
+    }
 
     updateDesirableSlots(selectedData: any) {
         console.log(selectedData);
