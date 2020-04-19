@@ -449,10 +449,10 @@ namespace dutyChart.Models
             var i = 0;
             foreach (List<Worker> group in workersInGroupByPriority)
             {
-                if (groups[i].NumberDutyHours == 0) {
+                /*if (groups[i].NumberDutyHours == 0) {
                     i++;
                     continue;
-                }  
+                }  */
                 FillSlotsForGroup(group, groups[i++].NumberDutyHours, ref hours, ref countFreeSlots, ref notBusyWorkers, date);
             }
 
