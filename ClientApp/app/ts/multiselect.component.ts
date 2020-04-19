@@ -45,7 +45,7 @@ export class NgMultiselect {
         //this.selectedItems.push(item.item_id);
         //this.selectedIds.push(item.item_id);
         //this.timeChange.emit(this.selectedItems);
-        this.onChanged.emit({x:"select", data:item.item_id });
+        this.onChanged.emit({operation:"select", data:item.item_id });
         //console.log(this.selectedItems);
 
     }
@@ -54,7 +54,7 @@ export class NgMultiselect {
         //splice indexOf
         //this.selectedItems.push(item.item_id);
         //this.selectedIds.push(item.item_id);
-        this.onChanged.emit({ x: "unSelect", data: item.item_id });
+        this.onChanged.emit({ operation: "unSelect", data: item.item_id });
 
     }
 

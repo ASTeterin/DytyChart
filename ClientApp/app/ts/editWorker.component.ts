@@ -86,8 +86,9 @@ export class EditWorkerComponent implements OnInit {
     cancel() {
         this.currentWorker = new Worker();
         this.selectedDesirableSlots = [];
+        this.selectedUnwantedSlots = [];
         this.desirableSlots = [];
-        //this.unwantedSlots = [];
+        this.unwantedSlots = [];
         this.periods = [];
     }
 
@@ -175,10 +176,17 @@ export class EditWorkerComponent implements OnInit {
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.loadAbsentPeriods(this.currentWorker);
-        this.loadSpecialHours(this.currentWorker);
-        this.splitSpecialHours(this.specialHours);
-        this.getSelectedHours(this.desirableSlots);
-       
+        this.loadSpecialHours(this.currentWorker, () => {
+            console.log(this.specialHours);
+            this.splitSpecialHours(this.specialHours);
+            if (this.desirableSlots.length != 0)
+                this.selectedDesirableSlots = this.getSelectedHours(this.desirableSlots);
+            if (this.unwantedSlots.length != 0)
+                this.selectedUnwantedSlots = this.getSelectedHours(this.unwantedSlots);
+            //this.getSelectedHours(this.desirableSlots);
+
+        }); 
+        console.log(this.specialHours);       
     }
 
     deleteWorker(id: number) {
@@ -205,25 +213,52 @@ export class EditWorkerComponent implements OnInit {
         }); 
     }
 
-    loadSpecialHours(worker: Worker) {
+    loadSpecialHours(worker: Worker, cb: any) {
         var isDerisableSlot = true;
         //this.selectedDesirableSlots = [];
         //this.selectedUnwantedSlots = [];
         this.dataService.getSpecialHours(worker.id)
-            .subscribe((data: SpecialHour[]) => {
-                console.log(data);
+            .subscribe((data: SpecialHour[]) => {  
                 this.specialHours = data;
+                if (cb) cb();
             });
+        console.log(this.specialHours);
     }
 
-    getSelectedHours(selectedSlots: SpecialHour[]) {
-        console.log(selectedSlots);
+    getSelectedHours(selectedSlots: SpecialHour[]): any {
+        //console.log(selectedSlots);
+        let selectedSpecialHours: any[] | { item_id: number; item_text: string; }[] = [];
         selectedSlots.forEach((slot) => {
-            this.selectedDesirableSlots.push(
+            selectedSpecialHours.push(
                 this.dropdownList.find((s) => s.item_id == slot.hourNumber));
         });
         //this.selectedDesirableSlots = [{ item_id: 11, item_text: '19:00' }];
-        console.log(this.selectedDesirableSlots);
+        console.log(selectedSpecialHours);
+        return selectedSpecialHours;
+    }
+
+    updateUnwantedSlots(selectedData: any) {
+        console.log(selectedData);
+        this.specialHour.type = false;
+        this.specialHour.workerId = this.selectedWorkerId;
+        this.specialHour.hourNumber = selectedData.data;
+        switch (selectedData.operation) {
+            case "select": {
+                this.dataService.createSpecialHour(this.specialHour)
+                    .subscribe((data: SpecialHour) => this.specialHours.push(data));
+                console.log(this.specialHours);
+                break;
+            }
+            case "unSelect": {
+                this.dataService.getSpecialHour(false, this.selectedWorkerId, selectedData.data).subscribe((data: SpecialHour) => {
+                    this.selectedHour = data;
+                    console.log(this.selectedHour);
+                    this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));
+                });
+                //console.log(this.selectedHour);
+                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
+            }
+        }
     }
 
     updateDesirableSlots(selectedData: any) {
@@ -232,7 +267,7 @@ export class EditWorkerComponent implements OnInit {
         this.specialHour.type = true;
         this.specialHour.workerId = this.selectedWorkerId;
         this.specialHour.hourNumber = selectedData.data;    
-        switch(selectedData.x) {
+        switch(selectedData.operation) {
             case "select": {
                 
                 this.dataService.createSpecialHour(this.specialHour)

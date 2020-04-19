@@ -84,8 +84,10 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.cancel = function () {
         this.currentWorker = new Worker();
-        //this.desirableSlots = [];
-        //this.unwantedSlots = [];
+        this.selectedDesirableSlots = [];
+        this.selectedUnwantedSlots = [];
+        this.desirableSlots = [];
+        this.unwantedSlots = [];
         this.periods = [];
     };
     EditWorkerComponent.prototype.isAllInfoEntered = function () {
@@ -171,9 +173,16 @@ var EditWorkerComponent = /** @class */ (function () {
         this.isDisableSettings = false;
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.loadAbsentPeriods(this.currentWorker);
-        this.loadSpecialHours(this.currentWorker);
-        this.splitSpecialHours(this.specialHours);
-        this.getSelectedHours(this.desirableSlots);
+        this.loadSpecialHours(this.currentWorker, function () {
+            console.log(_this.specialHours);
+            _this.splitSpecialHours(_this.specialHours);
+            if (_this.desirableSlots.length != 0)
+                _this.selectedDesirableSlots = _this.getSelectedHours(_this.desirableSlots);
+            if (_this.unwantedSlots.length != 0)
+                _this.selectedUnwantedSlots = _this.getSelectedHours(_this.unwantedSlots);
+            //this.getSelectedHours(this.desirableSlots);
+        });
+        console.log(this.specialHours);
     };
     EditWorkerComponent.prototype.deleteWorker = function (id) {
         var _this = this;
@@ -198,25 +207,53 @@ var EditWorkerComponent = /** @class */ (function () {
             }
         });
     };
-    EditWorkerComponent.prototype.loadSpecialHours = function (worker) {
+    EditWorkerComponent.prototype.loadSpecialHours = function (worker, cb) {
         var _this = this;
         var isDerisableSlot = true;
         //this.selectedDesirableSlots = [];
         //this.selectedUnwantedSlots = [];
         this.dataService.getSpecialHours(worker.id)
             .subscribe(function (data) {
-            console.log(data);
             _this.specialHours = data;
-            console.log(_this.selectedDesirableSlots);
+            if (cb)
+                cb();
         });
-        console.log(this.selectedDesirableSlots);
+        console.log(this.specialHours);
     };
     EditWorkerComponent.prototype.getSelectedHours = function (selectedSlots) {
         var _this = this;
-        console.log(selectedSlots);
+        //console.log(selectedSlots);
+        var selectedSpecialHours = [];
         selectedSlots.forEach(function (slot) {
-            _this.selectedDesirableSlots.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
+            selectedSpecialHours.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
         });
+        //this.selectedDesirableSlots = [{ item_id: 11, item_text: '19:00' }];
+        console.log(selectedSpecialHours);
+        return selectedSpecialHours;
+    };
+    EditWorkerComponent.prototype.updateUnwantedSlots = function (selectedData) {
+        var _this = this;
+        console.log(selectedData);
+        this.specialHour.type = false;
+        this.specialHour.workerId = this.selectedWorkerId;
+        this.specialHour.hourNumber = selectedData.data;
+        switch (selectedData.operation) {
+            case "select": {
+                this.dataService.createSpecialHour(this.specialHour)
+                    .subscribe(function (data) { return _this.specialHours.push(data); });
+                console.log(this.specialHours);
+                break;
+            }
+            case "unSelect": {
+                this.dataService.getSpecialHour(false, this.selectedWorkerId, selectedData.data).subscribe(function (data) {
+                    _this.selectedHour = data;
+                    console.log(_this.selectedHour);
+                    _this.dataService.deleteSpecialHour(_this.selectedHour.id).subscribe(function (data) { return console.log(data); });
+                });
+                //console.log(this.selectedHour);
+                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
+            }
+        }
     };
     EditWorkerComponent.prototype.updateDesirableSlots = function (selectedData) {
         var _this = this;
@@ -225,7 +262,7 @@ var EditWorkerComponent = /** @class */ (function () {
         this.specialHour.type = true;
         this.specialHour.workerId = this.selectedWorkerId;
         this.specialHour.hourNumber = selectedData.data;
-        switch (selectedData.x) {
+        switch (selectedData.operation) {
             case "select": {
                 this.dataService.createSpecialHour(this.specialHour)
                     .subscribe(function (data) { return _this.specialHours.push(data); });
