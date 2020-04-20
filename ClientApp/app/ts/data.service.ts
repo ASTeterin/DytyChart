@@ -164,6 +164,10 @@ export class DataService {
         return this.http.get(`${this.urlDesirableHourInDay}?date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
     }
 
+    getSpecialHoursInDay(date: moment.Moment, workerId: number) {
+        return this.http.get(`${this.urlSpecialHourInDay}?date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
+    }
+
     getUnwantedHourInDay(date: moment.Moment, type: boolean, workerId: number) {
         return this.http.get(`${this.urlUnwantedHourInDay}?date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
     }

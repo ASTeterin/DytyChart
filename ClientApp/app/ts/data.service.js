@@ -128,6 +128,9 @@ var DataService = /** @class */ (function () {
     DataService.prototype.getDesirableHourInDay = function (date, workerId) {
         return this.http.get(this.urlDesirableHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
     };
+    DataService.prototype.getSpecialHoursInDay = function (date, workerId) {
+        return this.http.get(this.urlSpecialHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
+    };
     DataService.prototype.getUnwantedHourInDay = function (date, type, workerId) {
         return this.http.get(this.urlUnwantedHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
     };

@@ -21,13 +21,13 @@ namespace dutyChart.controllers
 
 
         [HttpGet]
-
-        public IEnumerable<SpecialHourInDay> GetSpecialHourInDay(DateTime date, Boolean type, int workerId)
+        public IEnumerable<SpecialHourInDay> GetSpecialHourInDay(DateTime date, int workerId)
         {
-            var specialHourInDay = db.SpecialHoursInDay.Where(x => x.Date == date && x.Type == type && x.WorkerId == workerId).ToList();
+            var specialHourInDay = db.SpecialHoursInDay.Where(x => x.Date == date && x.WorkerId == workerId).ToList();
             return specialHourInDay;
 
         }
+
         [HttpGet, Route("all-special-hours")]
         public IEnumerable<SpecialHourInDay> GetSpecialHoursInDayFromSpecialHours(IEnumerable<SpecialHourInDay> specialHours, DateTime date)
         {
