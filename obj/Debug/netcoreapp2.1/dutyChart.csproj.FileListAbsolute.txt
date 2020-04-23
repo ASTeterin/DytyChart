@@ -44,3 +44,4 @@ d:\repos\dutychart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.AssemblyInfo.cs
 d:\repos\dutychart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.RazorTargetAssemblyInfo.cache
 d:\repos\dutychart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.dll
 d:\repos\dutychart\dutyChart\obj\Debug\netcoreapp2.1\dutyChart.pdb
+C:\Users\user\source\repos\dutyChart\dutyChart\bin\Debug\netcoreapp2.1\appsettings.json
