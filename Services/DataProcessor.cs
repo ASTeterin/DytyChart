@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using dutyChart.Dto;
+using Microsoft.Extensions.Configuration;
+
 
 namespace dutyChart.Models
 {
@@ -14,9 +16,12 @@ namespace dutyChart.Models
     {
         readonly ApplicationContext _db;
 
-        public DataProcessor(ApplicationContext db)
+        public IConfiguration Configuration { get; }
+
+        public DataProcessor(ApplicationContext db, IConfiguration configuration)
         {
             _db = db;
+            Configuration = configuration;
         }
 
         private bool СanDuty(Worker worker, DateTime date)
@@ -102,7 +107,6 @@ namespace dutyChart.Models
                 }
                 if ((workerInDay.IsDutyOnLetters) || (!СanDuty(w, date)) || (w.IdGroup == idDutyWorkerGroup))
                 {
-                    //notDutyWorkers.Add(w);
                     continue;
                 }
                 var groupIndex = groups.FindIndex(g => g.Id == w.IdGroup);
@@ -112,7 +116,6 @@ namespace dutyChart.Models
             workersInGroupByPriority.Insert(0, dutyOnPlanningGroup);
             workersInGroupByPriority.Insert(0, groupWithSpecialHours);
             workersInGroupByPriority.Insert(0, dutyGroup);
-            //workersInGroupByPriority.Add();
             return workersInGroupByPriority;
         }
 
@@ -177,7 +180,7 @@ namespace dutyChart.Models
 
         private List<int> GetSlotNumbersForWorker(ref List<int> hoursInDay, /*ref int countSlotsForWorker,*/ Worker worker, DateTime date)
         {
-            int maxCountAttempts = 50;
+            int maxCountAttempts = Convert.ToInt32(Configuration["MaxCountAttempts"]);
             bool isDesirableSlot = true;
             int number, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
@@ -449,10 +452,6 @@ namespace dutyChart.Models
             var i = 0;
             foreach (List<Worker> group in workersInGroupByPriority)
             {
-                /*if (groups[i].NumberDutyHours == 0) {
-                    i++;
-                    continue;
-                }  */
                 FillSlotsForGroup(group, groups[i++].NumberDutyHours, ref hours, ref countFreeSlots, ref notBusyWorkers, date);
             }
 
