@@ -96,7 +96,8 @@ namespace dutyChart.controllers
                 foreach (Worker w in dutyWorkers)
                 {
                     WorkerInDay eachWorkerInDay = db.WorkerInDays.Where(x => x.WorkerId == w.Id && x.Date == workerInDay.Date).FirstOrDefault();
-                    eachWorkerInDay.IsDuty = false;
+                    if (eachWorkerInDay != null) 
+                        eachWorkerInDay.IsDuty = false;
                 }
 
             }

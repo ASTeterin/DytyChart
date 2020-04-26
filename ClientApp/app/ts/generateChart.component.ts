@@ -31,7 +31,7 @@ export class GenerateChartComponent implements OnInit {
     calendar: NgbCalendar;
     currentDate: NgbDateStruct;
     day: number;
-    month: number;
+    month: string;
     worker: Worker = new Worker();
     workers: Worker[];
     workerInDay: WorkerInDay = new WorkerInDay();
@@ -148,16 +148,21 @@ export class GenerateChartComponent implements OnInit {
         return arr;
     }
 
+    getMonth(monthNumber: number) {
+        let monthNames: string[] = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+        return (monthNumber < monthNames.length - 1)? monthNames[monthNumber - 1]: null;
+    }
+
     dateChangeHandler(date: NgbDateStruct) {
+        this.cancelWorker();
         this.day = date.day;
-        this.month = date.month;
+        this.month = this.getMonth(date.month);
         this.isNewDay = true;
         if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
         };
 
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
-        
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.loadAllSpecialHoursInDay();
@@ -341,6 +346,12 @@ export class GenerateChartComponent implements OnInit {
                 this.selectedDateHours = data;
                 if (cb) cb();
             });
+    }
+
+    cancelWorker() {
+        this.selectedWorkerId = null;
+        this.cancelWorkerInDay();
+        //this.cancelSlot;
     }
 
     cancel() {

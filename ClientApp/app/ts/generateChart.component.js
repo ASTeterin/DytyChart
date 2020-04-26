@@ -122,9 +122,14 @@ var GenerateChartComponent = /** @class */ (function () {
         }
         return arr;
     };
+    GenerateChartComponent.prototype.getMonth = function (monthNumber) {
+        var monthNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+        return (monthNumber < monthNames.length - 1) ? monthNames[monthNumber - 1] : null;
+    };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
+        this.cancelWorker();
         this.day = date.day;
-        this.month = date.month;
+        this.month = this.getMonth(date.month);
         this.isNewDay = true;
         if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
@@ -303,6 +308,11 @@ var GenerateChartComponent = /** @class */ (function () {
             if (cb)
                 cb();
         });
+    };
+    GenerateChartComponent.prototype.cancelWorker = function () {
+        this.selectedWorkerId = null;
+        this.cancelWorkerInDay();
+        //this.cancelSlot;
     };
     GenerateChartComponent.prototype.cancel = function () {
         this.selectedHour = new Hour();

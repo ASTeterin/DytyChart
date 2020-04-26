@@ -16,9 +16,7 @@ namespace dutyChart.controllers
         public SpecialHourInDayController(ApplicationContext context)
         {
             db = context;
-
         }
-
 
         [HttpGet]
         public IEnumerable<SpecialHourInDay> GetSpecialHourInDay(DateTime date, int workerId)
@@ -32,8 +30,10 @@ namespace dutyChart.controllers
         public IEnumerable<SpecialHourInDay> GetSpecialHoursInDayFromSpecialHours(IEnumerable<SpecialHourInDay> specialHours, DateTime date)
         {
             var allSpecialHoursInDay = db.SpecialHoursInDay.Where(s => s.Date == date).ToList();
-            if (allSpecialHoursInDay.Count == 0)
-            {
+            db.SpecialHoursInDay.RemoveRange(allSpecialHoursInDay);
+            allSpecialHoursInDay = new List<SpecialHourInDay> { };
+            //if (allSpecialHoursInDay.Count == 0)
+            //{
                 var allSpecialHours = db.SpecialHours.ToList();
                 foreach (var specialHour in allSpecialHours)
                 {
@@ -46,7 +46,7 @@ namespace dutyChart.controllers
                 }
                 db.SpecialHoursInDay.AddRange(allSpecialHoursInDay);
                 db.SaveChanges();
-            }
+            //}
             return allSpecialHoursInDay;
         }
 
