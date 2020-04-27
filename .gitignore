@@ -7,7 +7,6 @@
 /obj
 /wwwroot
 /out-tsc
-/Migrations
 # dependencies
 /node_modules
 /bower_components
