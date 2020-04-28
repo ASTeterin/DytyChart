@@ -85,11 +85,13 @@ export class EditWorkerComponent implements OnInit {
 
     cancel() {
         this.currentWorker = new Worker();
+        this.absentPeriod = new AbsentPeriod();
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
         this.desirableSlots = [];
         this.unwantedSlots = [];
         this.periods = [];
+        this.absentPeriods = [];
     }
 
     isAllInfoEntered() {
@@ -112,10 +114,10 @@ export class EditWorkerComponent implements OnInit {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(data => this.loadWorkers());
         }
-        if (this.absentPeriods.length > 0) {
+        /*if (this.absentPeriods.length > 0) {
             this.saveAbsentPeriod();
             this.loadAbsentPeriods(this.currentWorker);
-        }
+        }*/
         this.modal.open(isErrorWhenSaving);
 
         //this.cancel();
@@ -156,10 +158,10 @@ export class EditWorkerComponent implements OnInit {
         this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
     }
-    showDate($event: any) {
-        this.absentPeriod.start = moment(new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day));
-        if ($event.todate)
-            this.absentPeriod.end = moment(new Date($event.todate.year, $event.todate.month - 1, $event.todate.day));
+    showDate($date: any) {
+        this.absentPeriod.start = moment.utc([$date.fromDate.year, $date.fromDate.month - 1, $date.fromDate.day]);
+        if ($date.todate)
+            this.absentPeriod.end = moment.utc([$date.todate.year, $date.todate.month - 1, $date.todate.day]);
     }
 
     loadAbsentPeriods(worker: Worker) {

@@ -84,11 +84,13 @@ var EditWorkerComponent = /** @class */ (function () {
     };
     EditWorkerComponent.prototype.cancel = function () {
         this.currentWorker = new Worker();
+        this.absentPeriod = new AbsentPeriod();
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
         this.desirableSlots = [];
         this.unwantedSlots = [];
         this.periods = [];
+        this.absentPeriods = [];
     };
     EditWorkerComponent.prototype.isAllInfoEntered = function () {
         return ((!this.currentWorker.color) || (!this.currentWorker.idGroup) || (!this.currentWorker.name)) ? false : true;
@@ -111,10 +113,10 @@ var EditWorkerComponent = /** @class */ (function () {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
-        if (this.absentPeriods.length > 0) {
+        /*if (this.absentPeriods.length > 0) {
             this.saveAbsentPeriod();
             this.loadAbsentPeriods(this.currentWorker);
-        }
+        }*/
         this.modal.open(isErrorWhenSaving);
         //this.cancel();
         //this.periods = [];
@@ -153,10 +155,10 @@ var EditWorkerComponent = /** @class */ (function () {
         this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
     };
-    EditWorkerComponent.prototype.showDate = function ($event) {
-        this.absentPeriod.start = moment(new Date($event.fromDate.year, $event.fromDate.month - 1, $event.fromDate.day));
-        if ($event.todate)
-            this.absentPeriod.end = moment(new Date($event.todate.year, $event.todate.month - 1, $event.todate.day));
+    EditWorkerComponent.prototype.showDate = function ($date) {
+        this.absentPeriod.start = moment.utc([$date.fromDate.year, $date.fromDate.month - 1, $date.fromDate.day]);
+        if ($date.todate)
+            this.absentPeriod.end = moment.utc([$date.todate.year, $date.todate.month - 1, $date.todate.day]);
     };
     EditWorkerComponent.prototype.loadAbsentPeriods = function (worker) {
         var _this = this;
