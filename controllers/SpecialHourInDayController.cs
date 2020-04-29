@@ -26,6 +26,14 @@ namespace dutyChart.controllers
 
         }
 
+        [HttpGet, Route("special-hours")]
+        public SpecialHourInDay GetSpecialHourInDay(DateTime date, int workerId, bool type, int hourNumber)
+        {
+            var specialHourInDay = db.SpecialHoursInDay.FirstOrDefault(x => x.Date == date && x.WorkerId == workerId && x.Type == type && x.HourNumber == hourNumber);
+            return specialHourInDay;
+
+        }
+
         [HttpGet, Route("all-special-hours")]
         public IEnumerable<SpecialHourInDay> GetSpecialHoursInDayFromSpecialHours(IEnumerable<SpecialHourInDay> specialHours, DateTime date)
         {
@@ -76,6 +84,18 @@ namespace dutyChart.controllers
                 return Ok(specialHourInDay);
             }
             return BadRequest(ModelState);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            SpecialHourInDay specialHourInDay = db.SpecialHoursInDay.FirstOrDefault(x => x.Id == id);
+            if (specialHourInDay != null)
+            {
+                db.SpecialHoursInDay.Remove(specialHourInDay);
+                db.SaveChanges();
+            }
+            return Ok(specialHourInDay);
         }
     }
 }

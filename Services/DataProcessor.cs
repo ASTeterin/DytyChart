@@ -89,15 +89,16 @@ namespace dutyChart.Models
                     dutyOnLettersGroup.Add(w);
                     continue;
                 }
-                if (IsWorkerWithDesirableHours(w, date)) 
-                {
-                    groupWithSpecialHours.Add(w);
-                    continue;
-                }
+                
                 if (workerInDay.IsDuty)
                 {
                     dutyGroup.Add(w);
                     idDutyWorkerGroup = w.IdGroup;
+                    continue;
+                }
+                if (IsWorkerWithDesirableHours(w, date))
+                {
+                    groupWithSpecialHours.Add(w);
                     continue;
                 }
 
@@ -106,7 +107,7 @@ namespace dutyChart.Models
                     dutyOnPlanningGroup.Add(w);
                     continue;
                 }
-                if ((workerInDay.IsDutyOnLetters) || (w.IdGroup == idDutyWorkerGroup))
+                if (w.IdGroup == idDutyWorkerGroup)
                 {
                     continue;
                 }

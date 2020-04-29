@@ -473,7 +473,7 @@ export class GenerateChartComponent implements OnInit {
             .subscribe(data => { console.log(data); this.loadSlots() });
     }
 
-    updateDesirableSlots(selectedItems: any) {
+    /*updateDesirableSlots(selectedItems: any) {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
@@ -481,6 +481,33 @@ export class GenerateChartComponent implements OnInit {
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
             .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
         console.log(this.specialHourInDay);
+    }*/
+
+    updateDesirableSlots(selectedData: any) {
+        console.log(selectedData);
+        //this.selectedHour = new SpecialHour();
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = true;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedData.data;
+        switch (selectedData.operation) {
+            case "select": {
+
+                this.dataService.createSpecialHourInDay(this.specialHourInDay)
+                    .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
+                console.log(this.specialHoursInDay);
+                break;
+            }
+            case "unSelect": {
+                this.dataService.getSpecialHourInDayForWorker(this.selectedDate, this.selectedWorkerId, true, selectedData.data).subscribe((data: SpecialHourInDay) => {
+                    this.selectedHour = data; console.log(this.selectedHour);
+                    this.dataService.deleteSpecialHourInDay(this.selectedHour.id).subscribe((data) => console.log(data));
+                });
+                //console.log(this.selectedHour);
+                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
+            }
+        }
+
     }
 
     updateUnwantedSlots(selectedItems: any) {

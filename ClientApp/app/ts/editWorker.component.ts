@@ -279,8 +279,10 @@ export class EditWorkerComponent implements OnInit {
             }
             case "unSelect": {
                 this.dataService.getSpecialHour(true, this.selectedWorkerId, selectedData.data).subscribe((data: SpecialHour) => {
-                this.selectedHour = data; console.log(this.selectedHour);
-                    this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));}); 
+                    this.selectedHour = data;
+                    console.log(this.selectedHour);
+                    this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));
+                }); 
                 //console.log(this.selectedHour);
                 //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }

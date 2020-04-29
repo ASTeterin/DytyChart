@@ -421,15 +421,40 @@ var GenerateChartComponent = /** @class */ (function () {
         this.dataService.deleteSlotsInHour(id)
             .subscribe(function (data) { console.log(data); _this.loadSlots(); });
     };
-    GenerateChartComponent.prototype.updateDesirableSlots = function (selectedItems) {
-        var _this = this;
+    /*updateDesirableSlots(selectedItems: any) {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
         this.specialHourInDay.hourNumber = selectedItems.data;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
-            .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
+            .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
         console.log(this.specialHourInDay);
+    }*/
+    GenerateChartComponent.prototype.updateDesirableSlots = function (selectedData) {
+        var _this = this;
+        console.log(selectedData);
+        //this.selectedHour = new SpecialHour();
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = true;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedData.data;
+        switch (selectedData.operation) {
+            case "select": {
+                this.dataService.createSpecialHourInDay(this.specialHourInDay)
+                    .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
+                console.log(this.specialHoursInDay);
+                break;
+            }
+            case "unSelect": {
+                this.dataService.getSpecialHourInDayForWorker(this.selectedDate, this.selectedWorkerId, true, selectedData.data).subscribe(function (data) {
+                    _this.selectedHour = data;
+                    console.log(_this.selectedHour);
+                    _this.dataService.deleteSpecialHourInDay(_this.selectedHour.id).subscribe(function (data) { return console.log(data); });
+                });
+                //console.log(this.selectedHour);
+                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
+            }
+        }
     };
     GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedItems) {
         var _this = this;

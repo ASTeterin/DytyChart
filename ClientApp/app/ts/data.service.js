@@ -28,6 +28,7 @@ var DataService = /** @class */ (function () {
         this.urlSpecialHour = "/api/SpecialHour";
         this.urlSpecialHours = "/api/SpecialHour/get-all-hours";
         this.urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
+        this.urlSpecialHoursInDayForWorker = "/api/SpecialHoursInDay/special-hours";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -130,6 +131,15 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.getSpecialHoursInDay = function (date, workerId) {
         return this.http.get(this.urlSpecialHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
+    };
+    DataService.prototype.getSpecialHourInDay = function (date, workerId) {
+        return this.http.get(this.urlSpecialHourInDay + "?&date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);
+    };
+    DataService.prototype.getSpecialHourInDayForWorker = function (date, workerId, type, hourNumber) {
+        return this.http.get(this.urlSpecialHoursInDayForWorker + "?type=" + type + "&date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId + "&hourNumber=" + hourNumber);
+    };
+    DataService.prototype.deleteSpecialHourInDay = function (id) {
+        return this.http.delete(this.urlSpecialHourInDay + '/' + id);
     };
     DataService.prototype.getUnwantedHourInDay = function (date, type, workerId) {
         return this.http.get(this.urlUnwantedHourInDay + "?date=" + date.format('YYYY-MM-DD') + "&workerId=" + workerId);

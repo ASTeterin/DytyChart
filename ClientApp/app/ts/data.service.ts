@@ -29,6 +29,7 @@ export class DataService {
     public urlSpecialHour = "/api/SpecialHour";
     public urlSpecialHours = "/api/SpecialHour/get-all-hours";
     public urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
+    public urlSpecialHoursInDayForWorker = "/api/SpecialHoursInDay/special-hours";
 
     constructor(private http: HttpClient) {
     }
@@ -166,6 +167,18 @@ export class DataService {
 
     getSpecialHoursInDay(date: moment.Moment, workerId: number) {
         return this.http.get(`${this.urlSpecialHourInDay}?date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
+    }
+
+    getSpecialHourInDay(date: moment.Moment, workerId: number) {
+        return this.http.get(`${this.urlSpecialHourInDay}?&date=${date.format('YYYY-MM-DD')}&workerId=${workerId}`);
+    }
+
+    getSpecialHourInDayForWorker(date: moment.Moment, workerId: number, type: boolean, hourNumber: number) {
+        return this.http.get(`${this.urlSpecialHoursInDayForWorker }?type=${type}&date=${date.format('YYYY-MM-DD')}&workerId=${workerId}&hourNumber=${hourNumber}`);
+    }
+
+    deleteSpecialHourInDay(id: number) {
+        return this.http.delete(this.urlSpecialHourInDay + '/' + id);
     }
 
     getUnwantedHourInDay(date: moment.Moment, type: boolean, workerId: number) {
