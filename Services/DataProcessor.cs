@@ -82,8 +82,13 @@ namespace dutyChart.Models
             foreach (Worker w in workers)
             {
                 workerInDay = GetWorkerInDay(w.Id, date);
-                if (workerInDay == null)
+                if ((workerInDay == null) || (!СanDuty(w, date)))
                     continue;
+                if (workerInDay.IsDutyOnLetters)
+                {
+                    dutyOnLettersGroup.Add(w);
+                    continue;
+                }
                 if (IsWorkerWithDesirableHours(w, date)) 
                 {
                     groupWithSpecialHours.Add(w);
@@ -95,17 +100,13 @@ namespace dutyChart.Models
                     idDutyWorkerGroup = w.IdGroup;
                     continue;
                 }
-                if (workerInDay.IsDutyOnLetters)
-                {
-                    dutyOnLettersGroup.Add(w);
-                    continue;
-                }
+
                 if (workerInDay.IsDutyOnWedn)
                 {
                     dutyOnPlanningGroup.Add(w);
                     continue;
                 }
-                if ((workerInDay.IsDutyOnLetters) || (!СanDuty(w, date)) || (w.IdGroup == idDutyWorkerGroup))
+                if ((workerInDay.IsDutyOnLetters) || (w.IdGroup == idDutyWorkerGroup))
                 {
                     continue;
                 }
