@@ -418,25 +418,7 @@ export class GenerateChartComponent implements OnInit {
                 this.specialHoursInDay = data;
                 if (cb)
                     cb();
-                /*this.desirableSlots.forEach((slot) => {
-                    this.selectedDesirableSlots.push(
-                        this.dropdownList.find((s) => s.item_id == slot.hourNumber));
-                });
-                console.log(this.selectedDesirableSlots);*/
             });
-        /*this.dataService.getUnwantedHourInDay(date, !isDerisableSlot, worker.id)
-            .subscribe((data: SpecialHourInDay[]) => {
-                console.log(data);
-                this.unwantedSlots = data;
-            });
-       */
-        
-        /*this.unwantedSlots.forEach((slot) => {
-            this.selectedUnwantedSlots.push(
-                this.dropdownList.find((s) => s.item_id == slot.hourNumber));
-        });*/
-        //console.log(this.selectedDesirableSlots);
-        //console.log(this.selectedUnwantedSlots);
     }
 
     getSelectedHours(selectedSlots: SpecialHourInDay[]) {
@@ -484,8 +466,6 @@ export class GenerateChartComponent implements OnInit {
     }*/
 
     updateDesirableSlots(selectedData: any) {
-        console.log(selectedData);
-        //this.selectedHour = new SpecialHour();
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
@@ -495,22 +475,40 @@ export class GenerateChartComponent implements OnInit {
 
                 this.dataService.createSpecialHourInDay(this.specialHourInDay)
                     .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
-                console.log(this.specialHoursInDay);
                 break;
             }
             case "unSelect": {
                 this.dataService.getSpecialHourInDayForWorker(this.selectedDate, this.selectedWorkerId, true, selectedData.data).subscribe((data: SpecialHourInDay) => {
-                    this.selectedHour = data; console.log(this.selectedHour);
+                    this.selectedHour = data;
                     this.dataService.deleteSpecialHourInDay(this.selectedHour.id).subscribe((data) => console.log(data));
                 });
-                //console.log(this.selectedHour);
-                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
 
     }
 
-    updateUnwantedSlots(selectedItems: any) {
+    updateUnwantedSlots(selectedData: any) {
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = false;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedData.data;
+        switch (selectedData.operation) {
+            case "select": {
+                this.dataService.createSpecialHourInDay(this.specialHourInDay)
+                    .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
+                break;
+            }
+            case "unSelect": {
+                this.dataService.getSpecialHourInDayForWorker(this.selectedDate, this.selectedWorkerId, false, selectedData.data).subscribe((data: SpecialHourInDay) => {
+                    this.selectedHour = data;
+                    this.dataService.deleteSpecialHourInDay(this.selectedHour.id).subscribe((data) => console.log(data));
+                });
+            }
+        }
+
+    }
+
+    /*updateUnwantedSlots(selectedItems: any) {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;
@@ -518,7 +516,7 @@ export class GenerateChartComponent implements OnInit {
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
             .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
         console.log(this.specialHourInDay);
-    }
+    }*/
 
     addDesirableSlots(slotId: number) {
         this.worker.desirableSlots.push(slotId);

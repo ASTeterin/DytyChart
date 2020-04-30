@@ -371,24 +371,7 @@ var GenerateChartComponent = /** @class */ (function () {
             _this.specialHoursInDay = data;
             if (cb)
                 cb();
-            /*this.desirableSlots.forEach((slot) => {
-                this.selectedDesirableSlots.push(
-                    this.dropdownList.find((s) => s.item_id == slot.hourNumber));
-            });
-            console.log(this.selectedDesirableSlots);*/
         });
-        /*this.dataService.getUnwantedHourInDay(date, !isDerisableSlot, worker.id)
-            .subscribe((data: SpecialHourInDay[]) => {
-                console.log(data);
-                this.unwantedSlots = data;
-            });
-       */
-        /*this.unwantedSlots.forEach((slot) => {
-            this.selectedUnwantedSlots.push(
-                this.dropdownList.find((s) => s.item_id == slot.hourNumber));
-        });*/
-        //console.log(this.selectedDesirableSlots);
-        //console.log(this.selectedUnwantedSlots);
     };
     GenerateChartComponent.prototype.getSelectedHours = function (selectedSlots) {
         var _this = this;
@@ -432,8 +415,6 @@ var GenerateChartComponent = /** @class */ (function () {
     }*/
     GenerateChartComponent.prototype.updateDesirableSlots = function (selectedData) {
         var _this = this;
-        console.log(selectedData);
-        //this.selectedHour = new SpecialHour();
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
@@ -442,30 +423,45 @@ var GenerateChartComponent = /** @class */ (function () {
             case "select": {
                 this.dataService.createSpecialHourInDay(this.specialHourInDay)
                     .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
-                console.log(this.specialHoursInDay);
                 break;
             }
             case "unSelect": {
                 this.dataService.getSpecialHourInDayForWorker(this.selectedDate, this.selectedWorkerId, true, selectedData.data).subscribe(function (data) {
                     _this.selectedHour = data;
-                    console.log(_this.selectedHour);
                     _this.dataService.deleteSpecialHourInDay(_this.selectedHour.id).subscribe(function (data) { return console.log(data); });
                 });
-                //console.log(this.selectedHour);
-                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
     };
-    GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedItems) {
+    GenerateChartComponent.prototype.updateUnwantedSlots = function (selectedData) {
         var _this = this;
+        this.specialHourInDay.date = this.selectedDate;
+        this.specialHourInDay.type = false;
+        this.specialHourInDay.workerId = this.selectedWorkerId;
+        this.specialHourInDay.hourNumber = selectedData.data;
+        switch (selectedData.operation) {
+            case "select": {
+                this.dataService.createSpecialHourInDay(this.specialHourInDay)
+                    .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
+                break;
+            }
+            case "unSelect": {
+                this.dataService.getSpecialHourInDayForWorker(this.selectedDate, this.selectedWorkerId, false, selectedData.data).subscribe(function (data) {
+                    _this.selectedHour = data;
+                    _this.dataService.deleteSpecialHourInDay(_this.selectedHour.id).subscribe(function (data) { return console.log(data); });
+                });
+            }
+        }
+    };
+    /*updateUnwantedSlots(selectedItems: any) {
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;
         this.specialHourInDay.hourNumber = selectedItems.data;
         this.dataService.createSpecialHourInDay(this.specialHourInDay)
-            .subscribe(function (data) { return _this.specialHoursInDay.push(data); });
+            .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
         console.log(this.specialHourInDay);
-    };
+    }*/
     GenerateChartComponent.prototype.addDesirableSlots = function (slotId) {
         this.worker.desirableSlots.push(slotId);
         this.saveWorker();
