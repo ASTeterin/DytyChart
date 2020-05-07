@@ -9,6 +9,7 @@ import { AbsentPeriod } from './absentPeriod';
 import * as moment from 'moment';
 import { SpecialHourInDay } from './specialHourInDay';
 import { SpecialHour } from './specialHour';
+import { DefaultSlots } from './defaultSlots';
 
 @Injectable()
 export class DataService {
@@ -30,6 +31,7 @@ export class DataService {
     public urlSpecialHours = "/api/SpecialHour/get-all-hours";
     public urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
     public urlSpecialHoursInDayForWorker = "/api/SpecialHoursInDay/special-hours";
+    public urlDefaultSlots = "/api/DefaultSlots";
 
     constructor(private http: HttpClient) {
     }
@@ -77,7 +79,7 @@ export class DataService {
     createGroup(group: Group) {
         return this.http.post(this.urlGroup, group);
     }
-    updateGroup(group: Worker) {
+    updateGroup(group: Group) {
 
         return this.http.put(this.urlGroup + '/' + group.id, group);
     }
@@ -203,6 +205,22 @@ export class DataService {
 
     deleteSpecialHour(id: number) {
         return this.http.delete(this.urlSpecialHour + '/' + id);
+    }
+
+    getDefaultSlots() {
+        return this.http.get(this.urlDefaultSlots);
+    }
+
+    createDefaultSlots(defaultSlot: DefaultSlots) {
+        return this.http.post(this.urlDefaultSlots, defaultSlot);
+    }
+
+    updateDefaultSlots(defaultSlot: DefaultSlots) {
+
+        return this.http.put(this.urlDefaultSlots + '/' + defaultSlot.id, defaultSlot);
+    }
+    deleteDefaultSlot(id: number) {
+        return this.http.delete(this.urlDefaultSlots + '/' + id);
     }
 
 }
