@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { GenerateChartComponent } from './generateChart.component';
 import { EditWorkerComponent } from './editWorker.component';
 import { EditGroupComponent } from './editGroup.component';
+import { EditDefaultSlotsComponent } from './editDefaultSlots.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgbdDatepicker } from './datepicker.component';
 import { ChartComponent } from './chart.component';
@@ -26,12 +27,13 @@ const appRoutes: Routes = [
     { path: '', component: GenerateChartComponent },
     { path: 'editUser', component: EditWorkerComponent },
     { path: 'editGroup', component: EditGroupComponent },
+    { path: 'editDefaultSlots', component: EditDefaultSlotsComponent },
     { path: '**', redirectTo: '/' }
 ];
 
 @NgModule({
     imports: [BrowserModule, BrowserAnimationsModule, FormsModule, HttpClientModule, NgbModule, NgbdModalStackedModule, NgMultiSelectDropDownModule.forRoot(), NgbdTabsetModule, RouterModule.forRoot(appRoutes), MDBBootstrapModule.forRoot(), ColorPickerModule, NgxSpinnerModule],
-    declarations: [AppComponent, NgbdDatepicker, ChartComponent, NgMultiselect, GenerateChartComponent, EditWorkerComponent, EditGroupComponent, NgbdDatepickerRangePopup, NavComponent],
+    declarations: [AppComponent, NgbdDatepicker, ChartComponent, NgMultiselect, GenerateChartComponent, EditWorkerComponent, EditDefaultSlotsComponent, EditGroupComponent, NgbdDatepickerRangePopup, NavComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

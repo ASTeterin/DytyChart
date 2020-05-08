@@ -29,6 +29,7 @@ var DataService = /** @class */ (function () {
         this.urlSpecialHours = "/api/SpecialHour/get-all-hours";
         this.urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
         this.urlSpecialHoursInDayForWorker = "/api/SpecialHoursInDay/special-hours";
+        this.urlDefaultSlots = "/api/DefaultSlots";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -158,6 +159,18 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.deleteSpecialHour = function (id) {
         return this.http.delete(this.urlSpecialHour + '/' + id);
+    };
+    DataService.prototype.getDefaultSlots = function () {
+        return this.http.get(this.urlDefaultSlots);
+    };
+    DataService.prototype.createDefaultSlots = function (defaultSlot) {
+        return this.http.post(this.urlDefaultSlots, defaultSlot);
+    };
+    DataService.prototype.updateDefaultSlots = function (defaultSlot) {
+        return this.http.put(this.urlDefaultSlots + '/' + defaultSlot.id, defaultSlot);
+    };
+    DataService.prototype.deleteDefaultSlot = function (id) {
+        return this.http.delete(this.urlDefaultSlots + '/' + id);
     };
     DataService = __decorate([
         Injectable(),

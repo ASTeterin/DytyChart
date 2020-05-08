@@ -25,6 +25,8 @@
     <None Remove="ClientApp\app\ts\absentPeriod.ts" />
     <None Remove="ClientApp\app\ts\chartData.ts" />
     <None Remove="ClientApp\app\ts\countFreeSlotsForWorker.ts" />
+    <None Remove="ClientApp\app\ts\defaultSlots.ts" />
+    <None Remove="ClientApp\app\ts\editDefaultSlots.component.ts" />
     <None Remove="ClientApp\app\ts\editGroup.component.ts" />
     <None Remove="ClientApp\app\ts\excel.service.ts" />
     <None Remove="ClientApp\app\ts\group.ts" />
