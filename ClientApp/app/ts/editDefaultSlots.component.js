@@ -9,34 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
-import { Group } from './group';
+import { DefaultSlots } from './defaultSlots';
 import { NgbdModalStacked } from './modalWindow.component';
 var EditDefaultSlotsComponent = /** @class */ (function () {
     function EditDefaultSlotsComponent(dataService, modal) {
         this.dataService = dataService;
         this.modal = modal;
-        this.groups = [];
-        this.selectedGroup = new Group();
+        this.defaultHourSettings = [];
+        this.selectedHourSettings = new DefaultSlots();
         this.isDisableSettings = true;
     }
     EditDefaultSlotsComponent.prototype.ngOnInit = function () {
-        this.loadGroups();
+        this.loadDefaultSlots();
     };
-    EditDefaultSlotsComponent.prototype.loadGroups = function () {
+    EditDefaultSlotsComponent.prototype.loadDefaultSlots = function () {
         var _this = this;
-        this.dataService.getGroups().subscribe(function (data) {
-            _this.groups = data;
+        this.dataService.getDefaultSlots().subscribe(function (data) {
+            _this.defaultHourSettings = data;
             //this.workers.sort(this.compare);
-            console.log(_this.groups);
+            console.log(_this.defaultHourSettings);
         });
     };
     EditDefaultSlotsComponent.prototype.cancel = function () {
-        this.selectedGroup = new Group();
+        this.selectedHourSettings = new DefaultSlots();
     };
     EditDefaultSlotsComponent.prototype.isAllInfoEntered = function () {
-        return ((!this.selectedGroup.name) || (!this.selectedGroup.numberDutyHours)) ? false : true;
+        return ((!this.selectedHourSettings.name) || (!this.selectedHourSettings.minCount)) ? false : true;
     };
-    EditDefaultSlotsComponent.prototype.saveGroup = function () {
+    EditDefaultSlotsComponent.prototype.saveHoursettings = function () {
         var isErrorWhenSaving = false;
         if (this.isAllInfoEntered()) {
             this.saveChanges();
@@ -48,35 +48,35 @@ var EditDefaultSlotsComponent = /** @class */ (function () {
     };
     EditDefaultSlotsComponent.prototype.saveChanges = function () {
         var _this = this;
-        if (!this.selectedGroup.id) {
-            this.dataService.createGroup(this.selectedGroup)
+        if (!this.selectedHourSettings.id) {
+            this.dataService.createDefaultSlots(this.selectedHourSettings)
                 .subscribe(function (data) {
-                _this.groups.push(data);
+                _this.defaultHourSettings.push(data);
             });
         }
         else {
-            this.dataService.updateGroup(this.selectedGroup)
-                .subscribe(function (data) { return _this.loadGroups(); });
+            this.dataService.createDefaultSlots(this.selectedHourSettings)
+                .subscribe(function (data) { return _this.loadDefaultSlots(); });
         }
     };
-    EditDefaultSlotsComponent.prototype.changeGroup = function () {
+    EditDefaultSlotsComponent.prototype.changeHourSettings = function () {
         var _this = this;
         this.cancel();
-        this.selectedGroup = this.groups.find(function (x) { return x.id == _this.selectedGroupId; });
+        this.selectedHourSettings = this.defaultHourSettings.find(function (x) { return x.id == _this.selectedHourSettingsId; });
         this.isDisableSettings = false;
     };
-    EditDefaultSlotsComponent.prototype.createNewGroup = function () {
+    EditDefaultSlotsComponent.prototype.createNewHourSettings = function () {
         this.isDisableSettings = false;
         this.cancel();
     };
-    EditDefaultSlotsComponent.prototype.deleteGroup = function () {
+    EditDefaultSlotsComponent.prototype.deleteHourSettings = function () {
         var _this = this;
-        this.dataService.deleteGroup(this.selectedGroup.id).subscribe(function (data) { return _this.loadGroups(); });
+        this.dataService.deleteDefaultSlot(this.selectedHourSettings.id).subscribe(function (data) { return _this.loadDefaultSlots(); });
         this.cancel();
     };
     EditDefaultSlotsComponent = __decorate([
         Component({
-            templateUrl: '../html/editGroup.component.html',
+            templateUrl: '../html/editDefaultSlots.component.html',
             styleUrls: ['../css/editWorker.css'],
             providers: [DataService, NgbdModalStacked]
         }),

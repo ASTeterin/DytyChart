@@ -5,38 +5,38 @@
     <div class="row">
         <div class="col-sm-4">
             <h3>Часы</h3>
-            <select size="20" id="name" class="form-control" [(ngModel)]="selectedGroupId" (change)="changeGroup($event)">
-                <ng-container *ngFor="let g of groups">
-                    <option class="worker_item" [value]="g?.id">
-                        {{g?.name}}
+            <select size="20" id="name" class="form-control" [(ngModel)]="selectedHourSettingsId" (change)="changeHourSettings($event)">
+                <ng-container *ngFor="let s of defaultHourSettings">
+                    <option class="worker_item" [value]="s?.id">
+                        {{s?.name}}
                     </option>
                 </ng-container>
             </select>
             <div class="form-group">
-                <button class="btn btn-primary new_user_btn" (click)="createNewGroup()">Создать группу</button>
+                <button class="btn btn-primary new_user_btn" (click)="createNewHourSettings()">Создать час</button>
             </div>
 
         </div>
 
         <div class="col-sm-8 user_info">
             <div class="form-group">
-                <label>Группа</label>
-                <input class="form-control" [(ngModel)]="selectedGroup.name" [disabled]="this.isDisableSettings" required />
+                <label>Час</label>
+                <input class="form-control" [(ngModel)]="selectedHourSettings.name" [disabled]="this.isDisableSettings" required />
             </div>
 
             <div class="form-group">
-                <label>Количество часов</label>
-                <input class="form-control" [(ngModel)]="selectedGroup.numberDutyHours" [disabled]="this.isDisableSettings" required />
+                <label>Минимальное количество слотов</label>
+                <input class="form-control" [(ngModel)]="selectedHourSettings.minCount" [disabled]="this.isDisableSettings" required />
             </div>
 
             <div class="form-group">
-                <label>Приоритет</label>
-                <input class="form-control" [(ngModel)]="selectedGroup.priority" [disabled]="this.isDisableSettings" required />
+                <label>Максимальное количество слотов</label>
+                <input class="form-control" [(ngModel)]="selectedHourSettings.maxCount" [disabled]="this.isDisableSettings" required />
             </div>
 
             <div class="form-group">
-                <button class="btn btn-success first_btn_in_line" (click)="saveGroup()" [disabled]="this.isDisableSettings">Сохранить</button>
-                <button class="btn btn-danger" (click)="deleteGroup()" [disabled]="this.isDisableSettings">Удалить</button>
+                <button class="btn btn-success first_btn_in_line" (click)="saveHoursettings()" [disabled]="this.isDisableSettings">Сохранить</button>
+                <button class="btn btn-danger" (click)="deleteHourSettings()" [disabled]="this.isDisableSettings">Удалить</button>
             </div>
 
         </div>

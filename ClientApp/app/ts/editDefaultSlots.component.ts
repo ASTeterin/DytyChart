@@ -1,45 +1,46 @@
 ﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from './data.service';
 import { Group } from './group';
+import { DefaultSlots } from './defaultSlots'
 import { NgbdModalStacked } from './modalWindow.component';
 
 
 
 @Component({
-    templateUrl: '../html/editGroup.component.html',
+    templateUrl: '../html/editDefaultSlots.component.html',
     styleUrls: ['../css/editWorker.css'],
     providers: [DataService, NgbdModalStacked]
 })
 export class EditDefaultSlotsComponent implements OnInit {
 
-    groups: Group[] = [];
-    selectedGroup: Group = new Group();
-    selectedGroupId: number;
+    defaultHourSettings: DefaultSlots[] = [];
+    selectedHourSettings: DefaultSlots = new DefaultSlots();
+    selectedHourSettingsId: number;
     isDisableSettings: boolean = true;
 
     constructor(private dataService: DataService, private modal: NgbdModalStacked) { }
 
     ngOnInit() {
-        this.loadGroups();
+        this.loadDefaultSlots();
     }
 
-    loadGroups() {
-        this.dataService.getGroups().subscribe((data: Group[]) => {
-            this.groups = data;
+    loadDefaultSlots() {
+        this.dataService.getDefaultSlots().subscribe((data: DefaultSlots[]) => {
+            this.defaultHourSettings = data;
             //this.workers.sort(this.compare);
-            console.log(this.groups)
+            console.log(this.defaultHourSettings)
         });
     }
 
     cancel() {
-        this.selectedGroup = new Group();
+        this.selectedHourSettings = new DefaultSlots();
     }
 
     isAllInfoEntered() {
-        return ((!this.selectedGroup.name) || (!this.selectedGroup.numberDutyHours)) ? false : true;
+        return ((!this.selectedHourSettings.name) || (!this.selectedHourSettings.minCount)) ? false : true;
     }
 
-    saveGroup() {
+    saveHoursettings() {
         var isErrorWhenSaving: boolean = false;
         if (this.isAllInfoEntered()) {
             this.saveChanges();
@@ -52,30 +53,30 @@ export class EditDefaultSlotsComponent implements OnInit {
 
     saveChanges() {
 
-        if (!this.selectedGroup.id) {
-            this.dataService.createGroup(this.selectedGroup)
+        if (!this.selectedHourSettings.id) {
+            this.dataService.createDefaultSlots(this.selectedHourSettings)
                 .subscribe((data: Group) => {
-                    this.groups.push(data);
+                    this.defaultHourSettings.push(data);
                 });
         } else {
-            this.dataService.updateGroup(this.selectedGroup)
-                .subscribe(data => this.loadGroups());
+            this.dataService.createDefaultSlots(this.selectedHourSettings)
+                .subscribe(data => this.loadDefaultSlots());
         }
     }
 
-    changeGroup() {
+    changeHourSettings() {
         this.cancel();
-        this.selectedGroup = this.groups.find(x => x.id == this.selectedGroupId);
+        this.selectedHourSettings = this.defaultHourSettings.find(x => x.id == this.selectedHourSettingsId);
         this.isDisableSettings = false;
     }
 
-    createNewGroup() {
+    createNewHourSettings() {
         this.isDisableSettings = false;
         this.cancel();
     }
 
-    deleteGroup() {
-        this.dataService.deleteGroup(this.selectedGroup.id).subscribe(data => this.loadGroups());
+    deleteHourSettings() {
+        this.dataService.deleteDefaultSlot(this.selectedHourSettings.id).subscribe(data => this.loadDefaultSlots());
         this.cancel();
     }
 
