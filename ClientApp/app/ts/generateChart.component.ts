@@ -19,6 +19,7 @@ import * as moment from 'moment';
 import { ExcelService } from './excel.service';
 import { DatePipe } from '@angular/common';
 import { SlotToExport } from './slotToExport';
+import { DefaultSlots } from './defaultSlots';
 
 @Component({
     templateUrl: '../html/generateChart.component.html',
@@ -37,6 +38,7 @@ export class GenerateChartComponent implements OnInit {
     workerInDay: WorkerInDay = new WorkerInDay();
     workersInDay: WorkerInDay[] = [];
     dutyWorkers: WorkerInDay[] = [];
+    defaultHourSettings: DefaultSlots[] = [];
     selectedWorkerId: number;
     selectHourEvent: any;
     countSlots: number[] = [1, 2, 3, 4, 5, 6, 7];
@@ -103,6 +105,8 @@ export class GenerateChartComponent implements OnInit {
         { item_id: 11, item_text: '19:00' }
     ];
 
+
+
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
 
@@ -130,6 +134,14 @@ export class GenerateChartComponent implements OnInit {
             }
             this.selectedHour = hour;
         });
+    }
+
+    loadDefaultHourSettings() {
+
+        this.dataService.getDefaultSlots().subscribe((data: DefaultSlots[]) => this.defaultHourSettings = data);
+        if (this.defaultHourSettings.length == 0) {
+            //this.dataService.createDefaultHourSettings();
+        }
     }
 
     minSlotChangeHandler(count: number) {
@@ -267,6 +279,7 @@ export class GenerateChartComponent implements OnInit {
     ngOnInit() {
         this.loadWorkers();
         this.loadGroups();
+        this.loadDefaultHourSettings();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);

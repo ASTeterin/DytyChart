@@ -29,10 +29,6 @@ namespace dutyChart.Controllers
             var hourOptions = new HourParam();
             var hoursOptionsList = Configuration.GetSection("Hours:entries");
             arrayOfHoursOptions = Configuration.GetSection("Hours").Get<ArrayExample>();
-      
-
-     
-
             for (int j = 0; j < arrayOfHoursOptions.Entries.Length; j++)
             {
                 

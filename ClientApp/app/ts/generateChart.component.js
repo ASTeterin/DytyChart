@@ -27,6 +27,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.workerInDay = new WorkerInDay();
         this.workersInDay = [];
         this.dutyWorkers = [];
+        this.defaultHourSettings = [];
         this.countSlots = [1, 2, 3, 4, 5, 6, 7];
         this.groups = [];
         this.isFirstHour = true;
@@ -108,6 +109,13 @@ var GenerateChartComponent = /** @class */ (function () {
             }
             _this.selectedHour = hour;
         });
+    };
+    GenerateChartComponent.prototype.loadDefaultHourSettings = function () {
+        var _this = this;
+        this.dataService.getDefaultSlots().subscribe(function (data) { return _this.defaultHourSettings = data; });
+        if (this.defaultHourSettings.length == 0) {
+            //this.dataService.createDefaultHourSettings();
+        }
     };
     GenerateChartComponent.prototype.minSlotChangeHandler = function (count) {
         this.newHour.minCount = count;
@@ -228,6 +236,7 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.ngOnInit = function () {
         this.loadWorkers();
         this.loadGroups();
+        this.loadDefaultHourSettings();
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);
