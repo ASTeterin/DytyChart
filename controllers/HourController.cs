@@ -67,7 +67,7 @@ namespace dutyChart.Controllers
                 .Where(h => h.Date == dateOnly)
                 .ToList();
             if (hours.Count == 0) {
-                var hoursDto = DefaultHourParams();
+                var hoursDto = db.DefaultSlots.ToList();//DefaultHourParams();
                 foreach (var h in hoursDto)
                 {
                     var hour = new Hour { Name = h.Name, MaxCount = h.MaxCount, MinCount = h.MinCount, Date = dateOnly };

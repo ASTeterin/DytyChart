@@ -55,7 +55,7 @@ var EditDefaultSlotsComponent = /** @class */ (function () {
             });
         }
         else {
-            this.dataService.createDefaultSlots(this.selectedHourSettings)
+            this.dataService.updateDefaultSlots(this.selectedHourSettings)
                 .subscribe(function (data) { return _this.loadDefaultSlots(); });
         }
     };

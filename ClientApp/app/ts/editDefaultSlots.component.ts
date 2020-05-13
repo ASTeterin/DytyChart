@@ -59,7 +59,7 @@ export class EditDefaultSlotsComponent implements OnInit {
                     this.defaultHourSettings.push(data);
                 });
         } else {
-            this.dataService.createDefaultSlots(this.selectedHourSettings)
+            this.dataService.updateDefaultSlots(this.selectedHourSettings)
                 .subscribe(data => this.loadDefaultSlots());
         }
     }
