@@ -31,29 +31,12 @@ namespace dutyChart.Controllers
             arrayOfHoursOptions = Configuration.GetSection("Hours").Get<ArrayExample>();
             for (int j = 0; j < arrayOfHoursOptions.Entries.Length; j++)
             {
-                
                 hoursOptionsList.GetSection(j.ToString()).Bind(hourOptions);
                 hoursDto.Add(new HourDto { Name = hourOptions.Name, 
                     MaxCount = Convert.ToInt32(hourOptions.MaxSlots), 
                     MinCount = Convert.ToInt32(hourOptions.MaxSlots)
                 });
-
-                //_array.Entries[j].Bind;
-                //var t = hourOptions;
             }
-            /*hoursDto.Add(new HourDto { Name = "08:00", MaxCount = 2, MinCount = 2 });
-            hoursDto.Add(new HourDto { Name = "09:00", MaxCount = 4, MinCount = 4 });
-            hoursDto.Add(new HourDto { Name = "10:00", MaxCount = 5, MinCount = 5 });
-            hoursDto.Add(new HourDto { Name = "11:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "12:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "13:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "14:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "15:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "16:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "17:00", MaxCount = 6, MinCount = 6 });
-            hoursDto.Add(new HourDto { Name = "18:00", MaxCount = 2, MinCount = 2 });
-            hoursDto.Add(new HourDto { Name = "19:00", MaxCount = 1, MinCount = 1 });
-            */
             return hoursDto;
         }
         private List<Hour> GetHours(DateTime date)
