@@ -55,7 +55,8 @@ export class GenerateChartComponent implements OnInit {
     palanningDay = 3;
     firstHour: string = "08:00";
 
-    timeArr: any[] = [
+    timeArr: any[] = [];
+    /*[
         { time: "08:00" },
         { time: "09:00" },
         { time: "10:00" },
@@ -68,7 +69,7 @@ export class GenerateChartComponent implements OnInit {
         { time: "17:00" },
         { time: "18:00" },
         { time: "19:00" },
-    ];
+    ];*/
 
     selectedDate: moment.Moment;
     selectedHour: Hour = new Hour();
@@ -110,6 +111,12 @@ export class GenerateChartComponent implements OnInit {
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
 
+    getListOfTimes(defaultHourSettings: DefaultSlots[]) {
+        var listOfTimes: any[] = [];
+        defaultHourSettings.forEach(x => listOfTimes.push({ time: x.name }));
+        return listOfTimes;
+    }
+
     createWorkersInDay(date: moment.Moment) {
         this.workers.forEach((worker) => {
             this.workerInDay.workerId = worker.id;
@@ -136,9 +143,15 @@ export class GenerateChartComponent implements OnInit {
         });
     }
 
-    loadDefaultHourSettings() {
+    loadDefaultHourSettings(cb: any) {
 
-        this.dataService.getDefaultSlots().subscribe((data: DefaultSlots[]) => this.defaultHourSettings = data);
+        this.dataService.getDefaultSlots().subscribe((data: DefaultSlots[]) => {
+            this.defaultHourSettings = data;
+            //console.log(this.defaultHourSettings)
+            if (cb) cb();
+        });
+
+
         if (this.defaultHourSettings.length == 0) {
             //this.dataService.createDefaultHourSettings();
         }
@@ -279,7 +292,10 @@ export class GenerateChartComponent implements OnInit {
     ngOnInit() {
         this.loadWorkers();
         this.loadGroups();
-        this.loadDefaultHourSettings();
+        this.loadDefaultHourSettings(() => {
+            this.timeArr = this.getListOfTimes(this.defaultHourSettings)
+        });
+        //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);

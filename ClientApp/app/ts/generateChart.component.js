@@ -83,6 +83,11 @@ var GenerateChartComponent = /** @class */ (function () {
             { item_id: 11, item_text: '19:00' }
         ];
     }
+    GenerateChartComponent.prototype.getListOfTimes = function (defaultHourSettings) {
+        var listOfTimes = [];
+        defaultHourSettings.forEach(function (x) { return listOfTimes.push(x.name); });
+        return listOfTimes;
+    };
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
         var _this = this;
         this.workers.forEach(function (worker) {
@@ -110,9 +115,14 @@ var GenerateChartComponent = /** @class */ (function () {
             _this.selectedHour = hour;
         });
     };
-    GenerateChartComponent.prototype.loadDefaultHourSettings = function () {
+    GenerateChartComponent.prototype.loadDefaultHourSettings = function (cb) {
         var _this = this;
-        this.dataService.getDefaultSlots().subscribe(function (data) { return _this.defaultHourSettings = data; });
+        this.dataService.getDefaultSlots().subscribe(function (data) {
+            _this.defaultHourSettings = data;
+            //console.log(this.defaultHourSettings)
+            if (cb)
+                cb();
+        });
         if (this.defaultHourSettings.length == 0) {
             //this.dataService.createDefaultHourSettings();
         }
@@ -234,9 +244,11 @@ var GenerateChartComponent = /** @class */ (function () {
         this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport);
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.loadWorkers();
         this.loadGroups();
-        this.loadDefaultHourSettings();
+        this.loadDefaultHourSettings(function () { console.log(_this.defaultHourSettings); });
+        console.log(this.defaultHourSettings);
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);
