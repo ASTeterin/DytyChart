@@ -19,6 +19,20 @@ import * as moment from 'moment';
 import { ExcelService } from './excel.service';
 import { DatePipe } from '@angular/common';
 var GenerateChartComponent = /** @class */ (function () {
+    /*
+        { item_id: 0, item_text: '08:00' },
+        { item_id: 1, item_text: '09:00' },
+        { item_id: 2, item_text: '10:00' },
+        { item_id: 3, item_text: '11:00' },
+        { item_id: 4, item_text: '12:00' },
+        { item_id: 5, item_text: '13:00' },
+        { item_id: 6, item_text: '14:00' },
+        { item_id: 7, item_text: '15:00' },
+        { item_id: 8, item_text: '16:00' },
+        { item_id: 9, item_text: '17:00' },
+        { item_id: 10, item_text: '18:00' },
+        { item_id: 11, item_text: '19:00' }
+    ];*/
     function GenerateChartComponent(dataService, spinner, excelService) {
         this.dataService = dataService;
         this.spinner = spinner;
@@ -37,20 +51,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.isPlanningToday = false;
         this.palanningDay = 3;
         this.firstHour = "08:00";
-        this.timeArr = [
-            { time: "08:00" },
-            { time: "09:00" },
-            { time: "10:00" },
-            { time: "11:00" },
-            { time: "12:00" },
-            { time: "13:00" },
-            { time: "14:00" },
-            { time: "15:00" },
-            { time: "16:00" },
-            { time: "17:00" },
-            { time: "18:00" },
-            { time: "19:00" },
-        ];
+        this.timeArr = [];
         this.selectedHour = new Hour();
         this.selectedDateHours = [];
         this.chartData = [];
@@ -68,24 +69,19 @@ var GenerateChartComponent = /** @class */ (function () {
         this.desirableSlots = [];
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
-        this.dropdownList = [
-            { item_id: 0, item_text: '08:00' },
-            { item_id: 1, item_text: '09:00' },
-            { item_id: 2, item_text: '10:00' },
-            { item_id: 3, item_text: '11:00' },
-            { item_id: 4, item_text: '12:00' },
-            { item_id: 5, item_text: '13:00' },
-            { item_id: 6, item_text: '14:00' },
-            { item_id: 7, item_text: '15:00' },
-            { item_id: 8, item_text: '16:00' },
-            { item_id: 9, item_text: '17:00' },
-            { item_id: 10, item_text: '18:00' },
-            { item_id: 11, item_text: '19:00' }
-        ];
+        this.dropdownList = [];
     }
+    GenerateChartComponent.prototype.getDropdownListSettings = function (defaultHourSettings) {
+        var dropdownListSettings = [];
+        var i = 0;
+        defaultHourSettings.forEach(function (x) {
+            dropdownListSettings.push({ item_id: i++, time: x.name });
+        });
+        return dropdownListSettings;
+    };
     GenerateChartComponent.prototype.getListOfTimes = function (defaultHourSettings) {
         var listOfTimes = [];
-        defaultHourSettings.forEach(function (x) { return listOfTimes.push(x.name); });
+        defaultHourSettings.forEach(function (x) { return listOfTimes.push({ time: x.name }); });
         return listOfTimes;
     };
     GenerateChartComponent.prototype.createWorkersInDay = function (date) {
@@ -247,8 +243,11 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.loadWorkers();
         this.loadGroups();
-        this.loadDefaultHourSettings(function () { console.log(_this.defaultHourSettings); });
-        console.log(this.defaultHourSettings);
+        this.loadDefaultHourSettings(function () {
+            _this.timeArr = _this.getListOfTimes(_this.defaultHourSettings);
+            _this.dropdownList = _this.getDropdownListSettings(_this.defaultHourSettings);
+        });
+        //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
         this.dateChangeHandler(date);

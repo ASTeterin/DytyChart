@@ -91,7 +91,8 @@ export class GenerateChartComponent implements OnInit {
     desirableSlots: SpecialHourInDay[] = [];
     selectedDesirableSlots: any[] = [];
     selectedUnwantedSlots: any[] = [];
-    dropdownList = [
+    dropdownList: any[] = [];
+    /*
         { item_id: 0, item_text: '08:00' },
         { item_id: 1, item_text: '09:00' },
         { item_id: 2, item_text: '10:00' },
@@ -104,11 +105,21 @@ export class GenerateChartComponent implements OnInit {
         { item_id: 9, item_text: '17:00' },
         { item_id: 10, item_text: '18:00' },
         { item_id: 11, item_text: '19:00' }
-    ];
+    ];*/
 
 
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
+    }
+
+    getDropdownListSettings(defaultHourSettings: DefaultSlots[]) {
+        var dropdownListSettings: any[] = [];
+        var i = 0;
+        defaultHourSettings.forEach(x => {
+            dropdownListSettings.push({ item_id: i++, item_text: x.name })
+        });
+        console.log(dropdownListSettings);
+        return dropdownListSettings;   
     }
 
     getListOfTimes(defaultHourSettings: DefaultSlots[]) {
@@ -293,7 +304,8 @@ export class GenerateChartComponent implements OnInit {
         this.loadWorkers();
         this.loadGroups();
         this.loadDefaultHourSettings(() => {
-            this.timeArr = this.getListOfTimes(this.defaultHourSettings)
+            this.timeArr = this.getListOfTimes(this.defaultHourSettings);
+            this.dropdownList = this.getDropdownListSettings(this.defaultHourSettings);
         });
         //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
