@@ -101,8 +101,7 @@ namespace dutyChart.Controllers
                 {
                     continue;
                 }
-                    
-                //if (db.WorkerInDays.Where(wID => wID.IsDutyOnLetters))
+
                 foreach ( var us in countUsedSlots )
                 {
                     if ( workersId.Contains( w.Id ) && ( us.Key != w.Id ) )

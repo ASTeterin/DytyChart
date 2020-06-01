@@ -50,7 +50,7 @@ namespace dutyChart.Models
             foreach (Worker w in workers)
             {
                 WorkerInDay workerInDay = GetWorkerInDay(w.Id, date);
-                if (workerInDay.IsDuty) 
+                if ((workerInDay != null) && (workerInDay.IsDuty)) 
                 {
                     id = w.IdGroup;
                     break;

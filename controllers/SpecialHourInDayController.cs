@@ -23,7 +23,6 @@ namespace dutyChart.controllers
         {
             var specialHourInDay = db.SpecialHoursInDay.Where(x => x.Date == date && x.WorkerId == workerId).ToList();
             return specialHourInDay;
-
         }
 
         [HttpGet, Route("special-hours")]
@@ -38,23 +37,22 @@ namespace dutyChart.controllers
         public IEnumerable<SpecialHourInDay> GetSpecialHoursInDayFromSpecialHours(IEnumerable<SpecialHourInDay> specialHours, DateTime date)
         {
             var allSpecialHoursInDay = db.SpecialHoursInDay.Where(s => s.Date == date).ToList();
-            db.SpecialHoursInDay.RemoveRange(allSpecialHoursInDay);
+            if (allSpecialHoursInDay.Count > 0)
+                db.SpecialHoursInDay.RemoveRange(allSpecialHoursInDay);
             allSpecialHoursInDay = new List<SpecialHourInDay> { };
-            //if (allSpecialHoursInDay.Count == 0)
-            //{
-                var allSpecialHours = db.SpecialHours.ToList();
-                foreach (var specialHour in allSpecialHours)
-                {
-                    var specialHourInDay = new SpecialHourInDay();
-                    specialHourInDay.Date = date;
-                    specialHourInDay.HourNumber = specialHour.HourNumber;
-                    specialHourInDay.Type = specialHour.Type;
-                    specialHourInDay.WorkerId = specialHour.WorkerId;
-                    allSpecialHoursInDay.Add(specialHourInDay);
-                }
-                db.SpecialHoursInDay.AddRange(allSpecialHoursInDay);
-                db.SaveChanges();
-            //}
+
+            var allSpecialHours = db.SpecialHours.ToList();
+            foreach (var specialHour in allSpecialHours)
+            {
+                var specialHourInDay = new SpecialHourInDay();
+                specialHourInDay.Date = date;
+                specialHourInDay.HourNumber = specialHour.HourNumber;
+                specialHourInDay.Type = specialHour.Type;
+                specialHourInDay.WorkerId = specialHour.WorkerId;
+                allSpecialHoursInDay.Add(specialHourInDay);
+            }
+            db.SpecialHoursInDay.AddRange(allSpecialHoursInDay);
+            db.SaveChanges();
             return allSpecialHoursInDay;
         }
 

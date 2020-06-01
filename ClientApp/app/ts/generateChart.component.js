@@ -75,8 +75,9 @@ var GenerateChartComponent = /** @class */ (function () {
         var dropdownListSettings = [];
         var i = 0;
         defaultHourSettings.forEach(function (x) {
-            dropdownListSettings.push({ item_id: i++, time: x.name });
+            dropdownListSettings.push({ item_id: i++, item_text: x.name });
         });
+        console.log(dropdownListSettings);
         return dropdownListSettings;
     };
     GenerateChartComponent.prototype.getListOfTimes = function (defaultHourSettings) {

@@ -49,7 +49,12 @@ namespace dutyChart.controllers
             foreach (var worker in workersByGroup)
             {
                 var workerInDay = workersInDay.FirstOrDefault(w => w.WorkerId == worker.Id);
-                result.Add(workerInDay);
+                if (workerInDay != null)
+                {
+                    result.Add(workerInDay);
+
+                }
+
             }
             return result;
         }

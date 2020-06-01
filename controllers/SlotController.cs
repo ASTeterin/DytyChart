@@ -29,18 +29,6 @@ namespace dutyChart.Controllers
             db = context;
             dp = dataProcessor;
         }
-        //[HttpGet]
-        /*public IEnumerable<Slot> Get()
-        {
-            return db.Slots.ToList();
-        }
-
-        [HttpGet("{id}")]
-        /*public Slot Get(int id)
-        {
-            Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
-            return slot;
-        }*/
 
         [HttpGet, Route( "get-filled-slots" )]
         public List<SlotDto> GetFilledSlots( DateTime date )

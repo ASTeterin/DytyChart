@@ -60,18 +60,6 @@ namespace dutyChart.Controllers
         [HttpDelete( "{id}" )]
         public IActionResult Delete( int id )
         {
-            //Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
-            /*var absentPeriods = Get( id );
-
-            if ( absentPeriods != null )
-            {
-                foreach ( AbsentPeriod absentPeriod in absentPeriods )
-                {
-                    db.AbsentPeriods.Remove( absentPeriod );
-                    db.SaveChanges();
-                }
-
-            }*/
             var absentPeriod = db.AbsentPeriods.FirstOrDefault(x => x.Id == id);
             if (absentPeriod != null)
             {

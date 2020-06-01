@@ -30,7 +30,6 @@ namespace dutyChart.controllers
             arrayOfHoursOptions = Configuration.GetSection("Hours").Get<ArrayExample>();
             for (int j = 0; j < arrayOfHoursOptions.Entries.Length; j++)
             {
-
                 hoursOptionsList.GetSection(j.ToString()).Bind(hourOptions);
                 hoursDto.Add(new HourDto
                 {

@@ -102,13 +102,13 @@ namespace dutyChart.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Hour Hour = db.Hours.FirstOrDefault(x => x.Id == id);
-            if (Hour != null)
+            Hour hour = db.Hours.FirstOrDefault(x => x.Id == id);
+            if (hour != null)
             {
-                db.Hours.Remove(Hour);
+                db.Hours.Remove(hour);
                 db.SaveChanges();
             }
-            return Ok(Hour);
+            return Ok(hour);
         }
     }
 
