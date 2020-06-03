@@ -92,22 +92,6 @@ export class GenerateChartComponent implements OnInit {
     selectedDesirableSlots: any[] = [];
     selectedUnwantedSlots: any[] = [];
     dropdownList: any[] = [];
-    /*
-        { item_id: 0, item_text: '08:00' },
-        { item_id: 1, item_text: '09:00' },
-        { item_id: 2, item_text: '10:00' },
-        { item_id: 3, item_text: '11:00' },
-        { item_id: 4, item_text: '12:00' },
-        { item_id: 5, item_text: '13:00' },
-        { item_id: 6, item_text: '14:00' },
-        { item_id: 7, item_text: '15:00' },
-        { item_id: 8, item_text: '16:00' },
-        { item_id: 9, item_text: '17:00' },
-        { item_id: 10, item_text: '18:00' },
-        { item_id: 11, item_text: '19:00' }
-    ];*/
-
-
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
@@ -137,18 +121,22 @@ export class GenerateChartComponent implements OnInit {
         });
     }
 
-    tabChangeHandler(event: any) {
+    saveSelectedHourSettings() {
         if ((this.selectedHour) && (this.selectedHour.name)) {
             this.saveHour();
         }
-        this.selectHourEvent = event;
+    }
+
+    tabChangeHandler(event: any) {
+        this.saveSelectedHourSettings();
+        //this.selectHourEvent = event;
         this.loadHours(() => {
             let hour: Hour = new Hour();
             if (!this.isNewDay) {
                 hour = this.selectedDateHours.find(x => x.name == event.nextId);
             } else {
                 this.isNewDay = false;
-                hour = this.selectedDateHours.find(x => x.name == this.firstHour);
+                hour = this.selectedDateHours.find(x => x.name == this.selectedHour.name);
             }
             this.selectedHour = hour;
         });
@@ -194,9 +182,7 @@ export class GenerateChartComponent implements OnInit {
         this.day = date.day;
         this.month = this.getMonth(date.month);
         this.isNewDay = true;
-        if ((this.selectedHour) && (this.selectedHour.name)) {
-            this.saveHour();
-        };
+        this.saveSelectedHourSettings();
 
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
@@ -213,9 +199,7 @@ export class GenerateChartComponent implements OnInit {
 
 
     generateGraph(): void {
-        if ((this.selectedHour) && (this.selectedHour.name)) {
-            this.saveHour();
-        };
+        this.saveSelectedHourSettings();
         this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => {
             this.slots = data;
@@ -223,7 +207,11 @@ export class GenerateChartComponent implements OnInit {
                 this.chartData = this.selectedDateHours;
                 this.getWorkersInfo();
                 this.spinner.hide();
+                
             });
+            //this.selectedHour: 
+            this.isNewDay = true;
+            this.tabChangeHandler(this.isNewDay);
         });
         
     }
@@ -293,6 +281,7 @@ export class GenerateChartComponent implements OnInit {
     }
 
     exportGraph(): void {
+        this.saveSelectedHourSettings();
         let fileName = 'dutyChart';
         let data: ChartData[] = [];
         this.getDataToExport();
@@ -310,6 +299,7 @@ export class GenerateChartComponent implements OnInit {
         //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
+        this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);
     }
 
@@ -323,6 +313,16 @@ export class GenerateChartComponent implements OnInit {
             this.saveWorkersInDay();
         }*/
         this.saveWorkerInDay();
+    }
+
+    updateData() {
+        this.dataService.deleteWorkerInDay(this.selectedDate).subscribe(data => {
+            this.clearData();
+            this.loadWorkerInDay();
+            this.cancelWorker();
+            this.slots = [];
+            this.selectedDateHours = [];
+        });
     }
 
     saveWorkersInDay() {
@@ -378,7 +378,7 @@ export class GenerateChartComponent implements OnInit {
             this.dataService.updateHour(this.selectedHour)
                 .subscribe(data => this.loadHours(null));
         }
-        this.cancel();
+        //this.cancel();
     }
 
     loadHours(cb: any) {
@@ -416,6 +416,7 @@ export class GenerateChartComponent implements OnInit {
     }
 
     changeStaff(worker: any) {
+        this.saveSelectedHourSettings();
         this.cancelWorkerInDay();
 
         if (this.workers) {
@@ -507,6 +508,7 @@ export class GenerateChartComponent implements OnInit {
     }*/
 
     updateDesirableSlots(selectedData: any) {
+        this.saveSelectedHourSettings();
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = true;
         this.specialHourInDay.workerId = this.selectedWorkerId;
@@ -529,6 +531,7 @@ export class GenerateChartComponent implements OnInit {
     }
 
     updateUnwantedSlots(selectedData: any) {
+        this.saveSelectedHourSettings();
         this.specialHourInDay.date = this.selectedDate;
         this.specialHourInDay.type = false;
         this.specialHourInDay.workerId = this.selectedWorkerId;

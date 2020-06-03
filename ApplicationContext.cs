@@ -1,4 +1,5 @@
-﻿using dutyChart.EntityConfigurations;
+﻿using System;
+using dutyChart.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -33,5 +34,7 @@ namespace dutyChart.Models
             modelBuilder.ApplyConfiguration(new AbsentPeriodConfiguration());
             modelBuilder.ApplyConfiguration(new WorkerInDayConfiguration());
         }
+
+        
     }
 }

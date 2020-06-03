@@ -18,6 +18,20 @@ namespace dutyChart.controllers
             db = context;
 
         }
+
+        private IEnumerable<WorkerInDay> CreateWorkerInDayFromDefaultWorkerSettings(DateTime date)
+        {
+            var workersInDay = new List<WorkerInDay> { };
+            var workers = db.Workers.ToList();
+            foreach (var w in workers)
+            {
+                WorkerInDay workerInDay = new WorkerInDay();
+                workerInDay.Date = date;
+                workerInDay.WorkerId = w.Id;
+                workersInDay.Add(workerInDay);
+            }
+            return workersInDay;
+        }
         [HttpGet]
         
         public IEnumerable<WorkerInDay> GetWorkersInDay(DateTime date)
@@ -25,14 +39,7 @@ namespace dutyChart.controllers
             var workersInDay = db.WorkerInDays.Where(x => x.Date == date).ToList();
             if (workersInDay.Count == 0) 
             {
-                var workers = db.Workers.ToList();
-                foreach (var w in workers) 
-                {
-                    WorkerInDay workerInDay = new WorkerInDay();
-                    workerInDay.Date = date;
-                    workerInDay.WorkerId = w.Id;
-                    workersInDay.Add(workerInDay);
-                }
+                workersInDay = CreateWorkerInDayFromDefaultWorkerSettings(date).ToList();
                 db.WorkerInDays.AddRange(workersInDay);
                 db.SaveChangesAsync();
             }
@@ -57,6 +64,21 @@ namespace dutyChart.controllers
 
             }
             return result;
+        }
+
+        [HttpGet, Route("reset-worker-in-day")]
+        public IEnumerable<WorkerInDay> GetDefaultWorkerInDay(DateTime date)
+        {
+            var workersInDay = db.WorkerInDays.Where(x => x.Date == date).ToList();
+            if (workersInDay.Count > 0)
+            {
+                db.WorkerInDays.RemoveRange(workersInDay);
+                db.SaveChanges();
+            }
+            workersInDay = CreateWorkerInDayFromDefaultWorkerSettings(date).ToList();
+            db.WorkerInDays.AddRange(workersInDay);
+            db.SaveChanges();
+            return workersInDay;
         }
 
 
@@ -114,5 +136,7 @@ namespace dutyChart.controllers
             db.SaveChanges();
             return Ok(ModelState);
         }
+
+       
     }
 }

@@ -191,6 +191,8 @@ namespace dutyChart.Models
             int countAttemps = 0;
             List<int> listNumbers = new List<int>();
             WorkerInDay workerInDay = GetWorkerInDay(worker.Id, date);
+            if (workerInDay == null)
+                return listNumbers;
             List<Group> groups = _db.Groups.ToList();
             List<int> desirableSlots = new List<int>();
             List<int> unwantedSlots = new List<int>();

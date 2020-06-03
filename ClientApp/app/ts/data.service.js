@@ -22,6 +22,7 @@ var DataService = /** @class */ (function () {
         this.urlAbsentWorker = "/api/Workers/get-absent-workers";
         this.urlWorkerInDay = "/api/WorkerInDay";
         this.urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
+        this.urlDelAllWorkersInDay = "/api/WorkerInDay/reset-worker-in-day";
         this.urlSpecialHourInDay = "/api/SpecialHoursInDay";
         this.urlDesirableHourInDay = "/api/SpecialHoursInDay/desirable-hours";
         this.urlUnwantedHourInDay = "/api/SpecialHoursInDay/unwanted-hours";
@@ -121,9 +122,12 @@ var DataService = /** @class */ (function () {
     DataService.prototype.updateWorkersInDay = function (workersInDay) {
         return this.http.put(this.urlWorkerInDay, workersInDay);
     };
-    DataService.prototype.deleteWorkerInDay = function (id) {
-        return this.http.delete(this.urlWorkerInDay + '/' + id);
+    DataService.prototype.deleteWorkerInDay = function (date) {
+        return this.http.get(this.urlDelAllWorkersInDay + "?date=" + date.format('YYYY-MM-DD'));
     };
+    /*deleteAllWorkersInDay(date: moment.Moment) {
+        return this.http.deleteAllWorkersInDay(`${this.urlDellAllWorkersInDay}?date=${date.format('YYYY-MM-DD')}`)
+    }*/
     DataService.prototype.createSpecialHourInDay = function (specialHourInDay) {
         return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
     };

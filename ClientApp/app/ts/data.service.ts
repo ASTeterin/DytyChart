@@ -24,6 +24,7 @@ export class DataService {
     public urlAbsentWorker = "/api/Workers/get-absent-workers";
     public urlWorkerInDay = "/api/WorkerInDay";
     public urlWorkerInDayByGroupe = "/api/WorkerInDay/workers-by-group";
+    public urlDelAllWorkersInDay = "/api/WorkerInDay/reset-worker-in-day";
     public urlSpecialHourInDay = "/api/SpecialHoursInDay";
     public urlDesirableHourInDay = "/api/SpecialHoursInDay/desirable-hours";
     public urlUnwantedHourInDay = "/api/SpecialHoursInDay/unwanted-hours";
@@ -155,9 +156,13 @@ export class DataService {
         return this.http.put(this.urlWorkerInDay, workersInDay);
     }
 
-    deleteWorkerInDay(id: number) {
-        return this.http.delete(this.urlWorkerInDay + '/' + id);
+    deleteWorkerInDay(date: moment.Moment) {
+        return this.http.get(`${this.urlDelAllWorkersInDay}?date=${date.format('YYYY-MM-DD')}`);
     }
+
+    /*deleteAllWorkersInDay(date: moment.Moment) {
+        return this.http.deleteAllWorkersInDay(`${this.urlDellAllWorkersInDay}?date=${date.format('YYYY-MM-DD')}`)
+    }*/
 
     createSpecialHourInDay(specialHourInDay: SpecialHourInDay) {
         return this.http.post(this.urlSpecialHourInDay, specialHourInDay);
