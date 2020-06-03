@@ -54,6 +54,7 @@ export class GenerateChartComponent implements OnInit {
     isPlanningToday: boolean = false;
     palanningDay = 3;
     firstHour: string = "08:00";
+    lastSelectedHourName: string = "";
 
     timeArr: any[] = [];
     /*[
@@ -136,7 +137,7 @@ export class GenerateChartComponent implements OnInit {
                 hour = this.selectedDateHours.find(x => x.name == event.nextId);
             } else {
                 this.isNewDay = false;
-                hour = this.selectedDateHours.find(x => x.name == this.selectedHour.name);
+                hour = this.selectedDateHours.find(x => x.name == this.firstHour);
             }
             this.selectedHour = hour;
         });
@@ -181,14 +182,14 @@ export class GenerateChartComponent implements OnInit {
         this.cancelWorker();
         this.day = date.day;
         this.month = this.getMonth(date.month);
-        this.isNewDay = true;
+        //this.isNewDay = true;
         this.saveSelectedHourSettings();
 
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.loadAllSpecialHoursInDay();
-        this.tabChangeHandler(this.isNewDay);
+        this.tabChangeHandler({ nextId: this.lastSelectedHourName });
     }
 
     compare(a: Hour, b: Hour) {
@@ -210,8 +211,8 @@ export class GenerateChartComponent implements OnInit {
                 
             });
             //this.selectedHour: 
-            this.isNewDay = true;
-            this.tabChangeHandler(this.isNewDay);
+            //this.isNewDay = true;
+            this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         });
         
     }
@@ -299,7 +300,7 @@ export class GenerateChartComponent implements OnInit {
         //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
-        this.selectedHour.name = this.firstHour;
+        //this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);
     }
 
@@ -378,7 +379,8 @@ export class GenerateChartComponent implements OnInit {
             this.dataService.updateHour(this.selectedHour)
                 .subscribe(data => this.loadHours(null));
         }
-        //this.cancel();
+        this.lastSelectedHourName = this.selectedHour.name;
+        this.cancel();
     }
 
     loadHours(cb: any) {

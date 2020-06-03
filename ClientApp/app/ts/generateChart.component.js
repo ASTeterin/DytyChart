@@ -37,6 +37,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.isPlanningToday = false;
         this.palanningDay = 3;
         this.firstHour = "08:00";
+        this.lastSelectedHourName = "";
         this.timeArr = [];
         this.selectedHour = new Hour();
         this.selectedDateHours = [];
@@ -134,13 +135,13 @@ var GenerateChartComponent = /** @class */ (function () {
         this.cancelWorker();
         this.day = date.day;
         this.month = this.getMonth(date.month);
-        this.isNewDay = true;
+        //this.isNewDay = true;
         this.saveSelectedHourSettings();
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.loadAllSpecialHoursInDay();
-        this.tabChangeHandler(this.isNewDay);
+        this.tabChangeHandler({ nextId: this.lastSelectedHourName });
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
         if (a.name > b.name)
@@ -161,7 +162,9 @@ var GenerateChartComponent = /** @class */ (function () {
                 _this.getWorkersInfo();
                 _this.spinner.hide();
             });
-            _this.tabChangeHandler(_this.isNewDay);
+            //this.selectedHour: 
+            //this.isNewDay = true;
+            _this.tabChangeHandler({ nextId: _this.lastSelectedHourName });
         });
     };
     GenerateChartComponent.prototype.getWorkerName = function (workerId) {
@@ -236,6 +239,7 @@ var GenerateChartComponent = /** @class */ (function () {
         //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
+        //this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);
     };
     GenerateChartComponent.prototype.saveDutyWorker = function () {
@@ -314,6 +318,7 @@ var GenerateChartComponent = /** @class */ (function () {
             this.dataService.updateHour(this.selectedHour)
                 .subscribe(function (data) { return _this.loadHours(null); });
         }
+        this.lastSelectedHourName = this.selectedHour.name;
         this.cancel();
     };
     GenerateChartComponent.prototype.loadHours = function (cb) {
