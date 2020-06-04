@@ -200,7 +200,8 @@ export class GenerateChartComponent implements OnInit {
 
 
     generateGraph(): void {
-        this.saveSelectedHourSettings();
+        //this.saveSelectedHourSettings();
+        this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => {
             this.slots = data;
@@ -434,6 +435,7 @@ export class GenerateChartComponent implements OnInit {
         });
         
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
+        this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         this.isDisableSettings = false;
     }
 
