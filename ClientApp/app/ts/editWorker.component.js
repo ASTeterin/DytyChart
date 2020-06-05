@@ -142,6 +142,9 @@ var EditWorkerComponent = /** @class */ (function () {
         this.periods = this.createArray(this.currentWorker.countAbsencePeriod);
         this.absentPeriod.WorkerId = this.selectedWorkerId;
         this.absentPeriod.index = this.currentWorker.countAbsencePeriod;
+        if (!this.absentPeriod.start) {
+            this.absentPeriod.start = moment().utc();
+        }
         this.saveAbsentPeriod();
         this.loadAbsentPeriods(this.currentWorker);
         //this.absentPeriods.push(this.absentPeriod);

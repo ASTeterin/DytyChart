@@ -153,7 +153,8 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.generateGraph = function () {
         var _this = this;
-        this.saveSelectedHourSettings();
+        //this.saveSelectedHourSettings();
+        this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) {
             _this.slots = data;
@@ -162,8 +163,6 @@ var GenerateChartComponent = /** @class */ (function () {
                 _this.getWorkersInfo();
                 _this.spinner.hide();
             });
-            //this.selectedHour: 
-            //this.isNewDay = true;
             _this.tabChangeHandler({ nextId: _this.lastSelectedHourName });
         });
     };
@@ -366,6 +365,7 @@ var GenerateChartComponent = /** @class */ (function () {
                 _this.selectedUnwantedSlots = _this.getSelectedHours(_this.unwantedSlots);
         });
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
+        this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         this.isDisableSettings = false;
     };
     GenerateChartComponent.prototype.loadWorkers = function () {

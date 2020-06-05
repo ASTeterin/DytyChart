@@ -211,8 +211,6 @@ export class GenerateChartComponent implements OnInit {
                 this.spinner.hide();
                 
             });
-            //this.selectedHour: 
-            //this.isNewDay = true;
             this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         });
         
