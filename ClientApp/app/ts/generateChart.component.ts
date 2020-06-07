@@ -298,7 +298,7 @@ export class GenerateChartComponent implements OnInit {
         });
         //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
-        var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
+        var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
         //this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);
     }

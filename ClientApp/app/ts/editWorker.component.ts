@@ -147,8 +147,8 @@ export class EditWorkerComponent implements OnInit {
         this.absentPeriod.index = this.currentWorker.countAbsencePeriod;
         if (!this.absentPeriod.start) {
             var now = moment();
-            this.absentPeriod.start = moment.utc([now.year(), now.month(), now.date()]);
-            this.absentPeriod.end = moment.utc([now.year(), now.month(), now.date() + 1]);
+            this.absentPeriod.start = moment.utc([now.year(), now.month(), now.date() + 1]);
+            this.absentPeriod.end = moment.utc([now.year(), now.month(), now.date() + 2]);
         }
         this.saveAbsentPeriod();
         this.loadAbsentPeriods(this.currentWorker);

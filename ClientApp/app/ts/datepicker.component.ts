@@ -11,11 +11,12 @@ export class NgbdDatepicker {
 
     model: NgbDateStruct;
     today: NgbDateStruct;
+    tomorrow: NgbDateStruct;
 
     constructor(private calendar: NgbCalendar) {
-        this.today = calendar.getToday();
-        this.model = this.today;
-        this.getDate(this.today);
+        this.tomorrow = calendar.getNext(calendar.getToday(), 'd', 1);;
+        this.model = this.tomorrow;
+        this.getDate(this.tomorrow);
     }
 
     @Output() onChanged = new EventEmitter<NgbDateStruct>()
