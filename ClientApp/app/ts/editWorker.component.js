@@ -143,7 +143,9 @@ var EditWorkerComponent = /** @class */ (function () {
         this.absentPeriod.WorkerId = this.selectedWorkerId;
         this.absentPeriod.index = this.currentWorker.countAbsencePeriod;
         if (!this.absentPeriod.start) {
-            this.absentPeriod.start = moment().utc();
+            var now = moment().utc();
+            this.absentPeriod.start = moment([now.year(), now.month(), now.date()]);
+            this.absentPeriod.end = this.absentPeriod.start.add(1, 'd');
         }
         this.saveAbsentPeriod();
         this.loadAbsentPeriods(this.currentWorker);
