@@ -42,7 +42,7 @@
             <div class="row">
                 <div class="form-group">
                     <label for="group">Группа</label>
-                    <select id="group" class="form-control" [disabled]="this.isDisableSettings" [(ngModel)]="worker.idGroup" #workerGroup="ngModel" required>
+                    <select id="group" class="form-control" [disabled]="this.isDisableSettings"  (change)="changeWorkerGroup($event)" [(ngModel)]="worker.idGroup" #workerGroup="ngModel" required>
                         <option *ngFor="let g of groups" [value]="g.id">
                             {{g.name}}
                         </option>

@@ -14,8 +14,8 @@ var NgbdDatepickerRangePopup = /** @class */ (function () {
         this.calendar = calendar;
         this.formatter = formatter;
         this.onChanged = new EventEmitter();
-        this.fromDate = calendar.getToday();
-        this.toDate = calendar.getNext(calendar.getToday(), 'd', 1);
+        this.fromDate = calendar.getNext(calendar.getToday(), 'd', 1);
+        this.toDate = calendar.getNext(this.fromDate, 'd', 1);
     }
     NgbdDatepickerRangePopup.prototype.onDateSelection = function (date) {
         if (!this.fromDate && !this.toDate) {

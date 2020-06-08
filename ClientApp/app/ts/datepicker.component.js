@@ -13,9 +13,10 @@ var NgbdDatepicker = /** @class */ (function () {
     function NgbdDatepicker(calendar) {
         this.calendar = calendar;
         this.onChanged = new EventEmitter();
-        this.today = calendar.getToday();
-        this.model = this.today;
-        this.getDate(this.today);
+        this.tomorrow = calendar.getNext(calendar.getToday(), 'd', 1);
+        ;
+        this.model = this.tomorrow;
+        this.getDate(this.tomorrow);
     }
     NgbdDatepicker.prototype.getDate = function ($event) {
         this.onChanged.emit(this.model);

@@ -237,7 +237,7 @@ var GenerateChartComponent = /** @class */ (function () {
         });
         //console.log(this.defaultHourSettings)
         this.selectedDate = moment();
-        var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() };
+        var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
         //this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);
     };
@@ -367,6 +367,15 @@ var GenerateChartComponent = /** @class */ (function () {
         this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
         this.tabChangeHandler({ nextId: this.lastSelectedHourName });
         this.isDisableSettings = false;
+    };
+    GenerateChartComponent.prototype.updateWorker = function () {
+        var _this = this;
+        this.dataService.updateWorker(this.worker)
+            .subscribe(function (data) { return _this.loadWorkers(); });
+    };
+    GenerateChartComponent.prototype.changeWorkerGroup = function (worker) {
+        this.saveSelectedHourSettings();
+        this.updateWorker();
     };
     GenerateChartComponent.prototype.loadWorkers = function () {
         var _this = this;

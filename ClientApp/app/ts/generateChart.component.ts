@@ -437,6 +437,18 @@ export class GenerateChartComponent implements OnInit {
         this.isDisableSettings = false;
     }
 
+    updateWorker() {
+        this.dataService.updateWorker(this.worker)
+            .subscribe(data => this.loadWorkers());
+    }
+
+    changeWorkerGroup(worker: Worker) {
+        this.cancelWorkerInDay();
+        this.saveSelectedHourSettings();
+        this.updateWorker();
+
+    }
+
     loadWorkers() {
         //this.workers = this.dataService.getWorkers();
         this.dataService.getData(this.dataService.urlWorker)
