@@ -374,8 +374,10 @@ var GenerateChartComponent = /** @class */ (function () {
             .subscribe(function (data) { return _this.loadWorkers(); });
     };
     GenerateChartComponent.prototype.changeWorkerGroup = function (worker) {
+        //this.cancelWorkerInDay();
         this.saveSelectedHourSettings();
         this.updateWorker();
+        this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
     };
     GenerateChartComponent.prototype.loadWorkers = function () {
         var _this = this;

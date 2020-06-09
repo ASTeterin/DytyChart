@@ -443,10 +443,10 @@ export class GenerateChartComponent implements OnInit {
     }
 
     changeWorkerGroup(worker: Worker) {
-        this.cancelWorkerInDay();
+        //this.cancelWorkerInDay();
         this.saveSelectedHourSettings();
         this.updateWorker();
-
+        this.isReplacementWorker = (this.worker.idGroup == 4) ? true : false;
     }
 
     loadWorkers() {
