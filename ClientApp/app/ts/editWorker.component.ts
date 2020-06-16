@@ -114,14 +114,7 @@ export class EditWorkerComponent implements OnInit {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(data => this.loadWorkers());
         }
-        /*if (this.absentPeriods.length > 0) {
-            this.saveAbsentPeriod();
-            this.loadAbsentPeriods(this.currentWorker);
-        }*/
         this.modal.open(isErrorWhenSaving);
-
-        //this.cancel();
-        //this.periods = [];
     }
 
     saveAbsentPeriod() {
@@ -152,14 +145,10 @@ export class EditWorkerComponent implements OnInit {
         }
         this.saveAbsentPeriod();
         this.loadAbsentPeriods(this.currentWorker);
-        //this.absentPeriods.push(this.absentPeriod);
-        console.log(this.absentPeriods);
-        //this.saveAbsentPeriod();
     }
 
     deleteAbsencePeriod(period: AbsentPeriod) {
         this.dataService.deleteAbsentPeriod(period.id).subscribe(data => this.loadAbsentPeriods(this.currentWorker));
-        console.log(this.absentPeriods);
         this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
     }
@@ -222,25 +211,19 @@ export class EditWorkerComponent implements OnInit {
 
     loadSpecialHours(worker: Worker, cb: any) {
         var isDerisableSlot = true;
-        //this.selectedDesirableSlots = [];
-        //this.selectedUnwantedSlots = [];
         this.dataService.getSpecialHours(worker.id)
             .subscribe((data: SpecialHour[]) => {  
                 this.specialHours = data;
                 if (cb) cb();
             });
-        console.log(this.specialHours);
     }
 
     getSelectedHours(selectedSlots: SpecialHour[]): any {
-        //console.log(selectedSlots);
         let selectedSpecialHours: any[] | { item_id: number; item_text: string; }[] = [];
         selectedSlots.forEach((slot) => {
             selectedSpecialHours.push(
                 this.dropdownList.find((s) => s.item_id == slot.hourNumber));
         });
-        //this.selectedDesirableSlots = [{ item_id: 11, item_text: '19:00' }];
-        console.log(selectedSpecialHours);
         return selectedSpecialHours;
     }
 
@@ -253,17 +236,13 @@ export class EditWorkerComponent implements OnInit {
             case "select": {
                 this.dataService.createSpecialHour(this.specialHour)
                     .subscribe((data: SpecialHour) => this.specialHours.push(data));
-                console.log(this.specialHours);
                 break;
             }
             case "unSelect": {
                 this.dataService.getSpecialHour(false, this.selectedWorkerId, selectedData.data).subscribe((data: SpecialHour) => {
                     this.selectedHour = data;
-                    console.log(this.selectedHour);
                     this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));
                 });
-                //console.log(this.selectedHour);
-                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
     }
@@ -279,17 +258,13 @@ export class EditWorkerComponent implements OnInit {
                 
                 this.dataService.createSpecialHour(this.specialHour)
                     .subscribe((data: SpecialHour) => this.specialHours.push(data));
-                console.log(this.specialHours);
                 break;
             }
             case "unSelect": {
                 this.dataService.getSpecialHour(true, this.selectedWorkerId, selectedData.data).subscribe((data: SpecialHour) => {
                     this.selectedHour = data;
-                    console.log(this.selectedHour);
                     this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));
                 }); 
-                //console.log(this.selectedHour);
-                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
      

@@ -1,4 +1,5 @@
-﻿<ng-multiselect-dropdown id="desirable_slots" 
+﻿
+<ng-multiselect-dropdown id="desirable_slots" 
                          [placeholder]="placeholder"
                          [data]="dropdownList"
                          [(ngModel)]="selectedHours"
@@ -6,5 +7,6 @@
                          (onSelect)="onItemSelect($event)"
                          (onSelectAll)="onSelectAll($event)"
                          (onDeSelect)="onItemDeSelect($event)"
+                         (onDeSelectAll)="onDeSelectAll($event)"
                          [disabled]="isDisable">
 </ng-multiselect-dropdown>

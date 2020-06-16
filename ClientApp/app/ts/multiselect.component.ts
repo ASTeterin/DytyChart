@@ -26,40 +26,26 @@ export class NgMultiselect {
             unSelectAllText: 'UnSelect All',
             itemsShowLimit: 2,
             allowSearchFilter: false
-        };
-
-        console.log(this.selectedHours);
-        console.log(this.selectedItems);
-        
-        
+        };    
     }
     
     @Input() userName: string;
     @Output() onChanged = new EventEmitter<any>()
 
-    onSelect(event: any) {
-        console.log(event);
-    }
-
     onItemSelect(item: any): void {
-        //this.selectedItems.push(item.item_id);
-        //this.selectedIds.push(item.item_id);
-        //this.timeChange.emit(this.selectedItems);
         this.onChanged.emit({operation:"select", data:item.item_id });
-        //console.log(this.selectedItems);
-
     }
 
     onItemDeSelect(item: any): void {
-        //splice indexOf
-        //this.selectedItems.push(item.item_id);
-        //this.selectedIds.push(item.item_id);
         this.onChanged.emit({ operation: "unSelect", data: item.item_id });
-
     }
 
-    onSelectAll(items: any) {
-        console.log(items);
+    onSelectAll(items: any[]): void {
+        items.forEach((item: any) => { this.onItemSelect(item) })
+    }
+
+    onDeSelectAll(items: any[]): void {
+        this.selectedHours.forEach((item: any) => { this.onItemDeSelect(item) })
     }
     
 }

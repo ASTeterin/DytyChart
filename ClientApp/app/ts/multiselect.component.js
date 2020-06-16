@@ -36,7 +36,7 @@ var NgMultiselect = /** @class */ (function () {
         //this.selectedIds.push(item.item_id);
         //this.timeChange.emit(this.selectedItems);
         this.onChanged.emit({ operation: "select", data: item.item_id });
-        //console.log(this.selectedItems);
+        console.log(this.selectedItems);
     };
     NgMultiselect.prototype.onItemDeSelect = function (item) {
         //splice indexOf
@@ -45,7 +45,12 @@ var NgMultiselect = /** @class */ (function () {
         this.onChanged.emit({ operation: "unSelect", data: item.item_id });
     };
     NgMultiselect.prototype.onSelectAll = function (items) {
-        console.log(items);
+        var _this = this;
+        items.foreach(function (item) { _this.onItemSelect(item); });
+    };
+    NgMultiselect.prototype.onDeSelectAll = function (items) {
+        var _this = this;
+        items.foreach(function (item) { _this.onItemDeSelect(item); });
     };
     __decorate([
         Input(),
