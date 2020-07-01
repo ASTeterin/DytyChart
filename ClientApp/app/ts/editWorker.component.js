@@ -70,6 +70,7 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.loadWorkers();
+        //localStorage.getItem('date');
         this.dataService.getGroups().subscribe(function (data) {
             return _this.groups = data;
         });
@@ -113,13 +114,7 @@ var EditWorkerComponent = /** @class */ (function () {
             this.dataService.updateWorker(this.currentWorker)
                 .subscribe(function (data) { return _this.loadWorkers(); });
         }
-        /*if (this.absentPeriods.length > 0) {
-            this.saveAbsentPeriod();
-            this.loadAbsentPeriods(this.currentWorker);
-        }*/
         this.modal.open(isErrorWhenSaving);
-        //this.cancel();
-        //this.periods = [];
     };
     EditWorkerComponent.prototype.saveAbsentPeriod = function () {
         var _this = this;
@@ -149,14 +144,10 @@ var EditWorkerComponent = /** @class */ (function () {
         }
         this.saveAbsentPeriod();
         this.loadAbsentPeriods(this.currentWorker);
-        //this.absentPeriods.push(this.absentPeriod);
-        console.log(this.absentPeriods);
-        //this.saveAbsentPeriod();
     };
     EditWorkerComponent.prototype.deleteAbsencePeriod = function (period) {
         var _this = this;
         this.dataService.deleteAbsentPeriod(period.id).subscribe(function (data) { return _this.loadAbsentPeriods(_this.currentWorker); });
-        console.log(this.absentPeriods);
         this.loadAbsentPeriods(this.currentWorker);
         this.currentWorker.countAbsencePeriod--;
     };
@@ -217,25 +208,19 @@ var EditWorkerComponent = /** @class */ (function () {
     EditWorkerComponent.prototype.loadSpecialHours = function (worker, cb) {
         var _this = this;
         var isDerisableSlot = true;
-        //this.selectedDesirableSlots = [];
-        //this.selectedUnwantedSlots = [];
         this.dataService.getSpecialHours(worker.id)
             .subscribe(function (data) {
             _this.specialHours = data;
             if (cb)
                 cb();
         });
-        console.log(this.specialHours);
     };
     EditWorkerComponent.prototype.getSelectedHours = function (selectedSlots) {
         var _this = this;
-        //console.log(selectedSlots);
         var selectedSpecialHours = [];
         selectedSlots.forEach(function (slot) {
             selectedSpecialHours.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
         });
-        //this.selectedDesirableSlots = [{ item_id: 11, item_text: '19:00' }];
-        console.log(selectedSpecialHours);
         return selectedSpecialHours;
     };
     EditWorkerComponent.prototype.updateUnwantedSlots = function (selectedData) {
@@ -248,17 +233,13 @@ var EditWorkerComponent = /** @class */ (function () {
             case "select": {
                 this.dataService.createSpecialHour(this.specialHour)
                     .subscribe(function (data) { return _this.specialHours.push(data); });
-                console.log(this.specialHours);
                 break;
             }
             case "unSelect": {
                 this.dataService.getSpecialHour(false, this.selectedWorkerId, selectedData.data).subscribe(function (data) {
                     _this.selectedHour = data;
-                    console.log(_this.selectedHour);
                     _this.dataService.deleteSpecialHour(_this.selectedHour.id).subscribe(function (data) { return console.log(data); });
                 });
-                //console.log(this.selectedHour);
-                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
     };
@@ -273,17 +254,13 @@ var EditWorkerComponent = /** @class */ (function () {
             case "select": {
                 this.dataService.createSpecialHour(this.specialHour)
                     .subscribe(function (data) { return _this.specialHours.push(data); });
-                console.log(this.specialHours);
                 break;
             }
             case "unSelect": {
                 this.dataService.getSpecialHour(true, this.selectedWorkerId, selectedData.data).subscribe(function (data) {
                     _this.selectedHour = data;
-                    console.log(_this.selectedHour);
                     _this.dataService.deleteSpecialHour(_this.selectedHour.id).subscribe(function (data) { return console.log(data); });
                 });
-                //console.log(this.selectedHour);
-                //this.dataService.deleteSpecialHour(this.selectedHour.id).subscribe((data) => console.log(data));   
             }
         }
     };

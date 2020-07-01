@@ -137,6 +137,9 @@ var GenerateChartComponent = /** @class */ (function () {
         this.month = this.getMonth(date.month);
         //this.isNewDay = true;
         this.saveSelectedHourSettings();
+        localStorage.setItem('date', JSON.stringify({
+            year: date.year, month: date.month, day: date.day
+        }));
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.loadWorkerInDay();
@@ -229,6 +232,14 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
         var _this = this;
+        if ('date' in localStorage) {
+            var saved_date = JSON.parse(localStorage.getItem('date'));
+            this.selectedDate = moment.utc([saved_date.year, saved_date.month - 1, saved_date.day - 1]);
+        }
+        else {
+            this.selectedDate = moment();
+        }
+        console.log(localStorage.getItem('date'));
         this.loadWorkers();
         this.loadGroups();
         this.loadDefaultHourSettings(function () {
@@ -236,7 +247,6 @@ var GenerateChartComponent = /** @class */ (function () {
             _this.dropdownList = _this.getDropdownListSettings(_this.defaultHourSettings);
         });
         //console.log(this.defaultHourSettings)
-        this.selectedDate = moment();
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
         //this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);

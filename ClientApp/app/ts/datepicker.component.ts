@@ -14,7 +14,16 @@ export class NgbdDatepicker {
     tomorrow: NgbDateStruct;
 
     constructor(private calendar: NgbCalendar) {
-        this.tomorrow = calendar.getNext(calendar.getToday(), 'd', 1);;
+        if ('date' in localStorage) {
+            var saved_date = JSON.parse(localStorage.getItem('date'));
+            this.tomorrow = { day: saved_date.day, month: saved_date.month, year: saved_date.year };
+        }
+        else {
+            this.tomorrow = calendar.getNext(calendar.getToday(), 'd', 1);
+        }
+          
+        
+
         this.model = this.tomorrow;
         this.getDate(this.tomorrow);
     }

@@ -184,11 +184,14 @@ export class GenerateChartComponent implements OnInit {
         this.month = this.getMonth(date.month);
         //this.isNewDay = true;
         this.saveSelectedHourSettings();
-
+        localStorage.setItem('date', JSON.stringify({
+            year: date.year, month: date.month, day: date.day
+        }));
         this.selectedDate = moment.utc([date.year, date.month - 1, date.day]);
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.loadAllSpecialHoursInDay();
+        
         this.tabChangeHandler({ nextId: this.lastSelectedHourName });
     }
 
@@ -290,6 +293,14 @@ export class GenerateChartComponent implements OnInit {
     }
 
     ngOnInit() {
+        if ('date' in localStorage) {
+            var saved_date = JSON.parse(localStorage.getItem('date'));
+            this.selectedDate = moment.utc([saved_date.year, saved_date.month - 1, saved_date.day - 1]);
+        }
+        else {
+            this.selectedDate = moment();
+        }
+            console.log(localStorage.getItem('date'));
         this.loadWorkers();
         this.loadGroups();
         this.loadDefaultHourSettings(() => {
@@ -297,7 +308,7 @@ export class GenerateChartComponent implements OnInit {
             this.dropdownList = this.getDropdownListSettings(this.defaultHourSettings);
         });
         //console.log(this.defaultHourSettings)
-        this.selectedDate = moment();
+        
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
         //this.selectedHour.name = this.firstHour;
         this.dateChangeHandler(date);

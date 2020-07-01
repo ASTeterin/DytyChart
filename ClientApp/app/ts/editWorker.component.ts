@@ -71,6 +71,7 @@ export class EditWorkerComponent implements OnInit {
 
     ngOnInit() {
         this.loadWorkers();
+        //localStorage.getItem('date');
         this.dataService.getGroups().subscribe((data: Group[]) =>
             this.groups = data);
     }

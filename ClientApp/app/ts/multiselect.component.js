@@ -25,32 +25,20 @@ var NgMultiselect = /** @class */ (function () {
             itemsShowLimit: 2,
             allowSearchFilter: false
         };
-        console.log(this.selectedHours);
-        console.log(this.selectedItems);
     }
-    NgMultiselect.prototype.onSelect = function (event) {
-        console.log(event);
-    };
     NgMultiselect.prototype.onItemSelect = function (item) {
-        //this.selectedItems.push(item.item_id);
-        //this.selectedIds.push(item.item_id);
-        //this.timeChange.emit(this.selectedItems);
         this.onChanged.emit({ operation: "select", data: item.item_id });
-        console.log(this.selectedItems);
     };
     NgMultiselect.prototype.onItemDeSelect = function (item) {
-        //splice indexOf
-        //this.selectedItems.push(item.item_id);
-        //this.selectedIds.push(item.item_id);
         this.onChanged.emit({ operation: "unSelect", data: item.item_id });
     };
     NgMultiselect.prototype.onSelectAll = function (items) {
         var _this = this;
-        items.foreach(function (item) { _this.onItemSelect(item); });
+        items.forEach(function (item) { _this.onItemSelect(item); });
     };
     NgMultiselect.prototype.onDeSelectAll = function (items) {
         var _this = this;
-        items.foreach(function (item) { _this.onItemDeSelect(item); });
+        this.selectedHours.forEach(function (item) { _this.onItemDeSelect(item); });
     };
     __decorate([
         Input(),
