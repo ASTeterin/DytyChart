@@ -86,6 +86,7 @@ export class GenerateChartComponent implements OnInit {
     workerNameToExport: string[][] = [];
     workerColorToExport: string[][] = [];
     workersInfoToExport: string[][] = [];
+    workerFontColorToExport: string[][] = [];
     specialHourInDay: SpecialHourInDay = new SpecialHourInDay();
     specialHoursInDay: SpecialHourInDay[] = [];
     unwantedSlots: SpecialHourInDay[] = [];
@@ -229,6 +230,14 @@ export class GenerateChartComponent implements OnInit {
         return worker ? worker.color : "";
     }
 
+    getWorkerFontColor(workerId: any): string {
+        let worker = this.workers.find(w => w.id == workerId);
+        if (worker == null) {
+            return "";
+        }
+        return (worker.fontColor == null) ? "#000000" : worker.fontColor;
+    }
+
     getWorkersInfo(): void {
         this.dataService.getAbsentWorkers(this.selectedDate).subscribe((data: Worker[]) => this.absentWorkers = data);
         this.dataService.getCountFreeSlotsForWorkers(this.selectedDate).subscribe((data: WorkersFreeSlots[]) => this.countFreeSlotsForWorker = data);
@@ -242,6 +251,7 @@ export class GenerateChartComponent implements OnInit {
 
     getDataToExport(): void {
         this.workerColorToExport = [];
+        this.workerFontColorToExport = [];
         this.workerNameToExport = [];
         let dutyWorkers: any[] | string[] = ["Сменник:"];
         let dutyOnPlanning: any[] | string[] = ["Дежурный по планерке:"];
@@ -266,15 +276,19 @@ export class GenerateChartComponent implements OnInit {
         this.selectedDateHours.forEach((hour) => {
             let workersInHour: string[] = [];
             let colors: string[] = [];
+            let fontColors: string[] = [];
 
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
+            fontColors.push("00000000");
 
             hour.slots.forEach((s) => {
                 workersInHour.push(this.getWorkerName(s.workerId));
                 colors.push(this.getWorkerColor(s.workerId));
+                fontColors.push(this.getWorkerFontColor(s.workerId));
             });
             this.workerColorToExport.push(colors);
+            this.workerFontColorToExport.push(fontColors);
             this.workerNameToExport.push(workersInHour);
         })
     }
@@ -289,7 +303,7 @@ export class GenerateChartComponent implements OnInit {
         let data: ChartData[] = [];
         this.getDataToExport();
 
-        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport);
+        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport, this.workerFontColorToExport);
     }
 
     ngOnInit() {

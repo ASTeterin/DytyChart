@@ -14,6 +14,7 @@ public class Worker
     public bool IsDutyOnLetters { get; set; }
     public int IdGroup { get; set; }
     public string Color { get; set; }
+    public string FontColor { get; set; }
     public int CountAbsencePeriod { get; set; }
     private string _unwantedSlotsJson { get; set; }
     protected List<AbsentPeriod> _absentPeriods { get; set; } = new List<AbsentPeriod>();

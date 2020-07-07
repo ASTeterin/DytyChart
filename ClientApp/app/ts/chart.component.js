@@ -26,6 +26,13 @@ var ChartComponent = /** @class */ (function () {
         var worker = this.workers.find(function (w) { return w.id == workerId; });
         return worker ? worker.color : "";
     };
+    ChartComponent.prototype.getWorkerFontColor = function (workerId) {
+        if (!this.workers) {
+            return "";
+        }
+        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        return worker ? worker.fontColor : "";
+    };
     __decorate([
         Input(),
         __metadata("design:type", Array)

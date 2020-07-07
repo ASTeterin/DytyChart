@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
 export class ExcelService {
     constructor(private datePipe: DatePipe) {
     }
-    generateExcel(data: any[], colorSettings: any[], info: any[]) {
+    generateExcel(data: any[], colorSettings: any[], info: any[], fontColors: any[]) {
         
         //Create workbook and worksheet
         let workbook = new Workbook();
@@ -24,15 +24,21 @@ export class ExcelService {
         data.forEach(d => {
             let row = worksheet.addRow(d);
             let color = "";
+            let fontColor = "";
 
             for (let i = 0; i < d.length; i++) {
                 let slot = row.getCell(i + 1); 
                 color = colorSettings[colorIndex][i].substr(1);
+                fontColor = fontColors[colorIndex][i].substr(1);
                 //console.log(color);
+                slot.font = {
+                    color: { argb: fontColor }
+                };
                 slot.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: color }
+                    fgColor: { argb: color },
+
                 }
             }
             colorIndex++;

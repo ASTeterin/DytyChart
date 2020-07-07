@@ -181,6 +181,8 @@ namespace dutyChart.Migrations
 
                     b.Property<int>("CountAbsencePeriod");
 
+                    b.Property<string>("FontColor");
+
                     b.Property<int>("IdGroup");
 
                     b.Property<bool>("IsDuty");

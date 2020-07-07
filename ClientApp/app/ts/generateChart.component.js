@@ -50,6 +50,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.workerNameToExport = [];
         this.workerColorToExport = [];
         this.workersInfoToExport = [];
+        this.workerFontColorToExport = [];
         this.specialHourInDay = new SpecialHourInDay();
         this.specialHoursInDay = [];
         this.unwantedSlots = [];
@@ -177,6 +178,13 @@ var GenerateChartComponent = /** @class */ (function () {
         var worker = this.workers.find(function (w) { return w.id == workerId; });
         return worker ? worker.color : "";
     };
+    GenerateChartComponent.prototype.getWorkerFontColor = function (workerId) {
+        var worker = this.workers.find(function (w) { return w.id == workerId; });
+        if (worker == null) {
+            return "";
+        }
+        return (worker.fontColor == null) ? "#ffffff" : worker.fontColor;
+    };
     GenerateChartComponent.prototype.getWorkersInfo = function () {
         var _this = this;
         this.dataService.getAbsentWorkers(this.selectedDate).subscribe(function (data) { return _this.absentWorkers = data; });
@@ -189,6 +197,7 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.getDataToExport = function () {
         var _this = this;
         this.workerColorToExport = [];
+        this.workerFontColorToExport = [];
         this.workerNameToExport = [];
         var dutyWorkers = ["Сменник:"];
         var dutyOnPlanning = ["Дежурный по планерке:"];
@@ -210,13 +219,16 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedDateHours.forEach(function (hour) {
             var workersInHour = [];
             var colors = [];
+            var fontColors = [];
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
             hour.slots.forEach(function (s) {
                 workersInHour.push(_this.getWorkerName(s.workerId));
                 colors.push(_this.getWorkerColor(s.workerId));
+                fontColors.push(_this.getWorkerFontColor(s.workerId));
             });
             _this.workerColorToExport.push(colors);
+            _this.workerFontColorToExport.push(fontColors);
             _this.workerNameToExport.push(workersInHour);
         });
     };
@@ -228,7 +240,7 @@ var GenerateChartComponent = /** @class */ (function () {
         var fileName = 'dutyChart';
         var data = [];
         this.getDataToExport();
-        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport);
+        this.excelService.generateExcel(this.workerNameToExport, this.workerColorToExport, this.workersInfoToExport, this.workerFontColorToExport);
     };
     GenerateChartComponent.prototype.ngOnInit = function () {
         var _this = this;

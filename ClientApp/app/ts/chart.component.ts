@@ -33,6 +33,15 @@ export class ChartComponent {
         return worker ? worker.color : "";
     }
 
+    getWorkerFontColor(workerId: any) {
+        if (!this.workers) {
+            return "";
+        }
+        let worker = this.workers.find(w => w.id == workerId);
+        return worker ? worker.fontColor : "";
+    }
+
+
     constructor() {
     }
 }

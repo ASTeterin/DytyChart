@@ -8,6 +8,7 @@
         public idGroup?: number,
         public countAbsencePeriod?: number,
         public color?: string,
+        public fontColor?: string,
         public unwantedSlots?: number[],
         public desirableSlots?: number[],
     ) { }

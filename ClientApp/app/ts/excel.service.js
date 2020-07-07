@@ -15,7 +15,7 @@ var ExcelService = /** @class */ (function () {
     function ExcelService(datePipe) {
         this.datePipe = datePipe;
     }
-    ExcelService.prototype.generateExcel = function (data, colorSettings, info) {
+    ExcelService.prototype.generateExcel = function (data, colorSettings, info, fontColors) {
         //Create workbook and worksheet
         var workbook = new Workbook();
         var worksheet = workbook.addWorksheet('chart');
@@ -28,14 +28,19 @@ var ExcelService = /** @class */ (function () {
         data.forEach(function (d) {
             var row = worksheet.addRow(d);
             var color = "";
+            var fontColor = "";
             for (var i_1 = 0; i_1 < d.length; i_1++) {
                 var slot = row.getCell(i_1 + 1);
                 color = colorSettings[colorIndex][i_1].substr(1);
+                fontColor = fontColors[colorIndex][i_1].substr(1);
                 //console.log(color);
+                slot.font = {
+                    color: { argb: fontColor }
+                };
                 slot.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: color }
+                    fgColor: { argb: color },
                 };
             }
             colorIndex++;
