@@ -183,7 +183,7 @@ var GenerateChartComponent = /** @class */ (function () {
         if (worker == null) {
             return "";
         }
-        return (worker.fontColor == null) ? "#ffffff" : worker.fontColor;
+        return (worker.fontColor == null) ? "#000000" : worker.fontColor;
     };
     GenerateChartComponent.prototype.getWorkersInfo = function () {
         var _this = this;
@@ -222,6 +222,7 @@ var GenerateChartComponent = /** @class */ (function () {
             var fontColors = [];
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
+            fontColors.push("00000000");
             hour.slots.forEach(function (s) {
                 workersInHour.push(_this.getWorkerName(s.workerId));
                 colors.push(_this.getWorkerColor(s.workerId));

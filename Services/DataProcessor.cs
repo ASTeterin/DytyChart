@@ -46,7 +46,7 @@ namespace dutyChart.Models
 
         private int GetDutyWorkerGroupId(List<Worker> workers, DateTime date)
         {
-            var id = 0;
+            var id = -1;
             foreach (Worker w in workers)
             {
                 WorkerInDay workerInDay = GetWorkerInDay(w.Id, date);
@@ -218,7 +218,7 @@ namespace dutyChart.Models
                 countAttemps = 0;
                 if (desirableSlots.Count == 0)
                 {
-                    number = rand.Next(0, countHoursInDay - 1);
+                    number = rand.Next(0, countHoursInDay);
                 }
                 else 
                 {
