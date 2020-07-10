@@ -96,17 +96,19 @@ namespace dutyChart.Models
                     idDutyWorkerGroup = w.IdGroup;
                     continue;
                 }
-                if (IsWorkerWithDesirableHours(w, date))
-                {
-                    groupWithSpecialHours.Add(w);
-                    continue;
-                }
 
                 if (workerInDay.IsDutyOnWedn)
                 {
                     dutyOnPlanningGroup.Add(w);
                     continue;
                 }
+
+                if (IsWorkerWithDesirableHours(w, date))
+                {
+                    groupWithSpecialHours.Add(w);
+                    continue;
+                }
+
                 if (w.IdGroup == idDutyWorkerGroup)
                 {
                     continue;
@@ -114,9 +116,9 @@ namespace dutyChart.Models
                 var groupIndex = groups.FindIndex(g => g.Id == w.IdGroup);
                 workersInGroupByPriority[groupIndex].Add(w);
                 
-            }
-            workersInGroupByPriority.Insert(0, dutyOnPlanningGroup);
+            }           
             workersInGroupByPriority.Insert(0, groupWithSpecialHours);
+            workersInGroupByPriority.Insert(0, dutyOnPlanningGroup);
             workersInGroupByPriority.Insert(0, dutyGroup);
             return workersInGroupByPriority;
         }
