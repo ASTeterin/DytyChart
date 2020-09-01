@@ -185,6 +185,7 @@ namespace dutyChart.Models
         private List<int> GetSlotNumbersForWorker(ref List<int> hoursInDay, /*ref int countSlotsForWorker,*/ Worker worker, DateTime date)
         {
             int maxCountAttempts = Convert.ToInt32(Configuration["MaxCountAttempts"]);
+
             bool isDesirableSlot = true;
             int number, countFreeSlots;
             int countHoursInDay = hoursInDay.Count;
@@ -200,7 +201,7 @@ namespace dutyChart.Models
             List<int> unwantedSlots = new List<int>();
             desirableSlots = _db.SpecialHoursInDay.Where(slot => slot.WorkerId == worker.Id && slot.Date == date && slot.Type == isDesirableSlot).Select(h => h.HourNumber).ToList();
             unwantedSlots = _db.SpecialHoursInDay.Where(slot => slot.WorkerId == worker.Id && slot.Date == date && slot.Type == !isDesirableSlot).Select(h => h.HourNumber).ToList();
-            var countSlotsForWorker = _db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours; 
+            var countSlotsForWorker = _db.Groups.FirstOrDefault(g => g.Id == worker.IdGroup).NumberDutyHours;
             if (workerInDay.IsDuty)
             {
                 countSlotsForWorker = 6;
@@ -255,9 +256,7 @@ namespace dutyChart.Models
                     listNumbers.Remove(number);
                     i--;
                     if (countAttemps == maxCountAttempts)
-                    {
                         break;
-                    }
                 }
                 else
                 {
@@ -265,6 +264,34 @@ namespace dutyChart.Models
                 }
             }
             return listNumbers;
+        }
+
+        private List<int> GetListOfNumbersSlot(int count)
+        {
+            List<int> ListOfNumbers = new List<int> { };
+            for (int i = 0; i < count; i++)
+            {
+                ListOfNumbers.Add(i);
+            }
+            return ListOfNumbers;
+        }
+
+        private void GetPermutationForSlotsInHour(List<Hour> hours)
+        {
+            foreach (var hour in hours)
+            {
+                var slotsInHour = _db.Slots.Where(s => s.HourId == hour.Id).ToList();
+                List<int> listOfNumbers = GetListOfNumbersSlot(slotsInHour.Count);
+                List<int> randomPermutation = GetRandomPermutation(listOfNumbers);
+                var i = 0;
+                foreach (var s in slotsInHour)
+                {
+                    s.Index = randomPermutation[i++];
+                }
+                _db.Slots.UpdateRange(slotsInHour);
+                _db.SaveChanges();
+            }
+            
         }
 
         private List<SlotDto> GetSlotsDto(List<Hour> hours)
@@ -345,10 +372,12 @@ namespace dutyChart.Models
         {
             List<T> result = new List<T> { };
             Random rand = new Random();
-            for (int i = 0; i < data.Count; i++)
+            int i = 0;
+            while (data.Count > 0)
             {
-                int position = rand.Next(0, i);
-                result.Insert(position, data[i]);
+                int position = rand.Next(0, data.Count);
+                result.Insert(i++, data[position]);
+                data.RemoveAt(position);
             }
             return result;
         }
@@ -431,6 +460,10 @@ namespace dutyChart.Models
             return (date.DayOfWeek == DayOfWeek.Wednesday) ? true : false;
         }
 
+        //List<>
+
+        
+
         public List<SlotDto> DistributeSlots(DateTime date)
         {
             var slots = new List<SlotDto>();
@@ -460,7 +493,7 @@ namespace dutyChart.Models
             {
                 FillSlotsForGroup(group, groups[i++].NumberDutyHours, ref hours, ref countFreeSlots, ref notBusyWorkers, date);
             }
-
+            GetPermutationForSlotsInHour(hours);
             slots = GetSlotsDto(hours);
             return slots;
         }
