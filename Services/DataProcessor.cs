@@ -397,6 +397,7 @@ namespace dutyChart.Models
             foreach (var slotNumber in slotNumbers)
             {
                 List<Slot> slotsInCurrentHour = slotsInCurrentHourById[hours[slotNumber].Id];
+                //slotsInCurrentHour.Reverse();
                 foreach (var slotInCurrentHour in slotsInCurrentHour)
                 {
                     if (slotInCurrentHour.WorkerId == null)
@@ -461,8 +462,50 @@ namespace dutyChart.Models
         }
 
         //List<>
+        private Dictionary<int, int> getWorkersWithNumbersOfFirsSlot(DateTime date)
+        {
+            Dictionary<int, int> numbersWorkersInFirstSlot = new Dictionary<int, int>();
+            var workersIdInFirstSlots = new List<int>();
+            var hours = _db.Hours.Where(h => h.Date == date).ToList();
+            foreach (var hour in hours)
+            {
+                var workerId = _db.Slots.FirstOrDefault(s => s.HourId == hour.Id && s.Index == 0).WorkerId.GetValueOrDefault();
+                if (numbersWorkersInFirstSlot.ContainsKey(workerId))
+                    numbersWorkersInFirstSlot[workerId]++;
+                else
+                    numbersWorkersInFirstSlot.Add(workerId, 1);
+            }
+            return numbersWorkersInFirstSlot;
+        }
 
-        
+        private List<int> getWorkersIdWithMoreSlotsInFirshHour(DateTime date)
+        {
+            var numbersWorkersInFirstSlot = getWorkersWithNumbersOfFirsSlot(date);
+            int ALLOWED_NUMBER_SLOTS = 2;
+            var workersIdWithMoreSlotsInFirshHour = new List<int>();
+            foreach (var keyValue in numbersWorkersInFirstSlot)
+            {
+                if (keyValue.Value > ALLOWED_NUMBER_SLOTS) 
+                    workersIdWithMoreSlotsInFirshHour.Add(keyValue.Key); 
+            }
+            return workersIdWithMoreSlotsInFirshHour;
+        }
+
+        private void changeSlotInHour(List<int> workersIdWithMoreSlotsInFirshHour, DateTime date)
+        {
+            foreach (var workerId in workersIdWithMoreSlotsInFirshHour)
+            {
+                var hourIds = _db.Hours.Where(h => h.Date == date).Select(h => h.Id).ToList();
+                var slotWithFirstPriority = _db.Slots.FirstOrDefault(s => s.Index == 0 && s.WorkerId == workerId && hourIds.Contains(s.HourId));
+                var hourId = _db.Hours.FirstOrDefault(h => h.Id == slotWithFirstPriority.HourId).Id;
+                var slotWithSecondPriority = _db.Slots.FirstOrDefault(s => s.HourId == hourId && s.Index == 1 && hourIds.Contains(s.HourId));
+                slotWithFirstPriority.Index = 1;
+                slotWithSecondPriority.Index = 0;
+                _db.Slots.Update(slotWithFirstPriority);
+                _db.Slots.Update(slotWithSecondPriority);
+                _db.SaveChanges();
+            }
+        }
 
         public List<SlotDto> DistributeSlots(DateTime date)
         {
@@ -493,7 +536,9 @@ namespace dutyChart.Models
             {
                 FillSlotsForGroup(group, groups[i++].NumberDutyHours, ref hours, ref countFreeSlots, ref notBusyWorkers, date);
             }
-            GetPermutationForSlotsInHour(hours);
+            //GetPermutationForSlotsInHour(hours);
+            var workersWorkersIdWithMoreSlotsInFirshHour = getWorkersIdWithMoreSlotsInFirshHour(date);
+            changeSlotInHour(workersWorkersIdWithMoreSlotsInFirshHour, date);
             slots = GetSlotsDto(hours);
             return slots;
         }
