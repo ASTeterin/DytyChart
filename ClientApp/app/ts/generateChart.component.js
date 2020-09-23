@@ -162,8 +162,10 @@ var GenerateChartComponent = /** @class */ (function () {
         this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) {
             _this.slots = data;
+            console.log(data);
             _this.loadHours(function () {
                 _this.chartData = _this.selectedDateHours;
+                console.log(_this.selectedDateHours);
                 _this.getWorkersInfo();
                 _this.spinner.hide();
             });

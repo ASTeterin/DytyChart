@@ -3,7 +3,10 @@
     <tbody>
         <tr *ngFor="let hour of selectedDateHours">
             <th scope="row">{{hour.name}}</th>
-            <th [style.background-color]="getWorkerColor(slot.workerId)" [style.color]="getWorkerFontColor(slot.workerId)" *ngFor="let slot of hour.slots">{{getWorkerName(slot.workerId)}}</th>
+            <ng-container *ngFor="let slot of slots">
+                <th [style.background-color]="getWorkerColor(slot.workerId)" [style.color]="getWorkerFontColor(slot.workerId)" *ngIf="slot.hourId == hour.id">{{getWorkerName(slot.workerId)}}</th>
+            </ng-container>
+            
         </tr>
     </tbody>
 </table>

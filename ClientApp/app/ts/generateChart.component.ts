@@ -209,8 +209,10 @@ export class GenerateChartComponent implements OnInit {
         this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe((data: Slot[]) => {
             this.slots = data;
+            console.log(data);
             this.loadHours(() => {
                 this.chartData = this.selectedDateHours;
+                console.log(this.selectedDateHours);
                 this.getWorkersInfo();
                 this.spinner.hide();
                 

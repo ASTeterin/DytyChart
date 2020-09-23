@@ -39,6 +39,24 @@ namespace dutyChart.Controllers
             }
             return hoursDto;
         }
+
+        private List<Hour> SortSlotsInHoursByIndex(List<Hour> sourceHours)
+        {
+            List<Hour> resultHours = new List<Hour>();
+            foreach (Hour hour in sourceHours)
+            {
+                Hour currentHour = new Hour();
+                currentHour = hour;
+                //currentHour._slots = { };
+                var slots = hour.Slots.ToList();
+                slots.Sort();
+
+                //for (var i = 0; i < hour.Slots.Count; i++)
+                    
+            }
+            return resultHours;
+        }
+
         private List<Hour> GetHours(DateTime date)
         {
             List<Hour> hours = new List<Hour>() { };
