@@ -492,18 +492,29 @@ namespace dutyChart.Models
             return workersIdWithMoreSlotsInFirshHour;
         }
 
-        private void changeSlotInHour(List<int> workersIdWithMoreSlotsInFirshHour, DateTime date)
+        private void GetSlotsPermutation(ref List<Slot> sourceSlots)
+        {
+            var slotIndexes = new List<int> { };
+            foreach(var slot in sourceSlots)
+            {
+                slotIndexes.Add((slot.Index + 1) % sourceSlots.Count());
+            }
+            var j = 0;
+            foreach (var slot in sourceSlots)
+            {
+                slot.Index = slotIndexes[j++];
+            }
+        }
+
+        private void ChangeSlotInHour(List<int> workersIdWithMoreSlotsInFirshHour, DateTime date)
         {
             foreach (var workerId in workersIdWithMoreSlotsInFirshHour)
             {
                 var hourIds = _db.Hours.Where(h => h.Date == date).Select(h => h.Id).ToList();
-                var slotWithFirstPriority = _db.Slots.FirstOrDefault(s => s.Index == 0 && s.WorkerId == workerId && hourIds.Contains(s.HourId));
-                var hourId = _db.Hours.FirstOrDefault(h => h.Id == slotWithFirstPriority.HourId).Id;
-                var slotWithSecondPriority = _db.Slots.FirstOrDefault(s => s.HourId == hourId && s.Index == 1 && hourIds.Contains(s.HourId));
-                slotWithFirstPriority.Index = 1;
-                slotWithSecondPriority.Index = 0;
-                _db.Slots.Update(slotWithFirstPriority);
-                _db.Slots.Update(slotWithSecondPriority);
+                var firstHourIdForUserWithMoreSlots = _db.Slots.FirstOrDefault(s => s.WorkerId == workerId && hourIds.Contains(s.HourId) && s.Index == 0).HourId;
+                var slotsInfirstHourIdForUserWithMoreSlots = _db.Slots.Where(s => s.HourId == firstHourIdForUserWithMoreSlots).ToList();
+                GetSlotsPermutation(ref slotsInfirstHourIdForUserWithMoreSlots);
+                _db.Slots.UpdateRange(slotsInfirstHourIdForUserWithMoreSlots);
                 _db.SaveChanges();
             }
         }
@@ -539,11 +550,11 @@ namespace dutyChart.Models
             }
             //GetPermutationForSlotsInHour(hours);
             var workersWorkersIdWithMoreSlotsInFirshHour = getWorkersIdWithMoreSlotsInFirshHour(date);
-            //while (workersWorkersIdWithMoreSlotsInFirshHour.Count > 0)
-            //{
-                //changeSlotInHour(workersWorkersIdWithMoreSlotsInFirshHour, date);
-                //workersWorkersIdWithMoreSlotsInFirshHour = getWorkersIdWithMoreSlotsInFirshHour(date);
-            //}
+            while (workersWorkersIdWithMoreSlotsInFirshHour.Count > 0)
+            {
+                ChangeSlotInHour(workersWorkersIdWithMoreSlotsInFirshHour, date);
+                workersWorkersIdWithMoreSlotsInFirshHour = getWorkersIdWithMoreSlotsInFirshHour(date);
+            }
                 
             slots = GetSlotsDto(hours);
             return slots;
