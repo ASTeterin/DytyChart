@@ -33,6 +33,7 @@ export class DataService {
     public urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
     public urlSpecialHoursInDayForWorker = "/api/SpecialHoursInDay/special-hours";
     public urlDefaultSlots = "/api/DefaultSlots";
+    public urlSlotsInDay = "api/slot/get-slots-in-day";
 
     constructor(private http: HttpClient) {
     }
@@ -47,6 +48,10 @@ export class DataService {
 
     getSlots() {
         return this.http.get(this.urlSlot);
+    }
+
+    getSlotsInDay(date: moment.Moment) {
+        return this.http.get(`${this.urlSlotsInDay}?date=${date.format('YYYY-MM-DD')}`);
     }
 
     createSlot(slot: Slot) {

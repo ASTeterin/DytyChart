@@ -58,6 +58,7 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedDesirableSlots = [];
         this.selectedUnwantedSlots = [];
         this.dropdownList = [];
+        this.loadedSlots = [];
     }
     GenerateChartComponent.prototype.getDropdownListSettings = function (defaultHourSettings) {
         var dropdownListSettings = [];
@@ -133,6 +134,7 @@ var GenerateChartComponent = /** @class */ (function () {
         return (monthNumber < monthNames.length - 1) ? monthNames[monthNumber - 1] : null;
     };
     GenerateChartComponent.prototype.dateChangeHandler = function (date) {
+        var _this = this;
         this.cancelWorker();
         this.day = date.day;
         this.month = this.getMonth(date.month);
@@ -145,6 +147,10 @@ var GenerateChartComponent = /** @class */ (function () {
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.loadAllSpecialHoursInDay();
+        this.loadSlotsInDay(function () {
+            _this.slots = _this.loadedSlots;
+            console.log(_this.slots);
+        });
         this.tabChangeHandler({ nextId: this.lastSelectedHourName });
     };
     GenerateChartComponent.prototype.compare = function (a, b) {
@@ -264,6 +270,7 @@ var GenerateChartComponent = /** @class */ (function () {
         //console.log(this.defaultHourSettings)
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
         //this.selectedHour.name = this.firstHour;
+        //console.log(this.slots);
         this.dateChangeHandler(date);
     };
     GenerateChartComponent.prototype.saveDutyWorker = function () {
@@ -411,6 +418,15 @@ var GenerateChartComponent = /** @class */ (function () {
             .subscribe(function (data) {
             _this.workers = data;
             _this.workers.sort(_this.compare);
+        });
+    };
+    GenerateChartComponent.prototype.loadSlotsInDay = function (cb) {
+        var _this = this;
+        this.dataService.getSlotsInDay(this.selectedDate)
+            .subscribe(function (data) {
+            _this.loadedSlots = data;
+            if (cb)
+                cb();
         });
     };
     GenerateChartComponent.prototype.loadSlots = function () {

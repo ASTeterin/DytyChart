@@ -36,6 +36,22 @@ namespace dutyChart.Controllers
             return dp.DistributeSlots( date );
         }
 
+        [HttpGet, Route("get-slots-in-day")]
+        public List<SlotDto> GetSlotsInDay(DateTime date)
+        {
+            var hours = db.Hours.Where(h => h.Date == date).ToList();
+            return dp.GetSlotsDto(hours);
+            /*var slotsDto = new List<SlotDto> { };
+            foreach (var hour in hours) {
+                var slots = db.Slots.Where(s => s.HourId == hour.Id).ToList();
+                foreach (var slot in slots) {
+                    var slotDto = new SlotDto();
+                    slotsDto.Add(slotDto);
+                }
+            }
+            return dp.DistributeSlots(date);*/
+        }
+
         [HttpGet( "{id}" )]
         public IEnumerable<Slot> Get( int hourId )
         {

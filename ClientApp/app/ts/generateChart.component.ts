@@ -94,6 +94,7 @@ export class GenerateChartComponent implements OnInit {
     selectedDesirableSlots: any[] = [];
     selectedUnwantedSlots: any[] = [];
     dropdownList: any[] = [];
+    loadedSlots: any[] = [];
 
     constructor(private dataService: DataService, private spinner: NgxSpinnerService, private excelService: ExcelService) {
     }
@@ -192,6 +193,10 @@ export class GenerateChartComponent implements OnInit {
         this.getWorkersInfo();
         this.loadWorkerInDay();
         this.loadAllSpecialHoursInDay();
+        this.loadSlotsInDay(() => {
+            this.slots = this.loadedSlots;
+            console.log(this.slots);
+        });
         
         this.tabChangeHandler({ nextId: this.lastSelectedHourName });
     }
@@ -327,6 +332,8 @@ export class GenerateChartComponent implements OnInit {
         
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
         //this.selectedHour.name = this.firstHour;
+        
+        //console.log(this.slots);
         this.dateChangeHandler(date);
     }
 
@@ -484,6 +491,14 @@ export class GenerateChartComponent implements OnInit {
                 this.workers = data;
                 this.workers.sort(this.compare);
             })
+    }
+
+    loadSlotsInDay(cb: any) {
+        this.dataService.getSlotsInDay(this.selectedDate)
+            .subscribe((data: Slot[]) => {
+                this.loadedSlots = data;
+                if (cb) cb();
+            });
     }
 
     loadSlots() {

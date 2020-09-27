@@ -31,6 +31,7 @@ var DataService = /** @class */ (function () {
         this.urlAllSpecialHoursInDay = "/api/SpecialHoursInDay/all-special-hours";
         this.urlSpecialHoursInDayForWorker = "/api/SpecialHoursInDay/special-hours";
         this.urlDefaultSlots = "/api/DefaultSlots";
+        this.urlSlotsInDay = "api/slot/get-slots-in-day";
     }
     DataService.prototype.getData = function (url) {
         return this.http.get(url);
@@ -40,6 +41,9 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.getSlots = function () {
         return this.http.get(this.urlSlot);
+    };
+    DataService.prototype.getSlotsInDay = function (date) {
+        return this.http.get(this.urlSlotsInDay + "?date=" + date.format('YYYY-MM-DD'));
     };
     DataService.prototype.createSlot = function (slot) {
         return this.http.post(this.urlSlot, slot);

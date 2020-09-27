@@ -294,7 +294,7 @@ namespace dutyChart.Models
             
         }
 
-        private List<SlotDto> GetSlotsDto(List<Hour> hours)
+        public List<SlotDto> GetSlotsDto(List<Hour> hours)
         {
             List<SlotDto> slotsDto = new List<SlotDto> { };
             foreach (var hour in hours)
