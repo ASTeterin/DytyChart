@@ -66,7 +66,6 @@ var GenerateChartComponent = /** @class */ (function () {
         defaultHourSettings.forEach(function (x) {
             dropdownListSettings.push({ item_id: i++, item_text: x.name });
         });
-        console.log(dropdownListSettings);
         return dropdownListSettings;
     };
     GenerateChartComponent.prototype.getListOfTimes = function (defaultHourSettings) {
@@ -91,7 +90,6 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.tabChangeHandler = function (event) {
         var _this = this;
         this.saveSelectedHourSettings();
-        //this.selectHourEvent = event;
         this.loadHours(function () {
             var hour = new Hour();
             if (!_this.isNewDay) {
@@ -108,7 +106,6 @@ var GenerateChartComponent = /** @class */ (function () {
         var _this = this;
         this.dataService.getDefaultSlots().subscribe(function (data) {
             _this.defaultHourSettings = data;
-            //console.log(this.defaultHourSettings)
             if (cb)
                 cb();
         });
@@ -149,7 +146,6 @@ var GenerateChartComponent = /** @class */ (function () {
         this.loadAllSpecialHoursInDay();
         this.loadSlotsInDay(function () {
             _this.slots = _this.loadedSlots;
-            console.log(_this.slots);
         });
         this.tabChangeHandler({ nextId: this.lastSelectedHourName });
     };
@@ -168,10 +164,8 @@ var GenerateChartComponent = /** @class */ (function () {
         this.spinner.show();
         this.dataService.getFilledSlots(this.selectedDate).subscribe(function (data) {
             _this.slots = data;
-            console.log(data);
             _this.loadHours(function () {
                 _this.chartData = _this.selectedDateHours;
-                console.log(_this.selectedDateHours);
                 _this.getWorkersInfo();
                 _this.spinner.hide();
             });
@@ -260,28 +254,16 @@ var GenerateChartComponent = /** @class */ (function () {
         else {
             this.selectedDate = moment();
         }
-        console.log(localStorage.getItem('date'));
         this.loadWorkers();
         this.loadGroups();
         this.loadDefaultHourSettings(function () {
             _this.timeArr = _this.getListOfTimes(_this.defaultHourSettings);
             _this.dropdownList = _this.getDropdownListSettings(_this.defaultHourSettings);
         });
-        //console.log(this.defaultHourSettings)
         var date = { year: this.selectedDate.year(), month: this.selectedDate.month() + 1, day: this.selectedDate.date() + 1 };
-        //this.selectedHour.name = this.firstHour;
-        //console.log(this.slots);
         this.dateChangeHandler(date);
     };
     GenerateChartComponent.prototype.saveDutyWorker = function () {
-        /*if (this.workerInDay.isDuty) {
-            this.dataService.getWorkersInDayByGroup(this.selectedDate, 4).subscribe((data: WorkerInDay[]) => this.dutyWorkers = data);
-            this.dutyWorkers.forEach((w) => {
-                w.isDuty = false;
-                
-            });
-            this.saveWorkersInDay();
-        }*/
         this.saveWorkerInDay();
     };
     GenerateChartComponent.prototype.updateData = function () {
@@ -327,7 +309,6 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.saveWorker = function () {
         var _this = this;
-        console.log(this.workerInDay);
         this.dataService.updateWorkerInDay(this.workerInDay)
             .subscribe(function (data) { return _this.loadWorkerInDay(); });
     };
@@ -340,7 +321,6 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.saveHour = function () {
         var _this = this;
         this.selectedHour.date = this.selectedDate; //moment();
-        console.log(this.selectedHour.date);
         if (!this.selectedHour.id) {
             this.dataService.createHour(this.selectedHour)
                 .subscribe(function (data) { return _this.selectedDateHours.push(data); });
@@ -441,7 +421,6 @@ var GenerateChartComponent = /** @class */ (function () {
         this.selectedUnwantedSlots = [];
         this.dataService.getSpecialHoursInDay(date, worker.id)
             .subscribe(function (data) {
-            //console.log(data);
             _this.specialHoursInDay = data;
             if (cb)
                 cb();
@@ -449,7 +428,6 @@ var GenerateChartComponent = /** @class */ (function () {
     };
     GenerateChartComponent.prototype.getSelectedHours = function (selectedSlots) {
         var _this = this;
-        console.log(selectedSlots);
         var selectedSpecialHours = [];
         selectedSlots.forEach(function (slot) {
             selectedSpecialHours.push(_this.dropdownList.find(function (s) { return s.item_id == slot.hourNumber; }));
@@ -476,17 +454,8 @@ var GenerateChartComponent = /** @class */ (function () {
     GenerateChartComponent.prototype.deleteSlots = function (id) {
         var _this = this;
         this.dataService.deleteSlotsInHour(id)
-            .subscribe(function (data) { console.log(data); _this.loadSlots(); });
+            .subscribe(function (data) { _this.loadSlots(); });
     };
-    /*updateDesirableSlots(selectedItems: any) {
-        this.specialHourInDay.date = this.selectedDate;
-        this.specialHourInDay.type = true;
-        this.specialHourInDay.workerId = this.selectedWorkerId;
-        this.specialHourInDay.hourNumber = selectedItems.data;
-        this.dataService.createSpecialHourInDay(this.specialHourInDay)
-            .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
-        console.log(this.specialHourInDay);
-    }*/
     GenerateChartComponent.prototype.updateDesirableSlots = function (selectedData) {
         var _this = this;
         this.saveSelectedHourSettings();
@@ -529,19 +498,9 @@ var GenerateChartComponent = /** @class */ (function () {
             }
         }
     };
-    /*updateUnwantedSlots(selectedItems: any) {
-        this.specialHourInDay.date = this.selectedDate;
-        this.specialHourInDay.type = false;
-        this.specialHourInDay.workerId = this.selectedWorkerId;
-        this.specialHourInDay.hourNumber = selectedItems.data;
-        this.dataService.createSpecialHourInDay(this.specialHourInDay)
-            .subscribe((data: SpecialHourInDay) => this.specialHoursInDay.push(data));
-        console.log(this.specialHourInDay);
-    }*/
     GenerateChartComponent.prototype.addDesirableSlots = function (slotId) {
         this.worker.desirableSlots.push(slotId);
         this.saveWorker();
-        console.log(this.worker);
     };
     GenerateChartComponent = __decorate([
         Component({

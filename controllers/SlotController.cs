@@ -41,15 +41,6 @@ namespace dutyChart.Controllers
         {
             var hours = db.Hours.Where(h => h.Date == date).ToList();
             return dp.GetSlotsDto(hours);
-            /*var slotsDto = new List<SlotDto> { };
-            foreach (var hour in hours) {
-                var slots = db.Slots.Where(s => s.HourId == hour.Id).ToList();
-                foreach (var slot in slots) {
-                    var slotDto = new SlotDto();
-                    slotsDto.Add(slotDto);
-                }
-            }
-            return dp.DistributeSlots(date);*/
         }
 
         [HttpGet( "{id}" )]
@@ -90,7 +81,6 @@ namespace dutyChart.Controllers
         {
             //Slot slot = db.Slots.FirstOrDefault(x => x.Id == id);
             var slots = Get( id );
-
             if ( slots != null )
             {
                 foreach ( Slot slot in slots )
@@ -98,7 +88,6 @@ namespace dutyChart.Controllers
                     db.Slots.Remove( slot );
                     db.SaveChanges();
                 }
-
             }
             return Ok( slots );
         }

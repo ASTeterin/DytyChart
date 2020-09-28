@@ -397,7 +397,6 @@ namespace dutyChart.Models
             foreach (var slotNumber in slotNumbers)
             {
                 List<Slot> slotsInCurrentHour = slotsInCurrentHourById[hours[slotNumber].Id];
-                //slotsInCurrentHour.Reverse();
                 foreach (var slotInCurrentHour in slotsInCurrentHour)
                 {
                     if (slotInCurrentHour.WorkerId == null)
@@ -461,7 +460,6 @@ namespace dutyChart.Models
             return (date.DayOfWeek == DayOfWeek.Wednesday) ? true : false;
         }
 
-        //List<>
         private Dictionary<int, int> getWorkersWithNumbersOfFirsSlot(DateTime date)
         {
             Dictionary<int, int> numbersWorkersInFirstSlot = new Dictionary<int, int>();
@@ -521,6 +519,8 @@ namespace dutyChart.Models
 
         public List<SlotDto> DistributeSlots(DateTime date)
         {
+            var MAX_NUMBER_SLOTS = 6;
+            var NUMBER_SLOTS_FOR_DUTY_ON_LETTERS = 5;
             var slots = new List<SlotDto>();
             var hours = new List<Hour>();
             var workers = new List<Worker>();
@@ -536,11 +536,11 @@ namespace dutyChart.Models
 
             groups.Insert(0, new Group());
             var dutyOnLettersGroup = new Group();
-            dutyOnLettersGroup.NumberDutyHours = 5;
+            dutyOnLettersGroup.NumberDutyHours = NUMBER_SLOTS_FOR_DUTY_ON_LETTERS;
             groups.Insert(0, dutyOnLettersGroup);
 
             var dutyGroup = new Group();
-            dutyGroup.NumberDutyHours = 6;
+            dutyGroup.NumberDutyHours = MAX_NUMBER_SLOTS;
             groups.Insert(0, dutyGroup);
             workersInGroupByPriority = GetGroups(workers, date);
             var i = 0;
@@ -548,7 +548,6 @@ namespace dutyChart.Models
             {
                 FillSlotsForGroup(group, groups[i++].NumberDutyHours, ref hours, ref countFreeSlots, ref notBusyWorkers, date);
             }
-            //GetPermutationForSlotsInHour(hours);
             var workersWorkersIdWithMoreSlotsInFirshHour = getWorkersIdWithMoreSlotsInFirshHour(date);
             while (workersWorkersIdWithMoreSlotsInFirshHour.Count > 0)
             {
