@@ -225,11 +225,18 @@ var GenerateChartComponent = /** @class */ (function () {
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
             fontColors.push("00000000");
-            hour.slots.forEach(function (s) {
-                workersInHour.push(_this.getWorkerName(s.workerId));
-                colors.push(_this.getWorkerColor(s.workerId));
-                fontColors.push(_this.getWorkerFontColor(s.workerId));
+            _this.slots.forEach(function (s) {
+                if (s.hourId == hour.id) {
+                    workersInHour.push(_this.getWorkerName(s.workerId));
+                    colors.push(_this.getWorkerColor(s.workerId));
+                    fontColors.push(_this.getWorkerFontColor(s.workerId));
+                }
             });
+            /*hour.slots.forEach((s) => {
+                workersInHour.push(this.getWorkerName(s.workerId));
+                colors.push(this.getWorkerColor(s.workerId));
+                fontColors.push(this.getWorkerFontColor(s.workerId));
+            });*/
             _this.workerColorToExport.push(colors);
             _this.workerFontColorToExport.push(fontColors);
             _this.workerNameToExport.push(workersInHour);

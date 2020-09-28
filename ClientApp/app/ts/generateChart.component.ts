@@ -267,12 +267,18 @@ export class GenerateChartComponent implements OnInit {
             workersInHour.push(hour.name);
             colors.push("FF99FF99");
             fontColors.push("00000000");
-
-            hour.slots.forEach((s) => {
+            this.slots.forEach((s) => {
+                if (s.hourId == hour.id) {
+                    workersInHour.push(this.getWorkerName(s.workerId));
+                    colors.push(this.getWorkerColor(s.workerId));
+                    fontColors.push(this.getWorkerFontColor(s.workerId));
+                }
+            });
+            /*hour.slots.forEach((s) => {
                 workersInHour.push(this.getWorkerName(s.workerId));
                 colors.push(this.getWorkerColor(s.workerId));
                 fontColors.push(this.getWorkerFontColor(s.workerId));
-            });
+            });*/
             this.workerColorToExport.push(colors);
             this.workerFontColorToExport.push(fontColors);
             this.workerNameToExport.push(workersInHour);
