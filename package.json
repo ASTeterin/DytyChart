@@ -35,7 +35,7 @@
     "rxjs": "6.5.2",
     "rxjs-compat": "^6.5.3",
     "ts-xlsx-export": "^1.0.1",
-    "xlsx": "^0.15.5",
+    "xlsx": "^0.17.0",
     "xlsx-style": "^0.8.13",
     "zone.js": "0.9.1"
   },
